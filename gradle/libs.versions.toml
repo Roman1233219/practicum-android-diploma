@@ -10,7 +10,7 @@ targetSdk = "33"
 # AndroidX
 appcompat = "1.7.1"
 constraintlayout = "2.2.1"
-coreKtx = "1.18.0"
+coreKtx = "1.13.1"
 
 # Testing
 espressoCore = "3.5.1"

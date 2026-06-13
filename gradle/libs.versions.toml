@@ -1,7 +1,7 @@
 [versions]
 
 # Build constants
-compileSdk = "36"
+compileSdk = "34"
 java = "VERSION_17"
 material = "1.13.0"
 minSdk = "26"
@@ -20,6 +20,27 @@ junitExt = "1.1.5"
 # Static analysis
 detekt = "1.23.8"
 detektTwitterComposeRules = "0.0.26"
+kotlin = "2.1.0"
+activityKtx = "1.9.3"
+kotlinxCoroutinesAndroid = "1.9.0"
+glide = "4.16.0"
+retrofit = "2.11.0"
+converterGson = "2.11.0"
+compiler = "4.16.0"
+gson = "2.11.0"
+fragmentKtx = "1.8.5"
+lifecycleViewmodelKtx = "2.8.7"
+navigationFragmentKtx = "2.8.3"
+navigationUiKtx = "2.8.3"
+roomKtx = "2.6.1"
+roomRuntime = "2.6.1"
+roomCompiler = "2.6.1"
+viewbinding = "8.7.2"
+firebaseCrashlytics = "19.2.1"
+playServicesLocation = "21.3.0"
+room = "2.6.1"
+koin = "4.0.0"
+
 
 [libraries]
 
@@ -45,4 +66,35 @@ staticAnalysis-detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gra
 staticAnalysis-detektTest = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
 staticAnalysis-detektTwitterComposeRules = { module = "com.twitter.compose.rules:detekt", version.ref = "detektTwitterComposeRules" }
 
+
+# Network
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+
+# Database
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
+# DI
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+
+# Navigation
+navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
+
+# Image Loading
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
+
+# Core
+lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
+fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+
 [bundles]
+
+[plugins]
+ksp = { id = "com.google.devtools.ksp", version = "2.1.0-1.0.29" }

@@ -10,7 +10,7 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(appModule) // <-- Временная заглушка
+            modules(AppModule) // <-- Временная заглушка
         }
     }
 }

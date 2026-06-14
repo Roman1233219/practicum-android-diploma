@@ -1,11 +1,7 @@
 package ru.practicum.android.diploma.ui.root
 
 import android.os.Bundle
-import android.util.TypedValue
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import ru.practicum.android.diploma.BuildConfig
@@ -20,13 +16,11 @@ class RootActivity : AppCompatActivity() {
         binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         // Пример использования access token для HeadHunter API
         networkRequestExample(accessToken = BuildConfig.API_ACCESS_TOKEN)
 
-        //подключение NavController к BottomBar
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
+        // Подключение NavController к BottomBar
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
 
         val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)

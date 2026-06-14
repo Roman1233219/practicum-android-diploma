@@ -5,4 +5,11 @@
     <string name="main_title">Главная</string>
     <string name="favourites_title">Избранное</string>
     <string name="team_title">Команда</string>
+
+<!--    Экран настроек фильтрации-->
+    <string name="work_place">Место работы</string>
+    <string name="industry">Отрасль</string>
+
+    <string name="country">Страна</string>
+    <string name="region">Регион</string>
 </resources>

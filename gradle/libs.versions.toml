@@ -19,7 +19,7 @@ coreKtx = "1.13.1"
 activityKtx = "1.9.3"
 fragmentKtx = "1.8.5"
 lifecycle = "2.8.7"
-navigation = "2.8.3"
+navigation = "2.9.8"
 room = "2.6.1"
 
 # Network

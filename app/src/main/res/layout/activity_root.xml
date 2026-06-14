@@ -30,9 +30,6 @@
         app:itemPaddingBottom="0dp"
         app:itemPaddingTop="0dp"
 
-        app:itemIconTint="@color/bottom_nav_color"
-        app:itemTextColor="@color/bottom_nav_color"
-
         style="@style/BottomNavingStyle"
 
         android:layout_margin="0dp"

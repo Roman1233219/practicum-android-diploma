@@ -27,4 +27,9 @@ class FavouritesFragment : Fragment() {
             findNavController().navigate(R.id.action_favouritesFragment_to_vacancyDetailsFragment)
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

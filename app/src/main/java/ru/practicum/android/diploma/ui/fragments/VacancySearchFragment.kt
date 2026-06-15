@@ -26,7 +26,12 @@ class VacancySearchFragment : Fragment() {
         }
 
         binding.goToFiltersButton.setOnClickListener {
-            findNavController().navigate(R.id.action_vacancySearchFragment_to_filtersFragment2)
+            findNavController().navigate(R.id.action_vacancySearchFragment_to_filtersFragment)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

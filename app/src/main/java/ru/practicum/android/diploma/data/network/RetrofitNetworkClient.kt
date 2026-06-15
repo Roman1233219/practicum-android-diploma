@@ -8,8 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.dto.FilterAreaRequest
 import ru.practicum.android.diploma.data.dto.Response
-import ru.practicum.android.diploma.data.dto.VacancyDetailRequest
-import ru.practicum.android.diploma.data.dto.VacancyRequest
+import ru.practicum.android.diploma.util.networkConnectivityChecker
 
 class RetrofitNetworkClient(
     private val apiService: PracticumApiService,
@@ -17,7 +16,7 @@ class RetrofitNetworkClient(
 ) : NetworkClient {
 
     override suspend fun filterAreaRequest(dto: Any): Response {
-        if (isConnected() == false) {
+        if (!networkConnectivityChecker(context)) {
             return Response().apply { resultCode = -1 }
         }
         if (dto !is FilterAreaRequest) {
@@ -32,55 +31,5 @@ class RetrofitNetworkClient(
                 Response().apply { resultCode = 500 }
             }
         }
-    }
-
-    override suspend fun vacancyDetailRequest(dto: Any): Response {
-        if (isConnected() == false) {
-            return Response().apply { resultCode = -1 }
-        }
-        if (dto !is VacancyDetailRequest) {
-            return Response().apply { resultCode = 400 }
-        }
-
-        return withContext(Dispatchers.IO) {
-            try{
-                val response = apiService.getVacancyById(dto.id)
-                response.apply { resultCode = 200 }
-            } catch (e: Throwable) {
-                Response().apply { resultCode = 500 }
-            }
-        }
-    }
-
-    override suspend fun vacancyRequest(dto: Any): Response {
-        if (isConnected() == false) {
-            return Response().apply { resultCode = -1 }
-        }
-        if (dto !is VacancyRequest) {
-            return Response().apply { resultCode = 400 }
-        }
-
-        return withContext(Dispatchers.IO) {
-            try{
-                val response = apiService.getVacancies()
-                response.apply { resultCode = 200 }
-            } catch (e: Throwable) {
-                Response().apply { resultCode = 500 }
-            }
-        }
-    }
-
-    private fun isConnected(): Boolean {
-        val connectivityManager = context.getSystemService(
-            Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        if (capabilities != null) {
-            when {
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> return true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> return true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> return true
-            }
-        }
-        return false
     }
 }

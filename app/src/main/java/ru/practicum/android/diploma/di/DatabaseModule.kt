@@ -16,5 +16,5 @@ val DataBaseModule = module {
             .build()
     }
 
-    single { get<AppDatabase>().someDao() }
+    single { get<AppDatabase>().vacancyDao() }
 }

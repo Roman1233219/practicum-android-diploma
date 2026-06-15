@@ -32,6 +32,24 @@ class RetrofitNetworkClient(
         }
     }
 
+    override suspend fun vacancyRequest(dto: Any): Response {
+        if (isConnected() == false) {
+            return Response().apply { resultCode = -1 }
+        }
+        if (dto !is VacancyDetailRequest) {
+            return Response().apply { resultCode = 400 }
+        }
+
+        return withContext(Dispatchers.IO) {
+            try{
+                val response = apiService.getVacancies()
+                response.apply { resultCode = 200 }
+            } catch (e: Throwable) {
+                Response().apply { resultCode = 500 }
+            }
+        }
+    }
+
     private fun isConnected(): Boolean {
         val connectivityManager = context.getSystemService(
             Context.CONNECTIVITY_SERVICE) as ConnectivityManager

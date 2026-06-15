@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.data.network.PracticumApiService
 
-private const val baseUrl = "https://someapi.com/"
+private const val baseUrl = "https://android-diploma.education-services.ru"
 
 val dataModule = module {
     single<PracticumApiService> {

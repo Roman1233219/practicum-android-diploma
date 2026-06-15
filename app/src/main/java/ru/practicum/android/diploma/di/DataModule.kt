@@ -10,17 +10,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.network.RetrofitNetworkClient
-import ru.practicum.android.diploma.data.network.SomeApiService
+import ru.practicum.android.diploma.data.network.PracticumApiService
 
 private const val baseUrl = "https://someapi.com/"
 
 val dataModule = module {
-    single<SomeApiService> {
+    single<PracticumApiService> {
         Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(SomeApiService::class.java)
+            .create(PracticumApiService::class.java)
     }
 
     single<Gson> { GsonBuilder().create() }

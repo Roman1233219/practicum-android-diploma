@@ -7,24 +7,24 @@ import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.dto.Response
-import ru.practicum.android.diploma.data.dto.SomeRequest
+import ru.practicum.android.diploma.data.dto.VacancyDetailRequest
 
 class RetrofitNetworkClient(
-    private val apiService: SomeApiService,
+    private val apiService: PracticumApiService,
     private val context: Context
 ) : NetworkClient {
 
-    override suspend fun doRequest(dto: Any): Response {
+    override suspend fun vacancyDetailRequest(dto: Any): Response {
         if (isConnected() == false) {
             return Response().apply { resultCode = -1 }
         }
-        if (dto !is SomeRequest) {
+        if (dto !is VacancyDetailRequest) {
             return Response().apply { resultCode = 400 }
         }
 
         return withContext(Dispatchers.IO) {
             try{
-                val response = apiService.getSomething(dto.expression)
+                val response = apiService.getVacancyById(dto.id)
                 response.apply { resultCode = 200 }
             } catch (e: Throwable) {
                 Response().apply { resultCode = 500 }

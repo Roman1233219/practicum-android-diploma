@@ -4,6 +4,8 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class SomeDto (
-    val id: Int
+data class SalaryDto (
+    val from: Int?,
+    val to: Int?,
+    val currency: String?
 ) : Parcelable

@@ -1,11 +1,15 @@
 package ru.practicum.android.diploma.data.network
 
 import retrofit2.http.GET
-import ru.practicum.android.diploma.data.dto.SalaryDto
+import retrofit2.http.Path
+import retrofit2.http.Query
+import ru.practicum.android.diploma.data.dto.FilterAreaResponse
 import ru.practicum.android.diploma.data.dto.VacancyDetailResponse
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 
 interface PracticumApiService {
+    @GET("/areas")
+    suspend fun getAreas(): FilterAreaResponse
     @GET("vacancies/{id}")
     suspend fun getVacancyById(@Path("id") id: String): VacancyDetailResponse
     @GET("vacancies")

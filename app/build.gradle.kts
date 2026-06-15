@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.parcelize)
     id("ru.practicum.android.diploma.plugins.developproperties")
     alias(libs.plugins.google.devtools.ksp)
 }
@@ -61,6 +62,8 @@ dependencies {
     
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
 
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)

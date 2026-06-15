@@ -28,11 +28,16 @@ class FiltersFragment : Fragment() {
 
         // Установка внутренних переходов
         binding.goToWorkPlaceSelectionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_filtersFragment2_to_workPlaceSelectionFragment2)
+            findNavController().navigate(R.id.action_filtersFragment_to_workPlaceSelectionFragment)
         }
 
         binding.goIndustrySelectionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_filtersFragment2_to_industrySelectionFragment2)
+            findNavController().navigate(R.id.action_filtersFragment_to_industrySelectionFragment)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

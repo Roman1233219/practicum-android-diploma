@@ -28,11 +28,16 @@ class WorkPlaceSelectionFragment : Fragment() {
 
         // Установка внутренних переходов
         binding.goToCountrySelection.setOnClickListener {
-            findNavController().navigate(R.id.action_workPlaceSelectionFragment2_to_countrySelectionFragment2)
+            findNavController().navigate(R.id.action_workPlaceSelectionFragment_to_countrySelectionFragment)
         }
 
         binding.goToRegionSelection.setOnClickListener {
-            findNavController().navigate(R.id.action_workPlaceSelectionFragment2_to_regionSelectionFragment2)
+            findNavController().navigate(R.id.action_workPlaceSelectionFragment_to_regionSelectionFragment)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

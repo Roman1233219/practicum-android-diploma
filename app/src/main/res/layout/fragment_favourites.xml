@@ -5,11 +5,18 @@
     android:id="@+id/fragment_favourites"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.fragments.FavouritesFragment"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Избранное"
         android:textColor="@color/black"/>
+
+    <Button
+        android:id="@+id/goToVacancyDetailsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Открыть вакансию"/>
 
 </LinearLayout>

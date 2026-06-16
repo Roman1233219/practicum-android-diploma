@@ -45,7 +45,7 @@ class RootActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val testData = networkClient.searchVacancies(VacanciesRequest())
             Log.d("vacancies", "HTTP result: ${testData.resultCode}")
-            if(testData is VacanciesResponse) {
+            if (testData is VacanciesResponse) {
                 Log.d("vacancies", "Page: ${testData.page}")
                 Log.d("vacancies", "Pages: ${testData.pages}")
                 Log.d("vacancies", "Found: ${testData.found}")

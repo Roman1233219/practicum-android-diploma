@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.domain.converters.toModel
 import ru.practicum.android.diploma.domain.models.ApiResult
 import ru.practicum.android.diploma.domain.models.Vacancy
 
-class VacancyRepositoryImpl(private var networkClient: NetworkClient): VacanciesRepository {
+class VacancyRepositoryImpl(private var networkClient: NetworkClient) : VacanciesRepository {
     override fun searchVacancies(
         query: String,
         page: Int
@@ -18,9 +18,10 @@ class VacancyRepositoryImpl(private var networkClient: NetworkClient): Vacancies
         emit(ApiResult.Loading)
 
         val data = networkClient.searchVacancies(VacanciesRequest(query, page))
-        if (data.resultCode == 200 && data is VacanciesResponse)
-            emit(ApiResult.Success(data.items.map { t->t.toModel() }))
-        else
+        if (data.resultCode == 200 && data is VacanciesResponse) {
+            emit(ApiResult.Success(data.items.map { t -> t.toModel() }))
+        } else {
             emit(ApiResult.Error(data.resultCode))
+        }
     }
 }

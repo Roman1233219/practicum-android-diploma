@@ -14,17 +14,15 @@ class RetrofitNetworkClient(
 ) : NetworkClient {
 
     override suspend fun filterAreaRequest(dto: Any): Response {
-        if (!networkConnectivityChecker(context)) {
-            return Response().apply { resultCode = -1 }
-        }
-        if (dto !is FilterAreaRequest) {
-            return Response().apply { resultCode = 400 }
+        if (!networkConnectivityChecker(context) || dto !is FilterAreaRequest) {
+            return Response().apply {
+                resultCode = if (!networkConnectivityChecker(context)) -1 else 400
+            }
         }
 
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.getAreas()
-                response.apply { resultCode = 200 }
+                apiService.getAreas().apply { resultCode = 200 }
             } catch (e: Throwable) {
                 Response().apply { resultCode = 500 }
             }

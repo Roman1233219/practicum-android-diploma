@@ -16,8 +16,8 @@ class VacancyRepositoryImpl(private var networkClient: NetworkClient): Vacancies
         page: Int
     ): Flow<ApiResult<List<Vacancy>>> = flow {
         emit(ApiResult.Loading)
-        val data = networkClient.searchVacancies(VacanciesRequest(query, page))
 
+        val data = networkClient.searchVacancies(VacanciesRequest(query, page))
         if (data.resultCode == 200 && data is VacanciesResponse)
             emit(ApiResult.Success(data.items.map { t->t.toModel() }))
         else

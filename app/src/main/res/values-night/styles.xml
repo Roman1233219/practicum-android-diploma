@@ -53,7 +53,8 @@
         <item name="itemIconTint">@color/bottom_nav_colors</item>
         <item name="itemTextColor">@color/bottom_nav_colors</item>
         <item name="android:textAppearance">@style/TextDisplayRegular12</item>
-        <item name="menu">@menu/bottom_nav_menu</item>
+        <!--        <item name="menu">@menu/bottom_nav_menu</item>
+        раскомментировать в момент мержа с задачей по Bottom Navigation-->
     </style>
 
     <style name="TextViewErrorStyle">

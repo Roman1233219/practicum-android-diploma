@@ -41,7 +41,7 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             try {
                 apiService.searchVacancies(dto.text, dto.page).apply { resultCode = 200 }
-            } catch (e: Throwable) {
+            } catch (_: Throwable) {
                 Response().apply { resultCode = 500 }
             }
         }

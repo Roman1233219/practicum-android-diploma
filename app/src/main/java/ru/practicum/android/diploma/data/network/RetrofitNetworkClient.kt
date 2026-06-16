@@ -6,6 +6,7 @@ import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.FilterAreaRequest
 import ru.practicum.android.diploma.data.dto.Response
+import ru.practicum.android.diploma.data.dto.VacanciesRequest
 import ru.practicum.android.diploma.util.networkConnectivityChecker
 
 class RetrofitNetworkClient(
@@ -23,6 +24,23 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             try {
                 apiService.getAreas().apply { resultCode = 200 }
+            } catch (e: Throwable) {
+                Response().apply { resultCode = 500 }
+            }
+        }
+    }
+
+    override suspend fun searchVacancies(dto: Any): Response {
+        val hasConnection = networkConnectivityChecker(context)
+        if (!hasConnection || dto !is VacanciesRequest) {
+            return Response().apply {
+                resultCode = if (!hasConnection) -1 else 400
+            }
+        }
+
+        return withContext(Dispatchers.IO) {
+            try {
+                apiService.searchVacancies(dto.text, dto.page).apply { resultCode = 200 }
             } catch (e: Throwable) {
                 Response().apply { resultCode = 500 }
             }

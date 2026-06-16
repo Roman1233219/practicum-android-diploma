@@ -12,6 +12,7 @@ agp = "8.12.0"
 kotlin = "2.1.0"
 kotlinPlugin = "1.8.10"
 ksp = "2.1.0-1.0.29"
+ktlint = "11.3.2"
 
 # AndroidX
 appcompat = "1.7.1"
@@ -102,3 +103,4 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlinPlugin" }
 google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }

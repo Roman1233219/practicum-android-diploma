@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.data.SomeSource
 import ru.practicum.android.diploma.domain.SomeRepository
 
 val RepositoryModule = module {
-    //Для проверки DI
+    // Для проверки DI
     single { SomeSource() }
     factory { SomeRepository(get()) }
 }

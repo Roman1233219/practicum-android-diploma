@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class FilterAreaDto (
+data class FilterAreaDto(
     val id: Int,
     val name: String,
     val parentId: Int?,

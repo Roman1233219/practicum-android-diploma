@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     id("ru.practicum.android.diploma.plugins.developproperties")
     alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.ktlint)
 }
 
 android {
@@ -59,7 +60,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     implementation(libs.koin.android)
-    
+
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
@@ -68,7 +69,7 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
-    
+
     implementation(libs.glide)
     ksp(libs.glide.compiler)
 

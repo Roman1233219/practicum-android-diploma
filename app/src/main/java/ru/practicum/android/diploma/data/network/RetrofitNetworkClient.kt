@@ -1,11 +1,9 @@
 package ru.practicum.android.diploma.data.network
 
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import ru.practicum.android.diploma.data.NetworkClient
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.FilterAreaRequest
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.util.networkConnectivityChecker
@@ -24,7 +22,7 @@ class RetrofitNetworkClient(
         }
 
         return withContext(Dispatchers.IO) {
-            try{
+            try {
                 val response = apiService.getAreas()
                 response.apply { resultCode = 200 }
             } catch (e: Throwable) {

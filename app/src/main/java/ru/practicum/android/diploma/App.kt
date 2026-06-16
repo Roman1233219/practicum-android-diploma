@@ -17,14 +17,16 @@ class App : Application() {
         startKoin {
             printLogger()
             androidContext(this@App)
-            modules(listOf(
-                AppModule,
-                DataBaseModule,
-                NetworkModule,
-                RepositoryModule,
-                InteractorModule,
-                ViewModelModule
-            ))
+            modules(
+                listOf(
+                    AppModule,
+                    DataBaseModule,
+                    NetworkModule,
+                    RepositoryModule,
+                    InteractorModule,
+                    ViewModelModule
+                )
+            )
         }
     }
 }

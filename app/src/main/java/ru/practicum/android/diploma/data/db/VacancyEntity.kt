@@ -7,7 +7,7 @@ import androidx.room.TypeConverters
 
 @Entity(tableName = "fav_vacancies_table")
 @TypeConverters(PhoneListConverter::class, StringListConverter::class)
-data class VacancyEntity (
+data class VacancyEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
@@ -49,5 +49,3 @@ data class Phone(
     val comment: String?,
     val formatted: String
 )
-
-

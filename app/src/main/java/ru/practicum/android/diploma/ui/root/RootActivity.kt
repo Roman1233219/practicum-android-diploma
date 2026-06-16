@@ -15,10 +15,13 @@ class RootActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_root)
 
-        //Для проверки DI
+        // Для проверки DI
         val textView = findViewById<TextView>(R.id.buildConfigReadExampleTextView)
-        someViewModel.data.observe(this, Observer { newData ->
-            textView.text = newData
-        })
+        someViewModel.data.observe(
+            this,
+            Observer { newData ->
+                textView.text = newData
+            }
+        )
     }
 }

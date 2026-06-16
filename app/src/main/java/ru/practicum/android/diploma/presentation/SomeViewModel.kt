@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.SomeRepository
 
-class SomeViewModel (
+class SomeViewModel(
     private val repository: SomeRepository
 ) : ViewModel() {
     private val _data = MutableLiveData<String>()
@@ -22,8 +22,5 @@ class SomeViewModel (
             val dataFromRepo = repository.getBusinessLogicData()
             _data.value = dataFromRepo
         }
-    }
-
-    fun processResult() {
     }
 }

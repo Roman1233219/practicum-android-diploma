@@ -4,8 +4,6 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-private val gson = Gson()
-
 open class PhoneListConverter {
     private val gson = Gson()
 
@@ -21,6 +19,6 @@ open class PhoneListConverter {
 
     @TypeConverter
     fun toJson(list: List<Phone>): String {
-        return gson.toJson(list )
+        return gson.toJson(list)
     }
 }

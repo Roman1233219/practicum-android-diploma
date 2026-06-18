@@ -5,5 +5,5 @@ import org.koin.dsl.module
 import ru.practicum.android.diploma.presentation.SomeViewModel
 
 val ViewModelModule = module {
-    viewModel { SomeViewModel(get()) }
+    //viewModel { SomeViewModel(get()) } заглушка удалена - ставить вызов реальной вьюмодели
 }

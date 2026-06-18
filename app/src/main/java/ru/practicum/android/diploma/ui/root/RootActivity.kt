@@ -16,24 +16,18 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.data.NetworkClient
 
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
-import ru.practicum.android.diploma.presentation.SomeViewModel
+
 
 class RootActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRootBinding
-    private val someViewModel: SomeViewModel by viewModel()
+
     private val networkClient: NetworkClient by inject()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Для проверки DI
-        someViewModel.data.observe(
-            this,
-            Observer { newData ->
-                Toast.makeText(this, "$newData", Toast.LENGTH_SHORT).show()
-            }
-        )
+
 
         // Подключение NavController к BottomBar
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment

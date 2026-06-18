@@ -1,6 +1,16 @@
 package ru.practicum.android.diploma.data.converters
 
+import ru.practicum.android.diploma.data.dto.AddressDto
+import ru.practicum.android.diploma.data.dto.AreaDto
+import ru.practicum.android.diploma.data.dto.ContactsDto
+import ru.practicum.android.diploma.data.dto.EmployerDto
+import ru.practicum.android.diploma.data.dto.EmploymentDto
+import ru.practicum.android.diploma.data.dto.ExperienceDto
+import ru.practicum.android.diploma.data.dto.KeySkillDto
+import ru.practicum.android.diploma.data.dto.LogoUrlsDto
+import ru.practicum.android.diploma.data.dto.PhoneDto
 import ru.practicum.android.diploma.data.dto.SalaryDto
+import ru.practicum.android.diploma.data.dto.ScheduleDto
 import ru.practicum.android.diploma.data.dto.VacanciesResponse
 import ru.practicum.android.diploma.data.dto.VacancyDto
 import ru.practicum.android.diploma.domain.models.VacanciesSearchResult
@@ -44,27 +54,31 @@ fun Vacancy.toDto(): VacancyDto = VacancyDto(
         to = this.salaryTo,
         currency = this.currency
     ),
-    employer = ru.practicum.android.diploma.data.dto.EmployerDto(
+    employer = EmployerDto(
         id = this.employerId,
         name = this.companyName,
-        logoUrls = ru.practicum.android.diploma.data.dto.LogoUrlsDto(
+        logoUrls = LogoUrlsDto(
             original = this.logoUrl
         )
     ),
-    area = ru.practicum.android.diploma.data.dto.AreaDto(
+    area = AreaDto(
         id = this.areaId,
         name = this.areaName
     ),
     description = this.description,
-    keySkills = this.skills?.map { ru.practicum.android.diploma.data.dto.KeySkillDto(it) },
-    experience = ru.practicum.android.diploma.data.dto.ExperienceDto(this.experienceName),
-    schedule = ru.practicum.android.diploma.data.dto.ScheduleDto(this.scheduleName),
-    employment = ru.practicum.android.diploma.data.dto.EmploymentDto(this.employmentName),
-    address = ru.practicum.android.diploma.data.dto.AddressDto(this.addressRaw),
-    contacts = ru.practicum.android.diploma.data.dto.ContactsDto(
+    keySkills = this.skills?.map { KeySkillDto(it) },
+    experience = ExperienceDto(this.experienceName),
+    schedule = ScheduleDto(this.scheduleName),
+    employment = EmploymentDto(this.employmentName),
+    address = AddressDto(this.addressRaw),
+    contacts = ContactsDto(
         name = this.contactName,
         email = this.contactEmail,
-        phones = if (this.phoneFormatted != null) listOf(ru.practicum.android.diploma.data.dto.PhoneDto(this.phoneFormatted)) else null
+        phones = if (this.phoneFormatted != null) {
+            listOf(PhoneDto(this.phoneFormatted))
+        } else {
+            null
+        }
     ),
     alternateUrl = this.shareUrl
 )

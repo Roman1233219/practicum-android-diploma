@@ -28,7 +28,6 @@ class RootActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-
         // Подключение NavController к BottomBar
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
 

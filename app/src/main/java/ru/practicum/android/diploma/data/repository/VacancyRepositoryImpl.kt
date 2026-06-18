@@ -18,10 +18,14 @@ class VacancyRepositoryImpl(private var networkClient: NetworkClient) : Vacancie
         emit(ApiResult.Loading)
 
         val data = networkClient.searchVacancies(VacanciesRequest(query, page))
-        if (data.resultCode == 200 && data is VacanciesResponse) {
+        if (data.resultCode == SUCCESS_CODE && data is VacanciesResponse) {
             emit(ApiResult.Success(data.toModel()))
         } else {
             emit(ApiResult.Error(data.resultCode))
         }
+    }
+
+    companion object {
+        private const val SUCCESS_CODE = 200
     }
 }

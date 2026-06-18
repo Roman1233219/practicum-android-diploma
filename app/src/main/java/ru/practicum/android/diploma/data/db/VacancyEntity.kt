@@ -10,29 +10,29 @@ import androidx.room.TypeConverters
 data class VacancyEntity(
     @PrimaryKey
     @ColumnInfo(name = "vacancy_id")
-    val vacancyId: String,          // ID вакансии
-    val vacancyName: String,        // Название вакансии
-    val employerId: String?,        // ID работодателя
+    val vacancyId: String, // ID вакансии
+    val vacancyName: String, // Название вакансии
+    val employerId: String?, // ID работодателя
     @ColumnInfo(name = "company_name")
-    val companyName: String?,       // Название компании
-    val areaId: String?,            // ID региона (города)
-    val areaName: String?,          // Название региона (города)
+    val companyName: String?, // Название компании
+    val areaId: String?, // ID региона (города)
+    val areaName: String?, // Название региона (города)
     @ColumnInfo(name = "salary_from")
-    val salaryFrom: Long?,          // Зарплата "от"
-    val salaryTo: Long?,            // Зарплата "до"
-    val currency: String?,          // Валюта зарплаты
-    val logoUrl: String?,           // Ссылка на логотип компании
-    val description: String?,       // Описание вакансии (HTML)
-    val experienceName: String?,    // Требуемый опыт работы
-    val scheduleName: String?,      // График работы
-    val employmentName: String?,    // Тип занятости
-    val addressRaw: String?,        // Полный адрес
+    val salaryFrom: Long?, // Зарплата "от"
+    val salaryTo: Long?, // Зарплата "до"
+    val currency: String?, // Валюта зарплаты
+    val logoUrl: String?, // Ссылка на логотип компании
+    val description: String?, // Описание вакансии (HTML)
+    val experienceName: String?, // Требуемый опыт работы
+    val scheduleName: String?, // График работы
+    val employmentName: String?, // Тип занятости
+    val addressRaw: String?, // Полный адрес
     @TypeConverters(StringListConverter::class)
-    val skills: List<String>?,      // Список ключевых навыков
-    val contactName: String?,       // Имя контактного лица
-    val contactEmail: String?,      // Почта контакта
-    val phoneFormatted: String?,    // Телефон контакта
-    val shareUrl: String?           // Ссылка на вакансию для шеринга
+    val skills: List<String>?, // Список ключевых навыков
+    val contactName: String?, // Имя контактного лица
+    val contactEmail: String?, // Почта контакта
+    val phoneFormatted: String?, // Телефон контакта
+    val shareUrl: String? // Ссылка на вакансию для шеринга
 )
 
 /**

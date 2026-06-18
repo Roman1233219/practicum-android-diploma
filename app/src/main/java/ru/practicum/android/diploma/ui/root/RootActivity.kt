@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.ui.root
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -50,6 +51,22 @@ class RootActivity : AppCompatActivity() {
                 Log.d("vacancies", "Pages: ${testData.pages}")
                 Log.d("vacancies", "Found: ${testData.found}")
                 Log.d("vacancies", "First vacancy name: ${testData.items.firstOrNull()?.name}")
+            }
+        }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.vacancySearchFragment,
+                R.id.favouritesFragment,
+                R.id.teamFragment -> {
+                    binding.bottomNavigationView.visibility = View.VISIBLE
+                    binding.divider.visibility = View.VISIBLE
+                }
+
+                else -> {
+                    binding.bottomNavigationView.visibility = View.GONE
+                    binding.divider.visibility = View.GONE
+                }
             }
         }
     }

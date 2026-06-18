@@ -6,7 +6,7 @@ import ru.practicum.android.diploma.data.dto.FilterAreaResponse
 import ru.practicum.android.diploma.data.dto.VacanciesResponse
 
 interface PracticumApiService {
-    @GET("/areas")
+    @GET("areas")
     suspend fun getAreas(): FilterAreaResponse
 
     @GET("/vacancies")

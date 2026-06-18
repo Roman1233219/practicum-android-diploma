@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.data.network.PracticumApiService
 import ru.practicum.android.diploma.data.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.data.network.createLoggingInterceptor
 
-private const val BaseUrl = "https://android-diploma.education-services.ru"
+private const val BaseUrl = "https://android-diploma.education-services.ru/"
 
 val NetworkModule = module {
     single<PracticumApiService> {

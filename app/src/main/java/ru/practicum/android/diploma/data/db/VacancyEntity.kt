@@ -6,46 +6,31 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 
 @Entity(tableName = "fav_vacancies_table")
-@TypeConverters(PhoneListConverter::class, StringListConverter::class)
+@TypeConverters(StringListConverter::class)
 data class VacancyEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val name: String,
-    val description: String,
-    val salaryFrom: Int?,
-    val salaryTo: Int?,
-    val salaryCurrency: String?,
-    val addressId: String,
-    val addressCity: String,
-    val addressStreet: String,
-    val addressBuilding: String,
-    val addressRaw: String,
-    val experienceId: String,
-    val experienceName: String,
-    val scheduleId: String,
-    val scheduleName: String,
-    val employmentId: String,
-    val employmentName: String,
-    val contactsId: String,
-    val contactsName: String,
-    val contactsEmail: String,
-    @TypeConverters(PhoneListConverter::class)
-    @ColumnInfo(name = "contactsPhones")
-    val contactsPhones: List<Phone>,
-    val employerId: String,
-    val employerName: String,
-    val employerLogo: String,
-    val areaId: String,
-    val areaName: String,
+    @PrimaryKey
+    @ColumnInfo(name = "vacancy_id")
+    val vacancyId: String,
+    val vacancyName: String,
+    val employerId: String?,
+    @ColumnInfo(name = "company_name")
+    val companyName: String?,
+    val areaId: String?,
+    val areaName: String?,
+    @ColumnInfo(name = "salary_from")
+    val salaryFrom: Long?,
+    val salaryTo: Long?,
+    val currency: String?,
+    val logoUrl: String?,
+    val description: String?,
+    val experienceName: String?,
+    val scheduleName: String?,
+    val employmentName: String?,
+    val addressRaw: String?,
     @TypeConverters(StringListConverter::class)
-    @ColumnInfo(name = "skills")
-    val skills: List<String>,
-    val url: String,
-    val industryId: String,
-    val industryName: String
-)
-
-data class Phone(
-    val comment: String?,
-    val formatted: String
+    val skills: List<String>?,
+    val contactName: String?,
+    val contactEmail: String?,
+    val phoneFormatted: String?,
+    val shareUrl: String?
 )

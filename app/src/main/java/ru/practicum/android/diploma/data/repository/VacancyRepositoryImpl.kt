@@ -8,18 +8,18 @@ import ru.practicum.android.diploma.data.dto.VacanciesResponse
 import ru.practicum.android.diploma.domain.api.VacanciesRepository
 import ru.practicum.android.diploma.data.converters.toModel
 import ru.practicum.android.diploma.domain.models.ApiResult
-import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.domain.models.VacanciesSearchResult
 
 class VacancyRepositoryImpl(private var networkClient: NetworkClient) : VacanciesRepository {
     override fun searchVacancies(
         query: String,
         page: Int
-    ): Flow<ApiResult<List<Vacancy>>> = flow {
+    ): Flow<ApiResult<VacanciesSearchResult>> = flow {
         emit(ApiResult.Loading)
 
         val data = networkClient.searchVacancies(VacanciesRequest(query, page))
         if (data.resultCode == 200 && data is VacanciesResponse) {
-            emit(ApiResult.Success(data.items.map { t -> t.toModel() }))
+            emit(ApiResult.Success(data.toModel()))
         } else {
             emit(ApiResult.Error(data.resultCode))
         }

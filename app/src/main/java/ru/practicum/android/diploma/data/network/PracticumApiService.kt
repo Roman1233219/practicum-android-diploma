@@ -9,7 +9,7 @@ interface PracticumApiService {
     @GET("areas")
     suspend fun getAreas(): FilterAreaResponse
 
-    @GET("/vacancies")
+    @GET("vacancies")
     suspend fun searchVacancies(
         @Query("text") text: String,
         @Query("page") page: Int

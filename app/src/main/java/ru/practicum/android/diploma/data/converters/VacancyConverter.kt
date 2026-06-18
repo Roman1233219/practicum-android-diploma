@@ -1,8 +1,17 @@
 package ru.practicum.android.diploma.data.converters
 
 import ru.practicum.android.diploma.data.dto.SalaryDto
+import ru.practicum.android.diploma.data.dto.VacanciesResponse
 import ru.practicum.android.diploma.data.dto.VacancyDto
+import ru.practicum.android.diploma.domain.models.VacanciesSearchResult
 import ru.practicum.android.diploma.domain.models.Vacancy
+
+fun VacanciesResponse.toModel(): VacanciesSearchResult = VacanciesSearchResult(
+    vacancies = this.items.map { it.toModel() },
+    vacanciesFound = this.found,
+    pagesCount = this.pages,
+    currentPage = this.page
+)
 
 fun VacancyDto.toModel(): Vacancy = Vacancy(
     vacancyId = this.id,

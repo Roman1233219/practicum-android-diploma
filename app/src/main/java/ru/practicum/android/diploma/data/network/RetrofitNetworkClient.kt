@@ -28,7 +28,7 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             try {
                 apiService.getAreas().apply { resultCode = SUCCESS_CODE }
-            } catch (e: Throwable) {
+            } catch (_: Throwable) {
                 Response().apply { resultCode = SERVER_ERROR_CODE }
             }
         }

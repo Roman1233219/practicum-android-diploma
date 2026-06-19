@@ -17,15 +17,19 @@ class RetrofitNetworkClient(
     override suspend fun filterAreaRequest(dto: Any): Response {
         if (!networkConnectivityChecker(context) || dto !is FilterAreaRequest) {
             return Response().apply {
-                resultCode = if (!networkConnectivityChecker(context)) -1 else 400
+                resultCode = if (!networkConnectivityChecker(context)) {
+                    NO_CONNECTION_CODE
+                } else {
+                    BAD_REQUEST_CODE
+                }
             }
         }
 
         return withContext(Dispatchers.IO) {
             try {
-                apiService.getAreas().apply { resultCode = 200 }
+                apiService.getAreas().apply { resultCode = SUCCESS_CODE }
             } catch (e: Throwable) {
-                Response().apply { resultCode = 500 }
+                Response().apply { resultCode = SERVER_ERROR_CODE }
             }
         }
     }
@@ -34,16 +38,23 @@ class RetrofitNetworkClient(
         val hasConnection = networkConnectivityChecker(context)
         if (!hasConnection || dto !is VacanciesRequest) {
             return Response().apply {
-                resultCode = if (!hasConnection) -1 else 400
+                resultCode = if (!hasConnection) NO_CONNECTION_CODE else BAD_REQUEST_CODE
             }
         }
 
         return withContext(Dispatchers.IO) {
             try {
-                apiService.searchVacancies(dto.text, dto.page).apply { resultCode = 200 }
+                apiService.searchVacancies(dto.text, dto.page).apply { resultCode = SUCCESS_CODE }
             } catch (_: Throwable) {
-                Response().apply { resultCode = 500 }
+                Response().apply { resultCode = SERVER_ERROR_CODE }
             }
         }
+    }
+
+    companion object {
+        private const val SUCCESS_CODE = 200
+        private const val BAD_REQUEST_CODE = 400
+        private const val SERVER_ERROR_CODE = 500
+        private const val NO_CONNECTION_CODE = -1
     }
 }

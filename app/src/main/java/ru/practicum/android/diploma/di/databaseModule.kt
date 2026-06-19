@@ -5,7 +5,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import ru.practicum.android.diploma.data.db.AppDatabase
 
-val DataBaseModule = module {
+val databaseModule = module {
     single {
         Room.databaseBuilder(
             androidContext(),
@@ -17,6 +17,4 @@ val DataBaseModule = module {
     }
 
     single { get<AppDatabase>().vacancyDao() }
-
-
 }

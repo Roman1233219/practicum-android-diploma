@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.data.db
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
@@ -10,29 +11,49 @@ import androidx.room.TypeConverters
 data class VacancyEntity(
     @PrimaryKey
     @ColumnInfo(name = "vacancy_id")
-    val vacancyId: String, // ID вакансии
-    val vacancyName: String, // Название вакансии
-    val employerId: String?, // ID работодателя
-    @ColumnInfo(name = "company_name")
-    val companyName: String?, // Название компании
-    val areaId: String?, // ID региона (города)
-    val areaName: String?, // Название региона (города)
-    @ColumnInfo(name = "salary_from")
-    val salaryFrom: Long?, // Зарплата "от"
-    val salaryTo: Long?, // Зарплата "до"
-    val currency: String?, // Валюта зарплаты
-    val logoUrl: String?, // Ссылка на логотип компании
-    val description: String?, // Описание вакансии (HTML)
-    val experienceName: String?, // Требуемый опыт работы
-    val scheduleName: String?, // График работы
-    val employmentName: String?, // Тип занятости
-    val addressRaw: String?, // Полный адрес
+    val vacancyId: String,          // ID вакансии
+    val vacancyName: String,        // Название вакансии
+    @Embedded
+    val employer: EmployerEntity?,  // Данные работодателя
+    @Embedded
+    val area: AreaEntity?,          // Данные региона (города)
+    @Embedded
+    val salary: SalaryEntity?,      // Данные о зарплате
+    val description: String?,       // Описание вакансии (HTML)
+    val experienceName: String?,    // Требуемый опыт работы
+    val scheduleName: String?,      // График работы
+    val employmentName: String?,    // Тип занятости
+    val addressRaw: String?,        // Полный адрес
     @TypeConverters(StringListConverter::class)
-    val skills: List<String>?, // Список ключевых навыков
-    val contactName: String?, // Имя контактного лица
-    val contactEmail: String?, // Почта контакта
-    val phoneFormatted: String?, // Телефон контакта
-    val shareUrl: String? // Ссылка на вакансию для шеринга
+    val skills: List<String>?,      // Список ключевых навыков
+    @Embedded
+    val contacts: ContactsEntity?,  // Контактная информация
+    val shareUrl: String?           // Ссылка на вакансию для шеринга
+)
+
+data class EmployerEntity(
+    val employerId: String?,        // ID работодателя
+    @ColumnInfo(name = "company_name")
+    val companyName: String?,       // Название компании
+    val logoUrl: String?            // Ссылка на логотип компании
+)
+
+data class AreaEntity(
+    val areaId: String?,            // ID региона (города)
+    val areaName: String?           // Название региона (города)
+)
+
+data class SalaryEntity(
+    @ColumnInfo(name = "salary_from")
+    val salaryFrom: Long?,          // Зарплата "от"
+    val salaryTo: Long?,            // Зарплата "до"
+    val currency: String?           // Валюта зарплаты
+)
+
+data class ContactsEntity(
+    val contactName: String?,       // Имя контактного лица
+    val contactEmail: String?,      // Почта контакта
+    val phoneFormatted: String?     // Телефон контакта
 )
 
 /**

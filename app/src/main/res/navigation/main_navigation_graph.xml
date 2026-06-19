@@ -78,5 +78,5 @@
         android:id="@+id/regionSelectionFragment"
         android:name="ru.practicum.android.diploma.ui.fragments.filter.RegionSelectionFragment"
         android:label="fragment_region_selection"
-        tools:layout="@layout/fragment_region_selection" />
+        tools:layout="@layout/fragment_filter_area" />
 </navigation>

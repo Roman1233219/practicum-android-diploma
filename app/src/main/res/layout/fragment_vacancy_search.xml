@@ -45,7 +45,8 @@
         android:src="@drawable/ic_filter_off_24"
         app:layout_constraintBottom_toBottomOf="@+id/searchTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/searchTitle" />
+        app:layout_constraintTop_toTopOf="@+id/searchTitle"
+        app:tint="?attr/colorOnSurface" />
 
     <EditText
         android:id="@+id/searchEditText"
@@ -53,13 +54,30 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_8"
-        android:drawableEnd="@drawable/ic_search_24"
         android:hint="@string/search_hint"
         android:imeOptions="actionSearch"
         android:importantForAutofill="no"
+        android:paddingStart="16dp"
+        android:paddingEnd="48dp"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintEnd_toStartOf="@id/glRightBorder_16"
         app:layout_constraintStart_toStartOf="@id/glLeftBorder_16"
         app:layout_constraintTop_toBottomOf="@+id/searchTitle" />
+
+    <ImageView
+
+        android:id="@+id/searchIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_search_24"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="null"
+        app:layout_constraintBottom_toBottomOf="@id/searchEditText"
+        app:layout_constraintEnd_toEndOf="@id/searchEditText"
+        app:layout_constraintTop_toTopOf="@id/searchEditText" />
 
     <TextView
         android:id="@+id/tvResultInfo"

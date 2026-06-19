@@ -14,6 +14,7 @@
     <string name="filters_title">Настройки фильтрации</string>
     <string name="vacancy_details_title">Вакансия</string>
     <string name="vacancy_search_title">Поиск вакансий</string>
+    <string name="search_hint">Введите запрос</string>
 
 <!--    Экран настроек фильтрации-->
     <string name="work_place">Место работы</string>

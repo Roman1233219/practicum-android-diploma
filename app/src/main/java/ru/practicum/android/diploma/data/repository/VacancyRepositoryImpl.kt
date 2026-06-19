@@ -3,10 +3,10 @@ package ru.practicum.android.diploma.data.repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.NetworkClient
+import ru.practicum.android.diploma.data.converters.toModel
 import ru.practicum.android.diploma.data.dto.VacanciesRequest
 import ru.practicum.android.diploma.data.dto.VacanciesResponse
 import ru.practicum.android.diploma.domain.api.VacanciesRepository
-import ru.practicum.android.diploma.data.converters.toModel
 import ru.practicum.android.diploma.domain.models.ApiResult
 import ru.practicum.android.diploma.domain.models.VacanciesSearchResult
 

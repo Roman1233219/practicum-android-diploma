@@ -9,7 +9,7 @@
 
     android:theme="@style/Base.Theme.PracticumAndroidDiploma">
     <TextView
-        android:id="@+id/locationName"
+        android:id="@+id/areaName"
         
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

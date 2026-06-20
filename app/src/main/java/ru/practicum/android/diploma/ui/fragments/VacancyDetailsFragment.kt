@@ -27,9 +27,6 @@ class VacancyDetailsFragment : Fragment() {
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
-
-        // Временно показываем ошибку сервера для проверки (удалить при реализации логики данных)
-        showServerError()
     }
 
     private fun setupServerErrorState() {

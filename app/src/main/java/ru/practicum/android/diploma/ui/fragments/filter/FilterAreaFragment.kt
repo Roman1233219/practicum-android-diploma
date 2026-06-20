@@ -10,12 +10,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.practicum.android.diploma.databinding.FragmentFilterAreaBinding
 import ru.practicum.android.diploma.presentation.area.AreaUi
-import ru.practicum.android.diploma.util.debounce
+import ru.practicum.android.diploma.presentation.area.AreaViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.presentation.area.AreaUiState
 
 class FilterAreaFragment : Fragment() {
     //binding
     private var _binding: FragmentFilterAreaBinding? = null
     private val binding get() = _binding!!
+
+    //viewModel
+    private val viewModel by viewModel<AreaViewModel>()
 
     //список регионов
     private val areas = mutableListOf<AreaUi>()
@@ -28,6 +33,11 @@ class FilterAreaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //подпись на liveData
+        viewModel.observeScreenState().observe(viewLifecycleOwner) {
+            render(it)
+        }
+
         // Установка кнопки "Назад"
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
@@ -43,7 +53,29 @@ class FilterAreaFragment : Fragment() {
         _binding = null
     }
 
-    companion object{
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
+    //состояния экрана
+    private fun render(state: AreaUiState) {
+        when(state) {
+            is AreaUiState.Initial -> {}
+            is AreaUiState.Content -> showContent(state.areas)
+            is AreaUiState.Empty -> showEmpty(state.message)
+            is AreaUiState.Error -> showError(state.message)
+        }
+    }
+
+    private fun showError(message: String) {
+
+    }
+
+    private fun showEmpty(message: String) {
+
+    }
+
+    private fun showContent(newAreas: List<AreaUi>) {
+        binding.regionList.visibility = View.VISIBLE
+
+        areas.clear()
+        areas.addAll(newAreas)
+        areasAdapter.notifyDataSetChanged()
     }
 }

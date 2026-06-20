@@ -21,4 +21,8 @@
 
     <string name="country">Страна</string>
     <string name="region">Регион</string>
+
+<!--    Текст для заглушек-->
+    <string name="placeholder_empty_area">Такого региона нет</string>
+    <string name="placeholder_error_area">Не удалось получить список</string>
 </resources>

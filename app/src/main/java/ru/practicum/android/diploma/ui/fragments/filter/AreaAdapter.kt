@@ -6,15 +6,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.presentation.area.AreaUi
 
 class AreaAdapter(
-    private val areas: List<String>
+    private val areas: List<AreaUi>
 ) : RecyclerView.Adapter<AreaAdapter.AreasViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): AreasViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_location, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_area, parent, false)
         return AreasViewHolder(view)
     }
 
@@ -30,10 +31,10 @@ class AreaAdapter(
     }
 
     inner class AreasViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        private val areaName: TextView = itemView.findViewById(R.id.locationName)
+        private val areaName: TextView = itemView.findViewById(R.id.areaName)
 
-        fun bind(model: String) {
-            areaName.text = model
+        fun bind(model: AreaUi) {
+            areaName.text = model.areaName
         }
     }
 

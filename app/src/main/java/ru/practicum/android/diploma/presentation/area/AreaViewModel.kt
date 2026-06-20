@@ -1,12 +1,24 @@
 package ru.practicum.android.diploma.presentation.area
 
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.Job
+import ru.practicum.android.diploma.R
 
 class AreaViewModel : ViewModel() {
     private val screenState = MutableLiveData<AreaUiState>(AreaUiState.Initial)
     fun observeScreenState(): LiveData<AreaUiState> = screenState
+
+    //полный список регионов
+    private var fullAreasList: List<AreaUi> = emptyList()
+
+    //для поисковой строки
+    private var latestSearchText: String? = null
+    private val handler = Handler(Looper.getMainLooper())
 
     init {
         loadAreas()
@@ -38,11 +50,65 @@ class AreaViewModel : ViewModel() {
             AreaUi(areaId = 19, areaName = "Зарайск"),
             AreaUi(areaId = 20, areaName = "Звенигород")
         )
+        fullAreasList = areasList
+
         renderScreenState(AreaUiState.Content(areasList))
+    }
+
+    //поиск региона
+    fun searchDebounce(changedText: String) {
+        if (latestSearchText == changedText) return
+
+        latestSearchText = changedText
+
+        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+
+        if (changedText.isBlank()) {
+            renderScreenState(AreaUiState.Content(fullAreasList))
+            return
+        }
+
+        handler.postDelayed(
+            { search(changedText) },
+            SEARCH_DEBOUNCE_DELAY
+        )
+    }
+
+    private fun search(query: String) {
+        if (query.isBlank()) {
+            renderScreenState(
+                AreaUiState.Content(fullAreasList)
+            )
+            return
+        }
+
+        val filteredList = fullAreasList.filter {
+            it.areaName.contains(query, ignoreCase = true)
+        }
+
+        if (filteredList.isEmpty()) {
+            renderScreenState(
+                AreaUiState.Empty(R.string.placeholder_empty_area)
+            )
+        } else {
+            renderScreenState(
+                AreaUiState.Content(filteredList)
+            )
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
 
     //изменение состояния экрана
     private fun renderScreenState(state: AreaUiState) {
         screenState.postValue(state)
+    }
+
+    private companion object {
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private val SEARCH_REQUEST_TOKEN = Any()
     }
 }

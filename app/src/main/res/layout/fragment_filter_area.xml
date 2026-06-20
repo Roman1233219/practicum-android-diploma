@@ -60,4 +60,25 @@
         android:layout_weight="1"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
+    <ImageView
+        android:id="@+id/placeholderImage"
+
+        android:layout_width="328dp"
+        android:layout_height="223dp"
+        android:layout_marginTop="135dp"
+
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/placeholderText"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+
+        style="@style/TextDisplayMedium22"
+        android:textColor="?attr/colorOnSurface"
+
+        android:visibility="gone"/>
+
 </LinearLayout>

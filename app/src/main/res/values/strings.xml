@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">Practicum-Android-Diploma</string>
 
-    <!--    BottomBar-->
+<!--    BottomBar-->
     <string name="main_title">Главная</string>
     <string name="favourites_title">Избранное</string>
     <string name="team_title">Команда</string>
 
-    <!--    Названия экранов-->
+<!--    Названия экранов-->
     <string name="country_selection_title">Выбор страны</string>
     <string name="region_selection_title">Выбор региона</string>
     <string name="industry_selection_title">Выбор отрасли</string>
@@ -22,7 +22,7 @@
     <string name="pictures_ratio">1:1</string>
     <string name="placeholder_picture_desc">Иллюстрация состояния экрана</string>
 
-    <!--    Экран настроек фильтрации-->
+<!--    Экран настроек фильтрации-->
     <string name="work_place">Место работы</string>
     <string name="industry">Отрасль</string>
 
@@ -52,5 +52,7 @@
     <string name="no_suitable_app">Нет подходящего приложения</string>
     <string name="error_occurred">Проверьте подключение к интернету</string>
 
-
+<!--    Текст для заглушек-->
+    <string name="placeholder_empty_area">Такого региона нет</string>
+    <string name="placeholder_error_area">Не удалось получить список</string>
 </resources>

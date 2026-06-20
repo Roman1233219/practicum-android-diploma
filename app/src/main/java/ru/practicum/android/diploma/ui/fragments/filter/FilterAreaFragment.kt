@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.practicum.android.diploma.databinding.FragmentFilterAreaBinding
 import ru.practicum.android.diploma.presentation.area.AreaUi
 import ru.practicum.android.diploma.presentation.area.AreaViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.area.AreaUiState
 
 class FilterAreaFragment : Fragment() {
@@ -64,15 +64,29 @@ class FilterAreaFragment : Fragment() {
     }
 
     private fun showError(message: String) {
+        binding.placeholderImage.setImageResource(R.drawable.placeholder_error_area)
+        binding.placeholderText.text = message
 
+        binding.placeholderImage.visibility = View.VISIBLE
+        binding.placeholderText.visibility = View.VISIBLE
+
+        binding.regionList.visibility = View.GONE
     }
 
     private fun showEmpty(message: String) {
+        binding.placeholderImage.setImageResource(R.drawable.placeholder_empty)
+        binding.placeholderText.text = message
 
+        binding.placeholderImage.visibility = View.VISIBLE
+        binding.placeholderText.visibility = View.VISIBLE
+
+        binding.regionList.visibility = View.GONE
     }
 
     private fun showContent(newAreas: List<AreaUi>) {
         binding.regionList.visibility = View.VISIBLE
+        binding.placeholderImage.visibility = View.GONE
+        binding.placeholderText.visibility = View.GONE
 
         areas.clear()
         areas.addAll(newAreas)

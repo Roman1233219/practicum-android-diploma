@@ -10,24 +10,24 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import ru.practicum.android.diploma.databinding.FragmentFilterAreaBinding
-import ru.practicum.android.diploma.presentation.area.AreaUi
-import ru.practicum.android.diploma.presentation.area.AreaViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.databinding.FragmentFilterAreaBinding
+import ru.practicum.android.diploma.presentation.area.AreaUi
 import ru.practicum.android.diploma.presentation.area.AreaUiState
+import ru.practicum.android.diploma.presentation.area.AreaViewModel
 
 class FilterAreaFragment : Fragment() {
-    //binding
+    // binding
     private var _binding: FragmentFilterAreaBinding? = null
     private val binding get() = _binding!!
 
-    //viewModel
+    // viewModel
     private val viewModel by viewModel<AreaViewModel>()
 
-    //список регионов
+    // список регионов
     private val areas = mutableListOf<AreaUi>()
-    private val areasAdapter = AreaAdapter(areas) {area ->
+    private val areasAdapter = AreaAdapter(areas) { area ->
         Log.d("getAreaId", area.areaId.toString())
         findNavController()
             .previousBackStackEntry
@@ -44,7 +44,7 @@ class FilterAreaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //подпись на liveData
+        // подпись на liveData
         viewModel.observeScreenState().observe(viewLifecycleOwner) {
             render(it)
         }
@@ -54,15 +54,15 @@ class FilterAreaFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        //список регионов
+        // список регионов
         binding.regionList.layoutManager = LinearLayoutManager(requireContext())
         binding.regionList.adapter = areasAdapter
 
-        //поиск
+        // поиск
         binding.regionSearchInput.setEndIconOnClickListener {
             val currentText = binding.regionSearchInput.editText?.text.toString()
 
-            if(currentText.isNotEmpty()) {
+            if (currentText.isNotEmpty()) {
                 binding.regionSearchInput.editText?.text?.clear()
             } else {
                 binding.regionSearchInput.editText?.requestFocus()
@@ -91,9 +91,9 @@ class FilterAreaFragment : Fragment() {
         _binding = null
     }
 
-    //состояния экрана
+    // состояния экрана
     private fun render(state: AreaUiState) {
-        when(state) {
+        when (state) {
             is AreaUiState.Initial -> {}
             is AreaUiState.Content -> showContent(state.areas)
             is AreaUiState.Empty -> showEmpty(state.messageRes)
@@ -131,7 +131,7 @@ class FilterAreaFragment : Fragment() {
         areasAdapter.notifyDataSetChanged()
     }
 
-    companion object{
+    companion object {
         const val AREA_DATA_KEY = "selected_area_id"
     }
 }

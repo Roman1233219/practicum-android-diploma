@@ -34,7 +34,7 @@ class AreaAdapter(
         return areas.size
     }
 
-    inner class AreasViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class AreasViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val areaName: TextView = itemView.findViewById(R.id.areaName)
 
         fun bind(model: AreaUi) {

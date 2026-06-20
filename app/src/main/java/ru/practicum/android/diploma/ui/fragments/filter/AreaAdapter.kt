@@ -9,7 +9,8 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.area.AreaUi
 
 class AreaAdapter(
-    private val areas: List<AreaUi>
+    private val areas: List<AreaUi>,
+    private val onClick: (AreaUi) -> Unit,
 ) : RecyclerView.Adapter<AreaAdapter.AreasViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -24,6 +25,9 @@ class AreaAdapter(
         position: Int
     ) {
         holder.bind(areas[position])
+        holder.itemView.setOnClickListener {
+            onClick(areas[position])
+        }
     }
 
     override fun getItemCount(): Int {

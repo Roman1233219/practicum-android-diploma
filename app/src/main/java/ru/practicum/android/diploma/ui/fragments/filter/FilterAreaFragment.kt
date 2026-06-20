@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.ui.fragments.filter
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +27,15 @@ class FilterAreaFragment : Fragment() {
 
     //список регионов
     private val areas = mutableListOf<AreaUi>()
-    private val areasAdapter = AreaAdapter(areas)
+    private val areasAdapter = AreaAdapter(areas) {area ->
+        Log.d("getAreaId", area.areaId.toString())
+        findNavController()
+            .previousBackStackEntry
+            ?.savedStateHandle
+            ?.set(AREA_DATA_KEY, area.areaId)
+
+        findNavController().navigateUp()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentFilterAreaBinding.inflate(inflater, container, false)
@@ -120,5 +129,9 @@ class FilterAreaFragment : Fragment() {
         areas.clear()
         areas.addAll(newAreas)
         areasAdapter.notifyDataSetChanged()
+    }
+
+    companion object{
+        const val AREA_DATA_KEY = "selected_area_id"
     }
 }

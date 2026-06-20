@@ -2,21 +2,19 @@ package ru.practicum.android.diploma.presentation.area
 
 import android.os.Handler
 import android.os.Looper
-import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.Job
 import ru.practicum.android.diploma.R
 
 class AreaViewModel : ViewModel() {
     private val screenState = MutableLiveData<AreaUiState>(AreaUiState.Initial)
     fun observeScreenState(): LiveData<AreaUiState> = screenState
 
-    //полный список регионов
+    // полный список регионов
     private var fullAreasList: List<AreaUi> = emptyList()
 
-    //для поисковой строки
+    // для поисковой строки
     private var latestSearchText: String? = null
     private val handler = Handler(Looper.getMainLooper())
 
@@ -24,9 +22,9 @@ class AreaViewModel : ViewModel() {
         loadAreas()
     }
 
-    //первоначальная загрузка всех регионов
+    // первоначальная загрузка всех регионов
     private fun loadAreas() {
-        //пока просто загружаю mock данные
+        // пока просто загружаю mock данные
         val areasList: List<AreaUi> = listOf(
             AreaUi(areaId = 1, areaName = "Москва"),
             AreaUi(areaId = 2, areaName = "Апрелевка"),
@@ -55,7 +53,7 @@ class AreaViewModel : ViewModel() {
         renderScreenState(AreaUiState.Content(areasList))
     }
 
-    //поиск региона
+    // поиск региона
     fun searchDebounce(changedText: String) {
         if (latestSearchText == changedText) return
 
@@ -102,7 +100,7 @@ class AreaViewModel : ViewModel() {
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
 
-    //изменение состояния экрана
+    // изменение состояния экрана
     private fun renderScreenState(state: AreaUiState) {
         screenState.postValue(state)
     }

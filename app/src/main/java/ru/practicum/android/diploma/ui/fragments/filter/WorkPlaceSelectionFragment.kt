@@ -37,7 +37,7 @@ class WorkPlaceSelectionFragment : Fragment() {
             findNavController().navigate(R.id.action_workPlaceSelectionFragment_to_regionSelectionFragment)
         }
 
-        //получение id выранного региона
+        // получение id выранного региона
         val savedStateHandle =
             findNavController()
                 .currentBackStackEntry

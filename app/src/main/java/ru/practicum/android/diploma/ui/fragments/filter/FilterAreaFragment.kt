@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,6 +48,33 @@ class FilterAreaFragment : Fragment() {
         //список регионов
         binding.regionList.layoutManager = LinearLayoutManager(requireContext())
         binding.regionList.adapter = areasAdapter
+
+        //поиск
+        binding.regionSearchInput.setEndIconOnClickListener {
+            val currentText = binding.regionSearchInput.editText?.text.toString()
+
+            if(currentText.isNotEmpty()) {
+                binding.regionSearchInput.editText?.text?.clear()
+            } else {
+                binding.regionSearchInput.editText?.requestFocus()
+            }
+        }
+
+        binding.regionSearchInput.editText?.doOnTextChanged { text, _, _, _ ->
+            val query = text.toString()
+
+            binding.regionSearchInput.endIconDrawable =
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    if (query.isEmpty()) {
+                        R.drawable.ic_search_24
+                    } else {
+                        R.drawable.ic_close_24
+                    }
+                )
+
+            viewModel.searchDebounce(query)
+        }
     }
 
     override fun onDestroyView() {
@@ -58,14 +87,14 @@ class FilterAreaFragment : Fragment() {
         when(state) {
             is AreaUiState.Initial -> {}
             is AreaUiState.Content -> showContent(state.areas)
-            is AreaUiState.Empty -> showEmpty(state.message)
-            is AreaUiState.Error -> showError(state.message)
+            is AreaUiState.Empty -> showEmpty(state.messageRes)
+            is AreaUiState.Error -> showError(state.messageRes)
         }
     }
 
-    private fun showError(message: String) {
+    private fun showError(messageRes: Int) {
         binding.placeholderImage.setImageResource(R.drawable.placeholder_error_area)
-        binding.placeholderText.text = message
+        binding.placeholderText.text = getString(messageRes)
 
         binding.placeholderImage.visibility = View.VISIBLE
         binding.placeholderText.visibility = View.VISIBLE
@@ -73,9 +102,9 @@ class FilterAreaFragment : Fragment() {
         binding.regionList.visibility = View.GONE
     }
 
-    private fun showEmpty(message: String) {
+    private fun showEmpty(messageRes: Int) {
         binding.placeholderImage.setImageResource(R.drawable.placeholder_empty)
-        binding.placeholderText.text = message
+        binding.placeholderText.text = getString(messageRes)
 
         binding.placeholderImage.visibility = View.VISIBLE
         binding.placeholderText.visibility = View.VISIBLE

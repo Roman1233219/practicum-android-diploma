@@ -11,10 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancySearchBinding
+import ru.practicum.android.diploma.util.ViewStateHelper
 
 class VacancySearchFragment : Fragment() {
     private var _binding: FragmentVacancySearchBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var viewStateHelper: ViewStateHelper
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentVacancySearchBinding.inflate(inflater, container, false)
@@ -23,6 +26,15 @@ class VacancySearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewStateHelper = ViewStateHelper(
+            listOf(
+                binding.layoutInitial.root,
+                binding.layoutNoInternet.root,
+                binding.layoutNoFound.root,
+                binding.layoutLoading.root
+            )
+        )
 
         setupInitialState()
         setupNoInternetState()
@@ -71,25 +83,24 @@ class VacancySearchFragment : Fragment() {
     }
 
     private fun showInitialState() {
-        binding.layoutInitial.root.isVisible = true
-        binding.layoutNoInternet.root.isVisible = false
-        binding.layoutNoFound.root.isVisible = false
+        viewStateHelper.showOnly(binding.layoutInitial.root)
         binding.tvResultInfo.isVisible = false
     }
 
     private fun showNoInternetState() {
-        binding.layoutInitial.root.isVisible = false
-        binding.layoutNoInternet.root.isVisible = true
-        binding.layoutNoFound.root.isVisible = false
+        viewStateHelper.showOnly(binding.layoutNoInternet.root)
         binding.tvResultInfo.isVisible = false
     }
 
     private fun showEmptyResultState() {
-        binding.layoutInitial.root.isVisible = false
-        binding.layoutNoInternet.root.isVisible = false
-        binding.layoutNoFound.root.isVisible = true
+        viewStateHelper.showOnly(binding.layoutNoFound.root)
         binding.tvResultInfo.isVisible = true
         binding.tvResultInfo.text = getString(R.string.no_vacancies)
+    }
+
+    private fun showLoadingState() {
+        viewStateHelper.showOnly(binding.layoutLoading.root)
+        binding.tvResultInfo.isVisible = false
     }
 
     override fun onDestroyView() {

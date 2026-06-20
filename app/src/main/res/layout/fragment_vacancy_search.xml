@@ -65,16 +65,15 @@
         app:layout_constraintTop_toBottomOf="@+id/searchTitle" />
 
     <ImageView
-
         android:id="@+id/searchIcon"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:padding="12dp"
-        android:src="@drawable/ic_search_24"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
+        android:contentDescription="@null"
         android:focusable="true"
-        android:contentDescription="null"
+        android:padding="12dp"
+        android:src="@drawable/ic_search_24"
         app:layout_constraintBottom_toBottomOf="@id/searchEditText"
         app:layout_constraintEnd_toEndOf="@id/searchEditText"
         app:layout_constraintTop_toTopOf="@id/searchEditText" />
@@ -85,6 +84,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_16"
+        android:background="@drawable/blue_bubble_shape"
+        android:paddingHorizontal="@dimen/padding_16"
+        android:paddingVertical="@dimen/padding_4"
+        android:textColor="@color/white"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/glRightBorder_16"
         app:layout_constraintStart_toStartOf="@id/glLeftBorder_16"
@@ -92,24 +95,40 @@
         tools:text="Найдено 10 вакансий"
         tools:visibility="visible" />
 
-    <LinearLayout
-        android:id="@+id/placeholderContainer"
+    <!-- Состояние: Начальный экран -->
+    <include
+        android:id="@+id/layoutInitial"
+        layout="@layout/layout_placeholder"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/glRightBorder_16"
         app:layout_constraintStart_toEndOf="@id/glLeftBorder_16"
-        app:layout_constraintTop_toBottomOf="@id/tvResultInfo">
+        app:layout_constraintTop_toBottomOf="@id/tvResultInfo" />
 
-        <ImageView
-            android:id="@+id/placeholderImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@null"
-            android:src="@drawable/main_screen" />
+    <!-- Состояние: Нет интернета -->
+    <include
+        android:id="@+id/layoutNoInternet"
+        layout="@layout/layout_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/glRightBorder_16"
+        app:layout_constraintStart_toEndOf="@id/glLeftBorder_16"
+        app:layout_constraintTop_toBottomOf="@id/tvResultInfo" />
 
-    </LinearLayout>
+    <!-- Состояние: Ошибка / Ничего не найдено -->
+    <include
+        android:id="@+id/layoutNoFound"
+        layout="@layout/layout_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/glRightBorder_16"
+        app:layout_constraintStart_toEndOf="@id/glLeftBorder_16"
+        app:layout_constraintTop_toBottomOf="@id/tvResultInfo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

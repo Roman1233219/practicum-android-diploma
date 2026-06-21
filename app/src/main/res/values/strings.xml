@@ -31,4 +31,7 @@
 
     <!-- Экран избранного -->
     <string name="no_items">Список пуст</string>
+    <string name="organization_icon">Логотип организации</string>
+
+
 </resources>

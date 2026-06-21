@@ -28,4 +28,7 @@
 
     <string name="country">Страна</string>
     <string name="region">Region</string>
+
+    <!-- Экран избранного -->
+    <string name="no_items">Список пуст</string>
 </resources>

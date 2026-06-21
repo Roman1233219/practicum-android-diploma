@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.ui.adapter.TeamAdapter
 class TeamFragment : Fragment() {
     private var _binding: FragmentTeamBinding? = null
     private val binding get() = _binding!!
-    private lateinit var adapter: TeamAdapter
+    private var adapter: TeamAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentTeamBinding.inflate(inflater, container, false)
@@ -27,7 +27,7 @@ class TeamFragment : Fragment() {
         _binding?.rvTeam?.adapter = adapter
 
         // Подключаем мок-данные
-        adapter.submitList(adapter.getMockData())
+        adapter?.submitList(adapter!!.getMockData())
     }
 
     override fun onDestroyView() {

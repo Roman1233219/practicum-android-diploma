@@ -18,10 +18,11 @@ class TeamAdapter : RecyclerView.Adapter<TeamAdapter.TeamViewHolder>() {
     }
 
     fun getMockData(): List<TeamItem> = listOf(
-        TeamItem("Анна Архиповна", "Тестирование"),
-        TeamItem("Ольга Петровна", "Оценка"),
-        TeamItem("Вениамин Петрович", "Дизайн"),
-        TeamItem("Антон Андроидович", null)
+        TeamItem("Бодалин Роман", "Разработчик"),
+        TeamItem("Давыдова Ксения", "Разработчик"),
+        TeamItem("Маканаев Хазрет", "Разработчик"),
+        TeamItem("Максимова Виктория", "Разработчик"),
+        TeamItem("Ставицкий Виктор", "Разработчик")
     )
 
     inner class TeamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -46,4 +47,3 @@ class TeamAdapter : RecyclerView.Adapter<TeamAdapter.TeamViewHolder>() {
 
     override fun getItemCount(): Int = items.size
 }
-

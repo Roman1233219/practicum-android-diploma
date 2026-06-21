@@ -13,6 +13,8 @@ import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancySearchBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.domain.models.VacancyCard
+import ru.practicum.android.diploma.presentation.VacancyAdapter
 import ru.practicum.android.diploma.ui.root.RootActivity
 import ru.practicum.android.diploma.util.ViewStateHelper
 import ru.practicum.android.diploma.util.debounce
@@ -21,7 +23,7 @@ class VacancySearchFragment : Fragment() {
     private var _binding: FragmentVacancySearchBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewStateHelper: ViewStateHelper
-    private lateinit var onVacancySearchDebounce: (Vacancy) -> Unit
+    private lateinit var onVacancySearchDebounce: (VacancyCard) -> Unit
     private lateinit var adapter: VacancyAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -48,7 +50,7 @@ class VacancySearchFragment : Fragment() {
         setupServerErrorState()
 
         onVacancySearchDebounce =
-            debounce<Vacancy>(
+            debounce<VacancyCard>(
                 CLICK_DEBOUNCE_DELAY,
                 viewLifecycleOwner.lifecycleScope,
                 false
@@ -58,6 +60,7 @@ class VacancySearchFragment : Fragment() {
                     //добавить вызов и передачу vacancyId или vacancy в VacancyDetailsFragment.createArgs(?)
                 )
             }
+
         adapter = VacancyAdapter { vacancy ->
             onVacancySearchDebounce(vacancy)
         }
@@ -81,6 +84,7 @@ class VacancySearchFragment : Fragment() {
                     binding.searchIcon.setImageResource(R.drawable.ic_close_24)
                 }
             }
+
             override fun afterTextChanged(s: Editable?) = Unit
         }
 
@@ -140,6 +144,7 @@ class VacancySearchFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }

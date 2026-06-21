@@ -22,7 +22,7 @@
         android:layout_height="fill_parent"
         android:id="@+id/no_items_placeholder"
         android:visibility="gone"
-        tools:visibility="gone">
+        tools:visibility="visible">
             <TextView
                 app:drawableTopCompat="@drawable/placeholder_no_items"
                 android:layout_width="wrap_content"
@@ -39,8 +39,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/error_placeholder"
-        android:visibility="gone"
-        tools:visibility="gone">
+        android:visibility="gone">
             <TextView
                 app:drawableTopCompat="@drawable/placeholder_no_found"
                 android:layout_width="wrap_content"
@@ -53,6 +52,7 @@
                 android:textColor="?attr/colorOnSurface" />
     </FrameLayout>
     <androidx.recyclerview.widget.RecyclerView
+        android:visibility="gone"
         android:id="@+id/vacancy_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

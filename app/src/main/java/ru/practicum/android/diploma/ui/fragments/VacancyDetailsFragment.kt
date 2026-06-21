@@ -23,7 +23,7 @@ class VacancyDetailsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: VacancyDetailsViewModel by viewModel {
-        parametersOf("dummy_id") // Временно хардкодим ID
+        parametersOf(arguments?.getString("vacancyId") ?: "")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

@@ -15,15 +15,20 @@ import ru.practicum.android.diploma.domain.api.VacanciesRepository
 import ru.practicum.android.diploma.domain.models.ApiResult
 import ru.practicum.android.diploma.domain.models.VacanciesSearchResult
 import ru.practicum.android.diploma.domain.models.VacancyCard
+import ru.practicum.android.diploma.util.debounce
 
 class SearchViewModel(
     private val vacancyRepository: VacanciesRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ApiResult<VacanciesSearchResult>>(ApiResult.Loading)
     val uiState: StateFlow<ApiResult<VacanciesSearchResult>> = _uiState.asStateFlow()
     private val mockVacanciesList: MutableList<VacancyCard> = mutableListOf()
     private var searchJob: Job? = null
+    private val vacancySearchDebounce =
+        debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changeText ->
+            searchVacancies(changeText)
+        }
 
     init {
         viewModelScope.launch(Dispatchers.Main) {
@@ -33,7 +38,7 @@ class SearchViewModel(
 
     fun searchVacancies(query: String): Flow<ApiResult<VacanciesSearchResult>> = flow {
         emit(ApiResult.Loading)
-        delay(500)
+        //delay(500)
 
         try {
             // Здесь должен быть реальный сетевой вызов.
@@ -56,44 +61,52 @@ class SearchViewModel(
     // --- Генератор мок-данных ---
     private fun generateMockVacanciesSearchResult(): VacanciesSearchResult {
         mockVacanciesList.add(
-            VacancyCard("1",
+            VacancyCard(
+                "1",
                 "Какая-то вакансия 1",
                 "Яндекс",
                 "Москва",
                 80000,
                 100000,
                 "RUB",
-                "")
+                ""
+            )
         )
         mockVacanciesList.add(
-            VacancyCard("2",
+            VacancyCard(
+                "2",
                 "Какая-то вакансия 2",
                 "Яндекс",
                 "Москва",
                 90000,
                 130000,
                 "RUB",
-                "")
+                ""
+            )
         )
         mockVacanciesList.add(
-            VacancyCard("3",
+            VacancyCard(
+                "3",
                 "Какая-то вакансия 3",
                 "ВК",
                 "Москва",
                 90000,
                 130000,
                 "RUB",
-                "")
+                ""
+            )
         )
         mockVacanciesList.add(
-            VacancyCard("4",
+            VacancyCard(
+                "4",
                 "Какая-то вакансия 4",
                 "Татнефть",
                 "Казань",
                 70000,
                 90000,
                 "RUB",
-                "")
+                ""
+            )
         )
 
         return VacanciesSearchResult(
@@ -110,5 +123,9 @@ class SearchViewModel(
 
     fun cancelSearch() {
         searchJob?.cancel()
+    }
+
+    companion object {
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }

@@ -8,16 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancySearchBinding
+import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.ui.root.RootActivity
 import ru.practicum.android.diploma.util.ViewStateHelper
+import ru.practicum.android.diploma.util.debounce
 
 class VacancySearchFragment : Fragment() {
     private var _binding: FragmentVacancySearchBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var viewStateHelper: ViewStateHelper
+    private lateinit var onVacancySearchDebounce: (Vacancy) -> Unit
+    private lateinit var adapter: VacancyAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentVacancySearchBinding.inflate(inflater, container, false)
@@ -41,6 +46,21 @@ class VacancySearchFragment : Fragment() {
         setupNoInternetState()
         setupNoFoundState()
         setupServerErrorState()
+
+        onVacancySearchDebounce =
+            debounce<Vacancy>(
+                CLICK_DEBOUNCE_DELAY,
+                viewLifecycleOwner.lifecycleScope,
+                false
+            ) { vacancy ->
+                findNavController().navigate(
+                    R.id.action_vacancySearchFragment_to_vacancyDetailsFragment,
+                    //добавить вызов и передачу vacancyId или vacancy в VacancyDetailsFragment.createArgs(?)
+                )
+            }
+        adapter = VacancyAdapter { vacancy ->
+            onVacancySearchDebounce(vacancy)
+        }
 
         binding.filterButton.setOnClickListener {
             findNavController().navigate(R.id.action_vacancySearchFragment_to_filtersFragment)
@@ -119,5 +139,8 @@ class VacancySearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

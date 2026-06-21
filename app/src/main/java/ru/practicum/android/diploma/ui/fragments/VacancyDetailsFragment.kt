@@ -13,15 +13,17 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyDetailsBinding
+import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.details.VacancyDetailsState
 import ru.practicum.android.diploma.presentation.details.VacancyDetailsViewModel
+import ru.practicum.android.diploma.util.HtmlUtils
 
 class VacancyDetailsFragment : Fragment() {
     private var _binding: FragmentVacancyDetailsBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: VacancyDetailsViewModel by viewModel {
-        parametersOf("dummy_id") // Временно хардкодим ID для этапа "Logic Start"
+        parametersOf("dummy_id") // Временно хардкодим ID
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -52,16 +54,49 @@ class VacancyDetailsFragment : Fragment() {
     private fun render(state: VacancyDetailsState) {
         when (state) {
             is VacancyDetailsState.Loading -> {
-                // Логика показа загрузки
+                // Здесь можно добавить показ лоадера
+                binding.vacancyContent.isVisible = false
+                binding.layoutServerError.root.isVisible = false
             }
             is VacancyDetailsState.Content -> {
-                binding.vacancyTitle.text = state.vacancy.vacancyName
-                binding.layoutServerError.root.isVisible = false
-                binding.vacancyContent.isVisible = true
+                showContent(state.vacancy)
             }
             is VacancyDetailsState.Error -> {
                 showServerError()
             }
+        }
+    }
+
+    private fun showContent(vacancy: Vacancy) {
+        binding.layoutServerError.root.isVisible = false
+        binding.vacancyContent.isVisible = true
+
+        with(binding) {
+            tvVacancyName.text = vacancy.vacancyName
+            tvCompanyName.text = vacancy.companyName
+            tvArea.text = vacancy.areaName
+            tvExperience.text = vacancy.experienceName
+            
+            // Обработка зарплаты
+            tvSalary.text = formatSalary(vacancy)
+            
+            // Самое важное: парсинг HTML описания
+            tvDescription.text = HtmlUtils.parseHtml(vacancy.description)
+        }
+    }
+
+    private fun formatSalary(vacancy: Vacancy): String {
+        return when {
+            vacancy.salaryFrom != null && vacancy.salaryTo != null -> {
+                "От ${vacancy.salaryFrom} до ${vacancy.salaryTo} ${vacancy.currency}"
+            }
+            vacancy.salaryFrom != null -> {
+                "От ${vacancy.salaryFrom} ${vacancy.currency}"
+            }
+            vacancy.salaryTo != null -> {
+                "До ${vacancy.salaryTo} ${vacancy.currency}"
+            }
+            else -> "Зарплата не указана"
         }
     }
 

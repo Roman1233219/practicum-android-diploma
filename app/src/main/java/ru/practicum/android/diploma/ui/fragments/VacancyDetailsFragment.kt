@@ -58,7 +58,7 @@ class VacancyDetailsFragment : Fragment() {
         }
     }
 
-    //обработка одноразовых событий
+    // обработка одноразовых событий
     private fun observeEvents() {
         lifecycleScope.launch {
             viewModel.events.collect { event ->
@@ -107,7 +107,7 @@ class VacancyDetailsFragment : Fragment() {
             tvCompanyName.text = vacancy.companyName
             tvArea.text = vacancy.areaName
             tvExperience.text = vacancy.experienceName
-            
+
             // Обработка зарплаты
             tvSalary.text = formatSalary(vacancy)
             
@@ -137,7 +137,7 @@ class VacancyDetailsFragment : Fragment() {
         }
 
         phoneComment.isVisible = hasPhoneComment
-        if(hasPhoneComment) {
+        if (hasPhoneComment) {
             phoneComment.text = vacancy.phoneComment
         }
     }

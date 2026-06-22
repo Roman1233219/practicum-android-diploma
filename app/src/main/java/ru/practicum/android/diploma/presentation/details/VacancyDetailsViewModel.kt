@@ -50,7 +50,11 @@ class VacancyDetailsViewModel(
 
         if (currentState is VacancyDetailsState.Content) {
             viewModelScope.launch {
-                _events.emit(VacancyDetailsEvent.OpenPhone(currentState.vacancy.phoneFormatted ?: return@launch))
+                val phone = currentState.vacancy.phoneFormatted
+
+                if (phone != null) {
+                    _events.emit(VacancyDetailsEvent.OpenPhone(phone))
+                }
             }
         }
     }
@@ -60,7 +64,11 @@ class VacancyDetailsViewModel(
 
         if (currentState is VacancyDetailsState.Content) {
             viewModelScope.launch {
-                _events.emit(VacancyDetailsEvent.OpenEmail(currentState.vacancy.contactEmail ?: return@launch))
+                val email = currentState.vacancy.contactEmail
+
+                if(email != null) {
+                    _events.emit(VacancyDetailsEvent.OpenEmail(email))
+                }
             }
         }
     }
@@ -70,11 +78,15 @@ class VacancyDetailsViewModel(
 
         if (currentState is VacancyDetailsState.Content) {
             viewModelScope.launch {
-                _events.emit(
-                    VacancyDetailsEvent.Share(
-                        currentState.vacancy.shareUrl ?: return@launch
+                val shareUrl = currentState.vacancy.shareUrl
+
+                if(shareUrl != null) {
+                    _events.emit(
+                        VacancyDetailsEvent.Share(
+                            shareUrl
+                        )
                     )
-                )
+                }
             }
         }
     }

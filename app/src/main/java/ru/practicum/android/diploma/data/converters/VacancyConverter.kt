@@ -6,6 +6,7 @@ import ru.practicum.android.diploma.data.dto.ContactsDto
 import ru.practicum.android.diploma.data.dto.EmployerDto
 import ru.practicum.android.diploma.data.dto.EmploymentDto
 import ru.practicum.android.diploma.data.dto.ExperienceDto
+import ru.practicum.android.diploma.data.dto.FilterIndustryDto
 import ru.practicum.android.diploma.data.dto.KeySkillDto
 import ru.practicum.android.diploma.data.dto.LogoUrlsDto
 import ru.practicum.android.diploma.data.dto.PhoneDto
@@ -70,7 +71,9 @@ fun VacancyDto.toModel(): Vacancy = Vacancy(
     contactEmail = this.contacts?.email,
     phoneFormatted = this.contacts?.phones?.firstOrNull()?.formatted,
     phoneComment = this.contacts?.phones?.firstOrNull()?.comment,
-    shareUrl = this.alternateUrl
+    shareUrl = this.alternateUrl,
+    industryId = this.industry.id,
+    industryName = this.industry.name
 )
 
 fun Vacancy.toDto(): VacancyDto = VacancyDto(
@@ -107,5 +110,9 @@ fun Vacancy.toDto(): VacancyDto = VacancyDto(
             null
         }
     ),
-    alternateUrl = this.shareUrl
+    alternateUrl = this.shareUrl,
+    industry = FilterIndustryDto(
+        id = this.industryId,
+        name = this.industryName
+    )
 )

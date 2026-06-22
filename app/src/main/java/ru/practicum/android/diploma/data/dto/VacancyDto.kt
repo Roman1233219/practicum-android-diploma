@@ -26,7 +26,8 @@ data class VacancyDto(
     val address: AddressDto?,
     val contacts: ContactsDto?,
     @SerializedName("alternate_url")
-    val alternateUrl: String?
+    val alternateUrl: String?,
+    val industry: FilterIndustryDto
 )
 
 data class EmployerDto(
@@ -74,4 +75,9 @@ data class ContactsDto(
 data class PhoneDto(
     val formatted: String?,
     val comment: String?
+)
+
+data class FilterIndustryDto(
+    val id: Int,
+    val name: String
 )

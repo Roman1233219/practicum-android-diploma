@@ -21,5 +21,7 @@ data class Vacancy(
     val contactEmail: String?,
     val phoneFormatted: String?,
     val phoneComment: String?,
-    val shareUrl: String?
+    val shareUrl: String?,
+    val industryId: Int,
+    val industryName: String
 )

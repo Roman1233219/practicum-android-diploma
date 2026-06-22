@@ -56,7 +56,9 @@
 
         app:layout_constraintTop_toTopOf="@id/vacancyTitle"
         app:layout_constraintEnd_toStartOf="@id/addToFavouritesButton"
-        android:layout_marginEnd="@dimen/padding_24"/>
+        android:layout_marginEnd="@dimen/padding_24"
+
+        app:tint="?attr/colorOnSurface" />
 
     <ImageView
         android:id="@+id/addToFavouritesButton"
@@ -66,7 +68,9 @@
 
         app:layout_constraintTop_toTopOf="@id/vacancyTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="@dimen/padding_20"/>
+        android:layout_marginEnd="@dimen/padding_20"
+
+        app:tint="?attr/colorOnSurface" />
 
 
     <!-- Слой ошибки сервера -->
@@ -159,6 +163,43 @@
                 android:paddingBottom="24dp"
                 android:textColor="?attr/colorOnSurface"
                 tools:text="Здесь будет описание вакансии с HTML тегами" />
+
+            <TextView
+                android:id="@+id/contactsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_24"
+                
+                android:text="Контакты"
+                android:textAppearance="@style/TextDisplayMedium22"
+                android:textColor="?attr/colorOnSurface"/>
+            
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_16"
+
+                android:textAppearance="@style/TextDisplayRegular16"
+                android:textColor="?attr/colorOnSurface"/>
+
+            <TextView
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_4"
+
+                android:textAppearance="@style/TextDisplayRegular16"
+                android:textColor="?attr/colorOnSurface"/>
+
+            <TextView
+                android:id="@+id/phoneComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_4"
+
+                android:textAppearance="@style/TextDisplayRegular16"
+                android:textColor="?attr/colorOnSurface"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

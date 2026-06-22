@@ -72,5 +72,6 @@ data class ContactsDto(
 )
 
 data class PhoneDto(
-    val formatted: String?
+    val formatted: String?,
+    val comment: String?
 )

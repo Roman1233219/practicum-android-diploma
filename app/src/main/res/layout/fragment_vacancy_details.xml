@@ -197,6 +197,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_4"
+                android:visibility="gone"
 
                 android:textAppearance="@style/TextDisplayRegular16"
                 android:textColor="?attr/colorOnSurface"/>

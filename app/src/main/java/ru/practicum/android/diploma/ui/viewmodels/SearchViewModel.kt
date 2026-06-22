@@ -70,8 +70,9 @@ class SearchViewModel(
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
                 runCatching {
-                    // repository.searchVacancies(searchQuery, currentSearchPage)
-                    generateVacancySearchData().collect { result ->
+                    repository.searchVacancies(searchQuery, currentSearchPage)
+                    //generateVacancySearchData()
+                        .collect { result ->
                         withContext(Dispatchers.Main) {
                             val replaceVacancyList = currentSearchPage == 0
                             when (result) {
@@ -125,28 +126,6 @@ class SearchViewModel(
                 }
             }
         }
-    }
-
-    private fun generateVacancySearchData(): Flow<ApiResult<VacanciesSearchResult>> = flow {
-        emit(ApiResult.Loading)
-        delay(800)
-
-        vacanciesList.clear()
-        val mockData = listOf(
-            VacancyCard("1", "Android Developer", "TechCorp", "Москва", 150000, 250000, "RUB", null),
-            VacancyCard("2", "Senior Kotlin Engineer", "SoftSolutions", "Санкт-Петербург", 200000, null, "RUB", null),
-            VacancyCard("3", "Junior Android Developer", null, "Казань", null, 80000, "RUB", null),
-            VacancyCard("4", "Mobile Architect", "BigTech", "Москва", 300000, 400000, "RUB", null)
-        )
-
-        val result = VacanciesSearchResult(
-            vacancies = mockData,
-            vacanciesFound = mockData.size,
-            pagesCount = maxOf(1, (mockData.size + 9) / 10),
-            currentPage = 1
-        )
-
-        emit(ApiResult.Success(result))
     }
 
     fun forceSearchLastRequest() {

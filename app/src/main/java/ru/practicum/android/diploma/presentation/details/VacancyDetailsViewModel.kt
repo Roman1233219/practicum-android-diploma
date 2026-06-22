@@ -45,21 +45,23 @@ class VacancyDetailsViewModel(
     }
 
     // обработка одноразовых событий
-    fun onPhoneClick(phone: String) {
-        viewModelScope.launch {
-            _events.emit(VacancyDetailsEvent.OpenPhone(phone))
+    fun onPhoneClick() {
+        val currentState = _state.value
+
+        if (currentState is VacancyDetailsState.Content) {
+            viewModelScope.launch {
+                _events.emit(VacancyDetailsEvent.OpenPhone(currentState.vacancy.phoneFormatted ?: return@launch))
+            }
         }
     }
 
-    fun onEmailClick(email: String) {
-        viewModelScope.launch {
-            _events.emit(VacancyDetailsEvent.OpenEmail(email))
-        }
-    }
+    fun onEmailClick() {
+        val currentState = _state.value
 
-    fun onUrlClick(url: String) {
-        viewModelScope.launch {
-            _events.emit(VacancyDetailsEvent.OpenUrl(url))
+        if (currentState is VacancyDetailsState.Content) {
+            viewModelScope.launch {
+                _events.emit(VacancyDetailsEvent.OpenEmail(currentState.vacancy.contactEmail ?: return@launch))
+            }
         }
     }
 

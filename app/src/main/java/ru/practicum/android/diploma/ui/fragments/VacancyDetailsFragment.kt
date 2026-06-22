@@ -48,6 +48,14 @@ class VacancyDetailsFragment : Fragment() {
         binding.shareButton.setOnClickListener {
             viewModel.shareUrl()
         }
+
+        binding.email.setOnClickListener {
+            viewModel.onEmailClick()
+        }
+
+        binding.phone.setOnClickListener {
+            viewModel.onPhoneClick()
+        }
     }
 
     //обработка одноразовых событий
@@ -59,8 +67,6 @@ class VacancyDetailsFragment : Fragment() {
                         IntentHelper.callPhone(requireContext(), event.phone)
                     is VacancyDetailsEvent.OpenEmail ->
                         IntentHelper.sendEmail(requireContext(), event.email)
-                    is VacancyDetailsEvent.OpenUrl ->
-                        IntentHelper.openBrowser(requireContext(), event.url)
                     is VacancyDetailsEvent.Share ->
                         IntentHelper.shareText(requireContext(), event.text)
                 }
@@ -107,6 +113,26 @@ class VacancyDetailsFragment : Fragment() {
             
             // Самое важное: парсинг HTML описания
             tvDescription.text = HtmlUtils.parseHtml(vacancy.description)
+
+            // Вставка контактых данных
+            showContacts(vacancy)
+        }
+    }
+
+    private fun showContacts(vacancy: Vacancy) = with(binding) {
+        val hasEmail = !vacancy.contactEmail.isNullOrBlank()
+        val hasPhone = !vacancy.phoneFormatted.isNullOrBlank()
+
+        contactsTitle.isVisible = hasEmail || hasPhone
+
+        email.isVisible = hasEmail
+        if (hasEmail) {
+            email.text = vacancy.contactEmail
+        }
+
+        phone.isVisible = hasPhone
+        if (hasPhone) {
+            phone.text = vacancy.phoneFormatted
         }
     }
 

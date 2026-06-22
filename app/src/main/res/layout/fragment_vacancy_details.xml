@@ -48,6 +48,27 @@
         app:layout_constraintStart_toEndOf="@+id/backButton"
         app:layout_constraintTop_toTopOf="@+id/backButton" />
 
+    <ImageView
+        android:id="@+id/shareButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_sharing_24"
+
+        app:layout_constraintTop_toTopOf="@id/vacancyTitle"
+        app:layout_constraintEnd_toStartOf="@id/addToFavouritesButton"
+        android:layout_marginEnd="@dimen/padding_24"/>
+
+    <ImageView
+        android:id="@+id/addToFavouritesButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_favorites_off_24"
+
+        app:layout_constraintTop_toTopOf="@id/vacancyTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/padding_20"/>
+
+
     <!-- Слой ошибки сервера -->
     <include
         android:id="@+id/layoutServerError"

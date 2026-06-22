@@ -44,6 +44,10 @@ class VacancyDetailsFragment : Fragment() {
 
         observeViewModel()
         observeEvents()
+
+        binding.shareButton.setOnClickListener {
+            viewModel.shareUrl()
+        }
     }
 
     //обработка одноразовых событий

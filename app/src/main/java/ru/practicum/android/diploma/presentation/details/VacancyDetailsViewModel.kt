@@ -63,9 +63,17 @@ class VacancyDetailsViewModel(
         }
     }
 
-    fun shareText(text: String) {
-        viewModelScope.launch {
-            _events.emit(VacancyDetailsEvent.Share(text))
+    fun shareUrl() {
+        val currentState = _state.value
+
+        if (currentState is VacancyDetailsState.Content) {
+            viewModelScope.launch {
+                _events.emit(
+                    VacancyDetailsEvent.Share(
+                        currentState.vacancy.shareUrl ?: return@launch
+                    )
+                )
+            }
         }
     }
 }

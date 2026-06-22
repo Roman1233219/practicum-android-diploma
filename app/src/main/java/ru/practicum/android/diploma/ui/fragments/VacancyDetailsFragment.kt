@@ -14,9 +14,11 @@ import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyDetailsBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.presentation.details.VacancyDetailsEvent
 import ru.practicum.android.diploma.presentation.details.VacancyDetailsState
 import ru.practicum.android.diploma.presentation.details.VacancyDetailsViewModel
 import ru.practicum.android.diploma.util.HtmlUtils
+import ru.practicum.android.diploma.util.IntentHelper
 
 class VacancyDetailsFragment : Fragment() {
     private var _binding: FragmentVacancyDetailsBinding? = null
@@ -41,6 +43,25 @@ class VacancyDetailsFragment : Fragment() {
         }
 
         observeViewModel()
+        observeEvents()
+    }
+
+    //обработка одноразовых событий
+    private fun observeEvents() {
+        lifecycleScope.launch {
+            viewModel.events.collect { event ->
+                when (event) {
+                    is VacancyDetailsEvent.OpenPhone ->
+                        IntentHelper.callPhone(requireContext(), event.phone)
+                    is VacancyDetailsEvent.OpenEmail ->
+                        IntentHelper.sendEmail(requireContext(), event.email)
+                    is VacancyDetailsEvent.OpenUrl ->
+                        IntentHelper.openBrowser(requireContext(), event.url)
+                    is VacancyDetailsEvent.Share ->
+                        IntentHelper.shareText(requireContext(), event.text)
+                }
+            }
+        }
     }
 
     private fun observeViewModel() {

@@ -28,9 +28,19 @@ class VacancySearchFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: SearchViewModel by viewModel()
     private lateinit var viewStateHelper: ViewStateHelper
-    private lateinit var onVacancySearchDebounce: (VacancyCard) -> Unit
     private var adapter: VacancyAdapter? = null
-    private val vacancies: MutableList<VacancyCard> = mutableListOf()
+    private val onVacancySearchDebounce: (VacancyCard) -> Unit by lazy {
+        debounce<VacancyCard>(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { vacancy ->
+            findNavController().navigate(
+                R.id.action_vacancySearchFragment_to_vacancyDetailsFragment,
+                // добавить вызов и передачу vacancyId или vacancy в VacancyDetailsFragment.createArgs(?)
+            )
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentVacancySearchBinding.inflate(inflater, container, false)
@@ -54,18 +64,6 @@ class VacancySearchFragment : Fragment() {
         setupNoInternetState()
         setupNoFoundState()
         setupServerErrorState()
-
-        onVacancySearchDebounce =
-            debounce<VacancyCard>(
-                CLICK_DEBOUNCE_DELAY,
-                viewLifecycleOwner.lifecycleScope,
-                false
-            ) { vacancy ->
-                findNavController().navigate(
-                    R.id.action_vacancySearchFragment_to_vacancyDetailsFragment
-                    // добавить вызов и передачу vacancyId или vacancy в VacancyDetailsFragment.createArgs(?)
-                )
-            }
 
         adapter = VacancyAdapter()
         binding.vacancyList.adapter = adapter

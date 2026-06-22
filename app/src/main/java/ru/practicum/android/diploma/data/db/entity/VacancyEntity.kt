@@ -1,10 +1,11 @@
-package ru.practicum.android.diploma.data.db
+package ru.practicum.android.diploma.data.db.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import ru.practicum.android.diploma.data.db.converters.StringListConverter
 
 @Entity(tableName = "fav_vacancies_table")
 @TypeConverters(StringListConverter::class)
@@ -39,38 +40,6 @@ data class VacancyEntity(
     val vacancyShareUrl: String? // Ссылка на вакансию для шеринга
 )
 
-data class EmployerEntity(
-    @ColumnInfo(name = "id")
-    val companyId: String?, // ID работодателя
-    @ColumnInfo(name = "name")
-    val companyName: String?, // Название компании
-    @ColumnInfo(name = "logo_url")
-    val logoUrl: String? // Ссылка на логотип компании
-)
-
-data class AreaEntity(
-    @ColumnInfo(name = "id")
-    val areaId: String?, // ID региона (города)
-    @ColumnInfo(name = "name")
-    val areaName: String? // Название региона (города)
-)
-
-data class SalaryEntity(
-    @ColumnInfo(name = "from")
-    val salaryFrom: Long?, // Зарплата "от"
-    @ColumnInfo(name = "to")
-    val salaryTo: Long?, // Зарплата "до"
-    val currency: String? // Валюта зарплаты
-)
-
-data class ContactsEntity(
-    @ColumnInfo(name = "name")
-    val contactName: String?, // Имя контактного лица
-    @ColumnInfo(name = "email")
-    val contactEmail: String?, // Почта контакта
-    @ColumnInfo(name = "phone_formatted")
-    val contactPhoneFormatted: String? // Телефон контакта
-)
 
 /**
  * ИНФОРМАЦИЯ ДЛЯ РАЗРАБОТКИ ЭКРАНА ОТРАСЛЕЙ (Victoria):

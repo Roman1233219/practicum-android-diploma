@@ -38,16 +38,20 @@ class SearchViewModel(
 
     fun searchVacancies(query: String): Flow<ApiResult<VacanciesSearchResult>> = flow {
         emit(ApiResult.Loading)
-        //delay(500)
+        delay(500)
 
         try {
             // Здесь должен быть реальный сетевой вызов.
             // Для примера используем мок-данные.
-            val result = generateMockVacanciesSearchResult()
-            emit(ApiResult.Success(result))
+            val result = vacancyRepository.searchVacancies(
+                query = query, page = 1//??
+            )
+                // val result = generateMockVacanciesSearchResult()
+                .collect { result -> ApiResult.Success(result) }
         } catch (e: Exception) {
             emit(ApiResult.Error(500))
         }
+
     }
 
     fun performSearch(query: String) {

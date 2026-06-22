@@ -122,6 +122,7 @@ class VacancyDetailsFragment : Fragment() {
     private fun showContacts(vacancy: Vacancy) = with(binding) {
         val hasEmail = !vacancy.contactEmail.isNullOrBlank()
         val hasPhone = !vacancy.phoneFormatted.isNullOrBlank()
+        val hasPhoneComment = !vacancy.phoneComment.isNullOrBlank()
 
         contactsTitle.isVisible = hasEmail || hasPhone
 
@@ -133,6 +134,11 @@ class VacancyDetailsFragment : Fragment() {
         phone.isVisible = hasPhone
         if (hasPhone) {
             phone.text = vacancy.phoneFormatted
+        }
+
+        phoneComment.isVisible = hasPhoneComment
+        if(hasPhoneComment) {
+            phoneComment.text = vacancy.phoneComment
         }
     }
 

@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.data.db.entity.VacancyEntity
 
 @Dao
 interface VacancyDao {
-    @Insert(entity = VacancyEntity::class, onConflict = OnConflictStrategy.Companion.REPLACE)
+    @Insert(entity = VacancyEntity::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertVacancy(vacancy: VacancyEntity)
 
     @Query("SELECT * FROM fav_vacancies_table ORDER BY vacancy_id DESC")

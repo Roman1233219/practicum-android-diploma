@@ -20,10 +20,4 @@ interface VacancyDao {
 
     @Query("SELECT vacancy_id FROM fav_vacancies_table WHERE vacancy_id = :vacancyId")
     suspend fun getVacancyId(vacancyId: String): String?
-
-    @Transaction
-    suspend fun deleteAndInsertVacancy(vacancy: VacancyEntity) {
-        deleteVacancy(vacancy.vacancyId)
-        insertVacancy(vacancy)
-    }
 }

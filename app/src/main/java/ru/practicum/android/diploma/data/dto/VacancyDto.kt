@@ -2,6 +2,15 @@ package ru.practicum.android.diploma.data.dto
 
 import com.google.gson.annotations.SerializedName
 
+data class VacancyCardDto(
+    val vacancyId: String,
+    val vacancyName: String,
+    val companyName: String?,
+    val areaName: String?,
+    val salary: SalaryDto?,
+    val shareUrl: String?
+)
+
 data class VacancyDto(
     val id: String,
     val name: String,
@@ -63,5 +72,6 @@ data class ContactsDto(
 )
 
 data class PhoneDto(
-    val formatted: String?
+    val formatted: String?,
+    val comment: String?
 )

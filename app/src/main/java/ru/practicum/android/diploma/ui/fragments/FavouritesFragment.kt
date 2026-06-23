@@ -4,27 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouritesBinding
-import ru.practicum.android.diploma.domain.models.VacancyCard
-import ru.practicum.android.diploma.ui.adapter.FavoritesAdapter
+import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.ui.adapter.VacancyAdapter
 import ru.practicum.android.diploma.ui.viewmodels.FavoritesState
-import ru.practicum.android.diploma.ui.viewmodels.FavoritesViewModel
-import ru.practicum.android.diploma.util.debounce
-import kotlin.getValue
+import ru.practicum.android.diploma.ui.viewmodels.FavouritesViewModel
 
 class FavouritesFragment : Fragment() {
     private var _binding: FragmentFavouritesBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: FavoritesViewModel by viewModel()
-    private lateinit var onVacancyCardDebounce: (VacancyCard) -> Unit
-    private var adapter: FavoritesAdapter? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    private val viewModel: FavouritesViewModel by viewModel()
+
+    private var adapter: VacancyAdapter? = null
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFavouritesBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -32,58 +29,56 @@ class FavouritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = FavoritesAdapter { vacancy ->
-            onVacancyCardDebounce(vacancy)
-        }
+        adapter = VacancyAdapter()
+        binding.vacancyList.adapter = adapter
 
-        onVacancyCardDebounce =
-            debounce<VacancyCard>(
-                CLICK_DEBOUNCE_DELAY,
-                viewLifecycleOwner.lifecycleScope,
-                false
-            ) { vacancy ->
-                findNavController().navigate(R.id.action_favouritesFragment_to_vacancyDetailsFragment)
-            }
+        observeViewModel()
     }
 
-    fun render(state: FavoritesState) {
-        when (state) {
-            is FavoritesState.Content -> showContent(state.vacancy)
-            is FavoritesState.IsEmpty -> showEmpty()
-            is FavoritesState.ConnectionError -> showConnectionError()
+    private fun observeViewModel() {
+        viewModel.favoritesViewState().observe(viewLifecycleOwner) { state ->
+            render(state)
         }
+    }
+
+    private fun render(state: FavoritesState) {
+        when (state) {
+            is FavoritesState.Loading -> showLoading()
+            is FavoritesState.Content -> showContent(state.vacancies)
+            is FavoritesState.Empty -> showEmpty()
+            is FavoritesState.Error -> showError()
+        }
+    }
+
+    private fun showLoading() {
+        binding.vacancyList.isVisible = false
+        binding.noItemsPlaceholder.isVisible = false
+        binding.errorPlaceholder.isVisible = false
+    }
+
+    private fun showEmpty() {
+        binding.vacancyList.isVisible = false
+        binding.errorPlaceholder.isVisible = false
+        binding.noItemsPlaceholder.isVisible = true
+    }
+
+    private fun showError() {
+        binding.vacancyList.isVisible = false
+        binding.noItemsPlaceholder.isVisible = false
+        binding.errorPlaceholder.isVisible = true
+    }
+
+    private fun showContent(vacancies: List<Vacancy>) {
+        binding.vacancyList.isVisible = true
+        binding.noItemsPlaceholder.isVisible = false
+        binding.errorPlaceholder.isVisible = false
+        // Здесь потребуется конвертация Vacancy в VacancyCard для адаптера
+        // adapter?.submitList(...)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
         adapter = null
-        binding.vacancy_list.adapter = null
     }
-
-    private fun showEmpty() {
-        binding.vacancy_list.visibility = View.GONE
-        binding.error_placeholder.visibility = View.GONE
-        binding.no_items_placeholder.visibility = View.VISIBLE
-    }
-
-    private fun showConnectionError() {
-        binding.error_placeholder.visibility = View.VISIBLE
-        binding.vacancy_list.visibility = View.GONE
-        binding.no_items_placeholder.visibility = View.GONE
-    }
-
-    private fun showContent(foundTrack: List<VacancyCard>) {
-        binding.vacancy_list.visibility = View.VISIBLE
-        binding.no_items_placeholder.visibility = View.GONE
-        binding.error_placeholder.visibility = View.GONE
-        adapter?.vacancy = foundTrack
-        adapter?.notifyDataSetChanged()
-    }
-
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-        fun newInstance() = FavouritesFragment()
-    }
-
 }

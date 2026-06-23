@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.FavoritesInteractor
 import ru.practicum.android.diploma.domain.api.VacanciesInteractor
 import ru.practicum.android.diploma.domain.models.ApiResult
-import ru.practicum.android.diploma.domain.models.Vacancy
 
 class VacancyDetailsViewModel(
     private val vacancyId: String,

@@ -1,5 +1,10 @@
 package ru.practicum.android.diploma.data.converters
 
+import ru.practicum.android.diploma.data.db.entity.AreaEntity
+import ru.practicum.android.diploma.data.db.entity.ContactsEntity
+import ru.practicum.android.diploma.data.db.entity.EmployerEntity
+import ru.practicum.android.diploma.data.db.entity.SalaryEntity
+import ru.practicum.android.diploma.data.db.entity.VacancyEntity
 import ru.practicum.android.diploma.data.dto.AddressDto
 import ru.practicum.android.diploma.data.dto.AreaDto
 import ru.practicum.android.diploma.data.dto.ContactsDto
@@ -139,4 +144,91 @@ fun Vacancy.toDto(): VacancyDto = VacancyDto(
         id = this.industryId,
         name = this.industryName
     )
+)
+
+fun Vacancy.toVacancyCard(): VacancyCard = VacancyCard(
+    vacancyId = this.vacancyId,
+    vacancyName = this.vacancyName,
+    companyName = this.companyName,
+    areaName = this.areaName,
+    salaryFrom = this.salaryFrom,
+    salaryTo = this.salaryTo,
+    currency = this.currency,
+    shareUrl = this.shareUrl
+)
+
+fun Vacancy.toDatabaseEntity(): VacancyEntity = VacancyEntity(
+    vacancyId = this.vacancyId,
+    vacancyName = this.vacancyName,
+    vacancyEmployer = EmployerEntity(
+        companyId = this.employerId,
+        companyName = this.companyName,
+        logoUrl = this.logoUrl
+    ),
+    vacancyArea = AreaEntity(
+        areaId = this.areaId,
+        areaName = this.areaName
+    ),
+    vacancySalary = SalaryEntity(
+        salaryFrom = this.salaryFrom,
+        salaryTo = this.salaryTo,
+        currency = this.currency
+    ),
+    vacancyDescription = this.description,
+    vacancyExperienceId = this.experienceId,
+    vacancyExperienceName = this.experienceName,
+    vacancyScheduleId = this.scheduleId,
+    vacancyScheduleName = this.scheduleName,
+    vacancyEmploymentId = this.employmentId,
+    vacancyEmploymentName = this.employmentName,
+    vacancyAddressId = this.addressId,
+    vacancyAddressCity = this.addressCity,
+    vacancyAddressStreet = this.addressStreet,
+    vacancyAddressBuilding = this.addressBuilding,
+    vacancyAddressRaw = this.addressRaw,
+    vacancySkills = this.skills,
+    vacancyContacts = ContactsEntity(
+        contactId = this.contactId,
+        contactName = this.contactName,
+        contactEmail = this.contactEmail,
+        contactPhoneFormatted = this.phoneFormatted,
+        contactPhoneComment = this.phoneComment
+    ),
+    vacancyShareUrl = this.shareUrl,
+    vacancyIndustryId = this.industryId,
+    vacancyIndustryName = this.industryName
+)
+
+fun VacancyEntity.toModel(): Vacancy = Vacancy(
+    vacancyId = this.vacancyId,
+    vacancyName = this.vacancyName,
+    employerId = this.vacancyEmployer?.companyId,
+    companyName = this.vacancyEmployer?.companyName,
+    areaId = this.vacancyArea?.areaId,
+    areaName = this.vacancyArea?.areaName,
+    salaryFrom = this.vacancySalary?.salaryFrom,
+    salaryTo = this.vacancySalary?.salaryTo,
+    currency = this.vacancySalary?.currency,
+    logoUrl = this.vacancyEmployer?.logoUrl,
+    description = this.vacancyDescription,
+    experienceId = this.vacancyExperienceId,
+    experienceName = this.vacancyExperienceName,
+    scheduleId = this.vacancyScheduleId,
+    scheduleName = this.vacancyScheduleName,
+    employmentName = this.vacancyEmploymentName,
+    employmentId = this.vacancyEmploymentId,
+    addressId = this.vacancyAddressId,
+    addressCity = this.vacancyAddressCity,
+    addressStreet = this.vacancyAddressStreet,
+    addressBuilding = this.vacancyAddressBuilding,
+    addressRaw = this.vacancyAddressRaw,
+    skills = this.vacancySkills,
+    contactId = this.vacancyContacts?.contactId,
+    contactName = this.vacancyContacts?.contactName,
+    contactEmail = this.vacancyContacts?.contactEmail,
+    phoneFormatted = this.vacancyContacts?.contactPhoneFormatted,
+    phoneComment = this.vacancyContacts?.contactPhoneComment,
+    shareUrl = this.vacancyShareUrl,
+    industryId = this.vacancyIndustryId,
+    industryName = this.vacancyIndustryName
 )

@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -36,9 +37,7 @@ class SearchViewModel(
         }
 
     init {
-        viewModelScope.launch(Dispatchers.Main) {
-            //
-        }
+        _searchState.setValue(SearchState.QueryIsEmpty(isEmpty = true))
     }
 
     fun searchDebounce(searchQuery: String) {
@@ -67,7 +66,7 @@ class SearchViewModel(
     }
 
     private fun searchVacancies(searchQuery: String) {
-        if (searchQuery.isNotEmpty() && currentSearchPage < maxPages) {
+        if (searchQuery.isNotEmpty()) {
             renderLoadingState()
             searchJob?.cancel()
             searchJob = viewModelScope.launch {

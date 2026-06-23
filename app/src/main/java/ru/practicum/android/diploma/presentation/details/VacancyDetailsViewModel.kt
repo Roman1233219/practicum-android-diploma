@@ -80,7 +80,7 @@ class VacancyDetailsViewModel(
         }
     }
 
-    fun onFavoritesClick(){
+    fun onFavoritesClick() {
         val state = _state.value
 
         if (state !is VacancyDetailsState.Content) return

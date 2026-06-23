@@ -91,8 +91,10 @@ class VacancyDetailsFragment : Fragment() {
         }
     }
 
-    private fun renderFavoriteState(isInFavorites: Boolean){
-        binding.addToFavouritesButton.setImageResource(if (isInFavorites) R.drawable.ic_favorites_on_24 else R.drawable.ic_favorites_off_24)
+    private fun renderFavoriteState(isInFavorites: Boolean) {
+        binding.addToFavouritesButton.setImageResource(
+            if (isInFavorites) R.drawable.ic_favorites_on_24 else R.drawable.ic_favorites_off_24
+        )
     }
 
     private fun render(state: VacancyDetailsState) {

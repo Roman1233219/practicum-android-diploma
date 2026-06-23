@@ -110,7 +110,7 @@ class VacancyDetailsFragment : Fragment() {
 
             // Обработка зарплаты
             tvSalary.text = formatSalary(vacancy)
-            
+
             // Самое важное: парсинг HTML описания
             tvDescription.text = HtmlUtils.parseHtml(vacancy.description)
 

@@ -145,7 +145,7 @@ fun Vacancy.toDatabaseEntity(): VacancyEntity = VacancyEntity(
         this.phoneComment
     ),
     this.shareUrl
-    )
+)
 
 fun VacancyEntity.toModel(): Vacancy = Vacancy(
     this.vacancyId,

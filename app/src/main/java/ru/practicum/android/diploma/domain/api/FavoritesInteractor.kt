@@ -8,5 +8,5 @@ interface FavoritesInteractor {
     suspend fun getVacancy(vacancyId: String): Vacancy?
     suspend fun addVacancy(vacancy: Vacancy)
     suspend fun removeVacancy(vacancyId: String)
-    suspend fun isInFavorites(vacancyId: String) : Boolean
+    suspend fun isInFavorites(vacancyId: String): Boolean
 }

@@ -66,7 +66,7 @@ class VacancyDetailsViewModel(
             viewModelScope.launch {
                 val email = currentState.vacancy.contactEmail
 
-                if(email != null) {
+                if (email != null) {
                     _events.emit(VacancyDetailsEvent.OpenEmail(email))
                 }
             }
@@ -80,7 +80,7 @@ class VacancyDetailsViewModel(
             viewModelScope.launch {
                 val shareUrl = currentState.vacancy.shareUrl
 
-                if(shareUrl != null) {
+                if (shareUrl != null) {
                     _events.emit(
                         VacancyDetailsEvent.Share(
                             shareUrl

@@ -6,5 +6,5 @@ sealed interface FavoritesState {
     object Loading : FavoritesState
     data class Content(val vacancies: List<Vacancy>) : FavoritesState
     object Error : FavoritesState
-    object Empty: FavoritesState
+    object Empty : FavoritesState
 }

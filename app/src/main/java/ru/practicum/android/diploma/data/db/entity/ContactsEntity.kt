@@ -10,5 +10,5 @@ data class ContactsEntity(
     @ColumnInfo(name = "phone_formatted")
     val contactPhoneFormatted: String?, // Телефон контакта
     @ColumnInfo(name = "phone_comment")
-    val contactPhoneComment : String? // Комментарий к телефону
+    val contactPhoneComment: String? // Комментарий к телефону
 )

@@ -12,16 +12,14 @@ class FavouritesViewModel(private val favoritesInteractor: FavoritesInteractor) 
     private val _favoritesViewState = MutableLiveData<FavoritesState>(FavoritesState.Loading)
     fun favoritesViewState(): LiveData<FavoritesState> = _favoritesViewState
 
-    private fun fetchFavorites(){
+    private fun fetchFavorites() {
         viewModelScope.launch {
-            favoritesInteractor.getFavoriteVacancies().catch{
+            favoritesInteractor.getFavoriteVacancies().catch {
                 _favoritesViewState.postValue(FavoritesState.Error)
             }.collect { data ->
                 if (data.isEmpty()) {
                     _favoritesViewState.postValue(FavoritesState.Empty)
-                }
-                else
-                {
+                } else {
                     _favoritesViewState.postValue(FavoritesState.Content(data))
                 }
             }

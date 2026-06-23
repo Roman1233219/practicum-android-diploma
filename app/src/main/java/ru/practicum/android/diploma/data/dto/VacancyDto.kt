@@ -51,22 +51,30 @@ data class KeySkillDto(
 )
 
 data class ExperienceDto(
+    val id: String?,
     val name: String?
 )
 
 data class ScheduleDto(
+    val id: String?,
     val name: String?
 )
 
 data class EmploymentDto(
+    val id: String?,
     val name: String?
 )
 
 data class AddressDto(
-    val formatted: String?
+    val id: String?,
+    val city: String?,
+    val street: String?,
+    val building: String?,
+    val raw: String?
 )
 
 data class ContactsDto(
+    val id: String?,
     val name: String?,
     val email: String?,
     val phones: List<PhoneDto>?

@@ -6,5 +6,5 @@ class FavoritesAdapter(val clickListener: VacancyClickListener) {
         fun interface VacancyClickListener {
             fun onVacancyClick(vacancy: VacancyCard)
         }
-    }
+
 }

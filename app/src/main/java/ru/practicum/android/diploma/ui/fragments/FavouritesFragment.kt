@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.data.converters.toVacancyCard
 import ru.practicum.android.diploma.databinding.FragmentFavouritesBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.ui.adapter.VacancyAdapter
@@ -33,6 +34,7 @@ class FavouritesFragment : Fragment() {
         binding.vacancyList.adapter = adapter
 
         observeViewModel()
+        viewModel.fetchFavorites()
     }
 
     private fun observeViewModel() {
@@ -72,8 +74,7 @@ class FavouritesFragment : Fragment() {
         binding.vacancyList.isVisible = true
         binding.noItemsPlaceholder.isVisible = false
         binding.errorPlaceholder.isVisible = false
-        // Здесь потребуется конвертация Vacancy в VacancyCard для адаптера
-        // adapter?.submitList(...)
+        adapter?.submitList(vacancies.map { it.toVacancyCard() })
     }
 
     override fun onDestroyView() {

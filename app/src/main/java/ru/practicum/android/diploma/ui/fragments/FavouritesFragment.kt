@@ -23,9 +23,9 @@ class FavouritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Установка внутренних переходов
-        binding.goToVacancyDetailsButton.setOnClickListener {
-            findNavController().navigate(R.id.action_favouritesFragment_to_vacancyDetailsFragment)
-        }
+//        binding.goToVacancyDetailsButton.setOnClickListener {
+//            findNavController().navigate(R.id.action_favouritesFragment_to_vacancyDetailsFragment)
+//        }
     }
 
     override fun onDestroyView() {

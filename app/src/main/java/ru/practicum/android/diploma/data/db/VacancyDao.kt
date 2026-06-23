@@ -19,4 +19,7 @@ interface VacancyDao {
 
     @Query("SELECT vacancy_id FROM fav_vacancies_table WHERE vacancy_id = :vacancyId")
     suspend fun getVacancyId(vacancyId: String): String?
+
+    @Query("SELECT * FROM fav_vacancies_table WHERE vacancy_id = :vacancyId")
+    suspend fun getVacancyById(vacancyId: String): VacancyEntity?
 }

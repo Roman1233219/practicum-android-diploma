@@ -7,13 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CenterInside
-import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.models.VacancyCard
-import java.lang.Integer.toString
 
 class VacancyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val vacancyName: TextView = itemView.findViewById(R.id.vacancyName)
@@ -46,12 +43,6 @@ class VacancyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             salary.text = "Зарплата не указана"
             salary.visibility = View.VISIBLE
         }
-
-//        Glide.with(itemView.context)
-//            .load(item.logoUrl)
-//            .placeholder(R.drawable.ic_placeholder_32)
-//            .transform(CenterInside())
-//            .into(companyIcon)
 
         Glide.with(itemView.context)
             .load(item.logoUrl)

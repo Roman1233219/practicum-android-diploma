@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.di_temp
+package ru.practicum.android.diploma.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

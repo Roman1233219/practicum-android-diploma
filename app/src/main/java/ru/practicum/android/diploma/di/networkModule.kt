@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.di_temp
+package ru.practicum.android.diploma.di
 
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext

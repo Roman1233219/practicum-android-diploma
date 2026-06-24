@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,6 +78,13 @@ class FavouritesFragment : Fragment() {
         binding.vacancyList.isVisible = true
         binding.noItemsPlaceholder.isVisible = false
         binding.errorPlaceholder.isVisible = false
+        vacancies.forEach {
+            Log.d(
+                "FAV_LOGO",
+                "id=${it.vacancyId}, logo=${it.logoUrl}"
+            )
+        }
+
         adapter?.submitList(vacancies.map { it.toVacancyCard() })
     }
 

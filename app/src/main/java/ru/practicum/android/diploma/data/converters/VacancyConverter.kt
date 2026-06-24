@@ -39,7 +39,7 @@ fun VacancyCardDto.toModel(): VacancyCard = VacancyCard(
     salaryFrom = this.salary?.from,
     salaryTo = this.salary?.to,
     currency = this.salary?.currency,
-    shareUrl = this.shareUrl
+    logoUrl = this.shareUrl
 )
 
 fun VacancyCard.toDto(): VacancyCardDto = VacancyCardDto(
@@ -52,7 +52,7 @@ fun VacancyCard.toDto(): VacancyCardDto = VacancyCardDto(
         to = this.salaryTo,
         currency = this.currency
     ),
-    shareUrl = this.shareUrl
+    shareUrl = this.logoUrl
 )
 
 fun VacancyDto.toModel(): Vacancy = Vacancy(
@@ -69,7 +69,7 @@ fun VacancyDto.toModel(): Vacancy = Vacancy(
     salaryFrom = this.salary?.from,
     salaryTo = this.salary?.to,
     currency = this.salary?.currency,
-    logoUrl = this.employer?.logoUrls?.original,
+    logoUrl = this.employer?.logoUrls,
     description = this.description,
     experienceId = this.experience?.id,
     experienceName = this.experience?.name,
@@ -100,9 +100,7 @@ fun Vacancy.toDto(): VacancyDto = VacancyDto(
     employer = EmployerDto(
         id = this.employerId,
         name = this.companyName,
-        logoUrls = LogoUrlsDto(
-            original = this.logoUrl
-        )
+        logoUrls = this.logoUrl
     ),
     area = AreaDto(
         id = this.areaId,
@@ -154,7 +152,7 @@ fun Vacancy.toVacancyCard(): VacancyCard = VacancyCard(
     salaryFrom = this.salaryFrom,
     salaryTo = this.salaryTo,
     currency = this.currency,
-    shareUrl = this.shareUrl
+    logoUrl = this.logoUrl
 )
 
 fun Vacancy.toDatabaseEntity(): VacancyEntity = VacancyEntity(

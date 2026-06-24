@@ -39,8 +39,8 @@ data class VacancyDto(
 data class EmployerDto(
     val id: String?,
     val name: String?,
-    @SerializedName("logo_urls")
-    val logoUrls: LogoUrlsDto?
+    @SerializedName("logo")
+    val logoUrls: String?
 )
 
 data class LogoUrlsDto(

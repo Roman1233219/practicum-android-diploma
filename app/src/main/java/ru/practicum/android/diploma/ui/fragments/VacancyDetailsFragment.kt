@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -115,6 +116,8 @@ class VacancyDetailsFragment : Fragment() {
     }
 
     private fun showContent(vacancy: Vacancy) {
+        Log.d("FAV_LOGO", vacancy.logoUrl.toString())
+
         binding.layoutServerError.root.isVisible = false
         binding.vacancyContent.isVisible = true
 

@@ -3,12 +3,12 @@ package ru.practicum.android.diploma
 import android.app.Application
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import ru.practicum.android.diploma.di.appModule
-import ru.practicum.android.diploma.di.databaseModule
-import ru.practicum.android.diploma.di.interactorModule
-import ru.practicum.android.diploma.di.networkModule
-import ru.practicum.android.diploma.di.repositoryModule
-import ru.practicum.android.diploma.di.viewModelModule
+import ru.practicum.android.diploma.di_temp.appModule
+import ru.practicum.android.diploma.di_temp.databaseModule
+import ru.practicum.android.diploma.di_temp.interactorModule
+import ru.practicum.android.diploma.di_temp.networkModule
+import ru.practicum.android.diploma.di_temp.repositoryModule
+import ru.practicum.android.diploma.di_temp.viewModelModule
 
 class App : Application() {
     override fun onCreate() {

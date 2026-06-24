@@ -10,14 +10,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.network.models.HttpErrorType
 import ru.practicum.android.diploma.data.network.models.toHttpErrorType
-import ru.practicum.android.diploma.domain.api.VacanciesRepository
+import ru.practicum.android.diploma.domain.api.VacanciesInteractor
 import ru.practicum.android.diploma.domain.models.ApiResult
 import ru.practicum.android.diploma.domain.models.VacancyCard
 import ru.practicum.android.diploma.util.CustomLiveData
 import ru.practicum.android.diploma.util.debounce
 
 class SearchViewModel(
-    private val repository: VacanciesRepository
+    private val interactor: VacanciesInteractor
 ) : ViewModel() {
 
     private var currentSearchPage: Int = 0
@@ -71,7 +71,7 @@ class SearchViewModel(
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
                 runCatching {
-                    repository.searchVacancies(searchQuery, currentSearchPage)
+                    interactor.searchVacancies(searchQuery, currentSearchPage)
                         .collect { result ->
                             withContext(Dispatchers.Main) {
                                 val replaceVacancyList = currentSearchPage == 0
@@ -175,6 +175,6 @@ class SearchViewModel(
     }
 
     companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val SEARCH_DEBOUNCE_DELAY = 1000L
     }
 }

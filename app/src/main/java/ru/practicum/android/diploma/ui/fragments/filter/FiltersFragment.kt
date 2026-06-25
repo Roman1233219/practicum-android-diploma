@@ -27,11 +27,11 @@ class FiltersFragment : Fragment() {
         }
 
         // Установка внутренних переходов
-        binding.goToWorkPlaceSelectionButton.setOnClickListener {
+        binding.workPlaceContainer.setOnClickListener {
             findNavController().navigate(R.id.action_filtersFragment_to_workPlaceSelectionFragment)
         }
 
-        binding.goIndustrySelectionButton.setOnClickListener {
+        binding.industryContainer.setOnClickListener {
             findNavController().navigate(R.id.action_filtersFragment_to_industrySelectionFragment)
         }
     }

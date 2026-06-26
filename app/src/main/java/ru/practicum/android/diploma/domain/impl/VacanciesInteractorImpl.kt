@@ -9,7 +9,11 @@ import ru.practicum.android.diploma.domain.models.VacanciesSearchResult
 import ru.practicum.android.diploma.domain.models.Vacancy
 
 class VacanciesInteractorImpl(private val repository: VacanciesRepository) : VacanciesInteractor {
-    override fun searchVacancies(query: String, page: Int, settings: FilterSettings?): Flow<ApiResult<VacanciesSearchResult>> {
+    override fun searchVacancies(
+        query: String,
+        page: Int,
+        settings: FilterSettings?
+    ): Flow<ApiResult<VacanciesSearchResult>> {
         return repository.searchVacancies(query, page, settings)
     }
 

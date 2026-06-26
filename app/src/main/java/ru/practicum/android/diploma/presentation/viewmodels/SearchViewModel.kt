@@ -118,6 +118,7 @@ class SearchViewModel(
                                             }
                                         }
                                     }
+
                                     is ApiResult.Success -> {
                                         with(result.data) {
                                             isNextPageLoading = false
@@ -137,6 +138,7 @@ class SearchViewModel(
                                             }
                                         }
                                     }
+
                                     else -> Unit
                                 }
                             }

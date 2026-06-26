@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +22,6 @@ import ru.practicum.android.diploma.presentation.viewmodels.SearchState
 import ru.practicum.android.diploma.presentation.viewmodels.SearchViewModel
 import ru.practicum.android.diploma.ui.adapter.VacancyAdapter
 import ru.practicum.android.diploma.util.ViewStateHelper
-import ru.practicum.android.diploma.util.debounce
 
 class VacancySearchFragment : Fragment() {
     private var _binding: FragmentVacancySearchBinding? = null
@@ -66,6 +64,7 @@ class VacancySearchFragment : Fragment() {
                 SearchState.IsLoadingNextPage -> {
                     showLoadingState()
                 }
+
                 is SearchState.Content -> showContent(state.pageData, state.listNeedsScrollTop)
                 is SearchState.ConnectionError -> showNoInternetState()
                 is SearchState.NotFoundError -> showEmptyResultState()
@@ -80,10 +79,12 @@ class VacancySearchFragment : Fragment() {
                         )
                     }
                 }
+
                 is SearchState.ServerError500 -> showServerErrorState()
                 is SearchState.QueryIsEmpty -> {
                     if (state.isEmpty) showInitialState()
                 }
+
                 is SearchState.SearchText -> {
 
                 }
@@ -99,7 +100,11 @@ class VacancySearchFragment : Fragment() {
                 binding.filterButton.setImageResource(R.drawable.ic_filter_off_24)
                 // Для выключенного фильтра возвращаем tint программно
                 val typedValue = android.util.TypedValue()
-                requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurface, typedValue, true)
+                requireContext().theme.resolveAttribute(
+                    com.google.android.material.R.attr.colorOnSurface,
+                    typedValue,
+                    true
+                )
                 binding.filterButton.setColorFilter(typedValue.data)
             }
         }

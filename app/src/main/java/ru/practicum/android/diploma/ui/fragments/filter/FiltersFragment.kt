@@ -59,6 +59,7 @@ class FiltersFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.setSalary(s?.toString())
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
 
@@ -83,6 +84,7 @@ class FiltersFragment : Fragment() {
             is FiltersState.Loading -> {
                 // Можно добавить ProgressBar если нужно
             }
+
             is FiltersState.Content -> {
                 renderContent(state.settings, state.canApply, state.canReset)
             }

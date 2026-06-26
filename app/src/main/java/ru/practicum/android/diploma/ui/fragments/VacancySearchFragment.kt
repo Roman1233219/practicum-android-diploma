@@ -29,7 +29,7 @@ class VacancySearchFragment : Fragment() {
     private var _binding: FragmentVacancySearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SearchViewModel by viewModel()
-    private lateinit var viewStateHelper: ViewStateHelper
+    private var viewStateHelper: ViewStateHelper? = null
     private var adapter: VacancyAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -169,35 +169,35 @@ class VacancySearchFragment : Fragment() {
     }
 
     private fun showInitialState() {
-        viewStateHelper.showOnly(binding.layoutInitial.root)
+        viewStateHelper?.showOnly(binding.layoutInitial.root)
         binding.tvResultInfo.isVisible = false
         binding.vacancyList.isVisible = false
     }
 
     private fun showNoInternetState() {
-        viewStateHelper.showOnly(binding.layoutNoInternet.root)
+        viewStateHelper?.showOnly(binding.layoutNoInternet.root)
         binding.tvResultInfo.isVisible = false
     }
 
     private fun showEmptyResultState() {
-        viewStateHelper.showOnly(binding.layoutNoFound.root)
+        viewStateHelper?.showOnly(binding.layoutNoFound.root)
         binding.tvResultInfo.isVisible = true
         binding.tvResultInfo.text = getString(R.string.no_vacancies)
     }
 
     private fun showServerErrorState() {
-        viewStateHelper.showOnly(binding.layoutServerError.root)
+        viewStateHelper?.showOnly(binding.layoutServerError.root)
         binding.tvResultInfo.isVisible = false
     }
 
     private fun showLoadingState() {
         closeKeyboard()
-        viewStateHelper.showOnly(binding.layoutLoading.root)
+        viewStateHelper?.showOnly(binding.layoutLoading.root)
         binding.tvResultInfo.isVisible = false
     }
 
     private fun showContent(searchData: List<VacancyCard>, listNeedsScrollTop: Boolean) {
-        viewStateHelper.showOnly(binding.vacancyList)
+        viewStateHelper?.showOnly(binding.vacancyList)
         if (!binding.vacancyList.isVisible) {
             binding.vacancyList.isVisible = true
         }
@@ -223,6 +223,7 @@ class VacancySearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        viewStateHelper = null
     }
 
     private fun clickOnVacancy(vacancy: VacancyCard) {

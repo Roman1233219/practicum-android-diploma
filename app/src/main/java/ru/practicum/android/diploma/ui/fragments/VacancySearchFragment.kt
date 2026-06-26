@@ -90,6 +90,20 @@ class VacancySearchFragment : Fragment() {
             }
         }
 
+        viewModel.isFilterSelected.observe(viewLifecycleOwner) { isSelected ->
+            if (isSelected) {
+                binding.filterButton.setImageResource(R.drawable.ic_filter_on_24)
+                binding.filterButton.imageTintList = null
+                binding.filterButton.clearColorFilter()
+            } else {
+                binding.filterButton.setImageResource(R.drawable.ic_filter_off_24)
+                // Для выключенного фильтра возвращаем tint программно
+                val typedValue = android.util.TypedValue()
+                requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurface, typedValue, true)
+                binding.filterButton.setColorFilter(typedValue.data)
+            }
+        }
+
         binding.filterButton.setOnClickListener {
             findNavController().navigate(R.id.action_vacancySearchFragment_to_filtersFragment)
         }
@@ -199,6 +213,11 @@ class VacancySearchFragment : Fragment() {
         if (scrollToTop) {
             binding.vacancyList.scrollToPosition(0)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.checkFilterState()
     }
 
     override fun onDestroyView() {

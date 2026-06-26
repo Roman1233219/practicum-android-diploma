@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.presentation.viewmodels
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -12,6 +13,7 @@ import ru.practicum.android.diploma.data.network.models.toHttpErrorType
 import ru.practicum.android.diploma.domain.api.FilterSettingsInteractor
 import ru.practicum.android.diploma.domain.api.VacanciesInteractor
 import ru.practicum.android.diploma.domain.models.ApiResult
+import ru.practicum.android.diploma.domain.models.FilterSettings
 import ru.practicum.android.diploma.domain.models.VacancyCard
 import ru.practicum.android.diploma.util.CustomLiveData
 import ru.practicum.android.diploma.util.debounce
@@ -32,6 +34,9 @@ class SearchViewModel(
     private val _searchState: CustomLiveData<SearchState> = CustomLiveData()
     internal val searchState: LiveData<SearchState> get() = _searchState
 
+    private val _isFilterSelected = MutableLiveData<Boolean>()
+    val isFilterSelected: LiveData<Boolean> = _isFilterSelected
+
     private val _searchDebounce =
         debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changeText ->
             searchVacancies(changeText)
@@ -39,6 +44,12 @@ class SearchViewModel(
 
     init {
         _searchState.setValue(SearchState.QueryIsEmpty(isEmpty = true))
+        checkFilterState()
+    }
+
+    fun checkFilterState() {
+        val settings = filterInteractor.getFilterSettings()
+        _isFilterSelected.value = settings != FilterSettings()
     }
 
     fun searchDebounce(searchQuery: String) {
@@ -68,6 +79,7 @@ class SearchViewModel(
 
     private fun searchVacancies(searchQuery: String) {
         if (searchQuery.isNotEmpty()) {
+            checkFilterState() // Проверяем состояние фильтров перед поиском
             renderLoadingState()
             searchJob?.cancel()
             searchJob = viewModelScope.launch {

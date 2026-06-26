@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.network.models.HttpErrorType
 import ru.practicum.android.diploma.data.network.models.toHttpErrorType
+import ru.practicum.android.diploma.domain.api.FilterSettingsInteractor
 import ru.practicum.android.diploma.domain.api.VacanciesInteractor
 import ru.practicum.android.diploma.domain.models.ApiResult
 import ru.practicum.android.diploma.domain.models.VacancyCard
@@ -16,7 +17,8 @@ import ru.practicum.android.diploma.util.CustomLiveData
 import ru.practicum.android.diploma.util.debounce
 
 class SearchViewModel(
-    private val interactor: VacanciesInteractor
+    private val interactor: VacanciesInteractor,
+    private val filterInteractor: FilterSettingsInteractor
 ) : ViewModel() {
 
     private var currentSearchPage: Int = 0
@@ -69,8 +71,11 @@ class SearchViewModel(
             renderLoadingState()
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
+                // Получаем текущие настройки фильтрации перед каждым поиском
+                val settings = filterInteractor.getFilterSettings()
+
                 runCatching {
-                    interactor.searchVacancies(searchQuery, currentSearchPage)
+                    interactor.searchVacancies(searchQuery, currentSearchPage, settings)
                         .collect { result ->
                             withContext(Dispatchers.Main) {
                                 val replaceVacancyList = currentSearchPage == 0

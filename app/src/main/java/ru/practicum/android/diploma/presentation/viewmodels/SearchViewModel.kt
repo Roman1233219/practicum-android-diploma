@@ -79,79 +79,17 @@ class SearchViewModel(
 
     private fun searchVacancies(searchQuery: String) {
         if (searchQuery.isNotEmpty()) {
-<<<<<<< HEAD
             checkFilterState()
-=======
-            checkFilterState() // Проверяем состояние фильтров перед поиском
->>>>>>> origin/develop
             renderLoadingState()
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
                 // Получаем текущие настройки фильтрации перед каждым поиском
                 val settings = filterInteractor.getFilterSettings()
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/develop
                 runCatching {
                     interactor.searchVacancies(searchQuery, currentSearchPage, settings)
                         .collect { result ->
                             withContext(Dispatchers.Main) {
-<<<<<<< HEAD
                                 processSearchResult(result)
-=======
-                                val replaceVacancyList = currentSearchPage == 0
-                                when (result) {
-                                    is ApiResult.Error -> {
-                                        when (result.httpCode.toHttpErrorType()) {
-                                            HttpErrorType.NETWORK,
-                                            HttpErrorType.UNKNOWN -> {
-                                                if (currentSearchPage == 0) {
-                                                    renderState(SearchState.ConnectionError(true), true)
-                                                } else {
-                                                    _searchState.setSingleEventValue(SearchState.ConnectionError(false))
-                                                }
-                                            }
-
-                                            HttpErrorType.CLIENT -> {
-                                                renderState(
-                                                    SearchState.NotFoundError(replaceVacancyList),
-                                                    replaceVacancyList
-                                                )
-                                            }
-
-                                            HttpErrorType.SERVER -> {
-                                                renderState(
-                                                    SearchState.ServerError500(replaceVacancyList),
-                                                    replaceVacancyList
-                                                )
-                                            }
-                                        }
-                                    }
-
-                                    is ApiResult.Success -> {
-                                        with(result.data) {
-                                            isNextPageLoading = false
-                                            maxPages = result.data.pagesCount
-                                            if (result.data.vacanciesFound > 0) {
-                                                vacanciesList.addAll(result.data.vacancies)
-                                                renderState(
-                                                    SearchState.Content(vacanciesList, currentSearchPage == 0),
-                                                    true
-                                                )
-                                                renderState(SearchState.VacanciesCount(result.data.vacanciesFound))
-                                                ++currentSearchPage
-                                            } else if (currentSearchPage == 0) {
-                                                renderState(SearchState.NotFoundError(true), true)
-                                            } else {
-                                                renderState(SearchState.NotFoundError(true), true)
-                                            }
-                                        }
-                                    }
-
-                                    else -> Unit
-                                }
->>>>>>> origin/develop
                             }
                         }
                 }

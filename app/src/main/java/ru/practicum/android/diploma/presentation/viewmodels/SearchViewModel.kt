@@ -88,7 +88,6 @@ class SearchViewModel(
 
     private fun searchVacancies(searchQuery: String) {
         if (searchQuery.isNotEmpty()) {
-            checkFilterState()
             renderLoadingState()
             searchJob?.cancel()
             searchJob = viewModelScope.launch {

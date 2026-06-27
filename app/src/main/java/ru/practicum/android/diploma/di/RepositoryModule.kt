@@ -1,14 +1,19 @@
 package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
+import ru.practicum.android.diploma.data.repository.AreasRepositoryImpl
 import ru.practicum.android.diploma.data.repository.FavoritesRepositoryImpl
 import ru.practicum.android.diploma.data.repository.FilterSettingsRepositoryImpl
 import ru.practicum.android.diploma.data.repository.VacancyRepositoryImpl
+import ru.practicum.android.diploma.domain.api.AreasRepository
 import ru.practicum.android.diploma.domain.api.FavoritesRepository
 import ru.practicum.android.diploma.domain.api.FilterSettingsRepository
 import ru.practicum.android.diploma.domain.api.VacanciesRepository
 
 val RepositoryModule = module {
+    single<AreasRepository> {
+        AreasRepositoryImpl(get())
+    }
 
     single<VacanciesRepository> {
         VacancyRepositoryImpl(get())

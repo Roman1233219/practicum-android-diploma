@@ -59,9 +59,9 @@
         tools:layout="@layout/fragment_country_selection" />
     <fragment
         android:id="@+id/workPlaceSelectionFragment"
-        android:name="ru.practicum.android.diploma.ui.fragments.filter.WorkPlaceSelectionFragment"
+        android:name="ru.practicum.android.diploma.ui.fragments.filter.FilterAreaFragment"
         android:label="fragment_work_place_selection"
-        tools:layout="@layout/fragment_work_place_selection">
+        tools:layout="@layout/fragment_filter_area">
         <action
             android:id="@+id/action_workPlaceSelectionFragment_to_countrySelectionFragment"
             app:destination="@id/countrySelectionFragment" />
@@ -78,5 +78,5 @@
         android:id="@+id/regionSelectionFragment"
         android:name="ru.practicum.android.diploma.ui.fragments.filter.RegionSelectionFragment"
         android:label="fragment_region_selection"
-        tools:layout="@layout/fragment_region_selection" />
+        tools:layout="@layout/fragment_filter_area" />
 </navigation>

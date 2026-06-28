@@ -48,7 +48,9 @@ class IndustrySelectionFragment : Fragment() {
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
-
+        binding.searchIcon.setOnClickListener {
+            binding.searchIndustry.setText("")
+        }
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {

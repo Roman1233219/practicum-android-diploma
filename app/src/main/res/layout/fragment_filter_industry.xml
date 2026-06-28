@@ -51,10 +51,9 @@
         android:focusable="true"
         android:padding="12dp"
         android:src="@drawable/ic_search_24"
-        app:layout_constraintBottom_toBottomOf="@id/searchEditText"
-        app:layout_constraintEnd_toEndOf="@id/searchEditText"
-
-        app:layout_constraintTop_toTopOf="@id/searchEditText"/>
+        app:layout_constraintBottom_toBottomOf="@id/searchIndustry"
+        app:layout_constraintEnd_toEndOf="@id/searchIndustry"
+        app:layout_constraintTop_toTopOf="@id/searchIndustry"/>
 
     <!--    <RadioGroup-->
     <!--        android:id="@+id/radioGroup"-->

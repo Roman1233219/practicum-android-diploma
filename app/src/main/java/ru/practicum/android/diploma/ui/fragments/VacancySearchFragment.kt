@@ -78,7 +78,7 @@ class VacancySearchFragment : Fragment() {
 
                 is SearchState.ConnectionError -> {
                     binding.progressBarNextPage.isVisible = false
-                    if (adapter?.itemCount ?: 0 > 0) {
+                    if ((adapter?.itemCount ?: 0) > 0) {
                         Toast.makeText(requireContext(), getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
                     } else {
                         showNoInternetState()
@@ -105,7 +105,7 @@ class VacancySearchFragment : Fragment() {
 
                 is SearchState.ServerError500 -> {
                     binding.progressBarNextPage.isVisible = false
-                    if (adapter?.itemCount ?: 0 > 0) {
+                    if ((adapter?.itemCount ?: 0) > 0) {
                         Toast.makeText(requireContext(), getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
                     } else {
                         showServerErrorState()

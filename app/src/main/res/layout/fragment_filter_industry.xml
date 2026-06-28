@@ -26,6 +26,7 @@
         android:id="@+id/backButton"
         style="@style/ToolbarStyle"
         android:textColor="@color/black"
+        android:minHeight="64dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_arrow_back_24"

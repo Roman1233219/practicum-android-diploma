@@ -28,6 +28,7 @@
     <string name="industry">Отрасль</string>
 
     <string name="salary">Ожидаемая зарплата</string>
+    <string name="input_salary">Введите сумму</string>
     <string name="do_not_show_without_salary">Не показывать без зарплаты</string>
     <string name="apply">Применить</string>
     <string name="reset">Сбросить</string>

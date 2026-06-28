@@ -211,6 +211,7 @@ class VacancySearchFragment : Fragment() {
         viewStateHelper?.showOnly(binding.layoutInitial.root)
         binding.tvResultInfo.isVisible = false
         binding.vacancyList.isVisible = false
+        viewModel.searchDebounce("")
     }
 
     private fun showNoInternetState() {

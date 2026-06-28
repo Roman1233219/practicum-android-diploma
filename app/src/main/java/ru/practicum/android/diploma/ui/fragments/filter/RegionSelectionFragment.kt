@@ -49,6 +49,10 @@ class RegionSelectionFragment : Fragment() {
             render(it)
         }
 
+        // Подготовка экрана "Ничего не найдено" (для демонстрации/заглушки)
+        binding.layoutNoFound.ivPlaceholderPicture.setImageResource(R.drawable.placeholder_no_found)
+        binding.layoutNoFound.tvPlaceholderText.text = getString(R.string.no_region)
+
         // Установка кнопки "Назад"
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()

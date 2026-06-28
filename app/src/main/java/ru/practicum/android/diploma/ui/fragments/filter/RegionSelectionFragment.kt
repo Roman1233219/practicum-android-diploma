@@ -17,7 +17,7 @@ import ru.practicum.android.diploma.presentation.`filter-area`.AreaUi
 import ru.practicum.android.diploma.presentation.`filter-area`.RegionUiState
 import ru.practicum.android.diploma.presentation.`filter-area`.RegionViewModel
 
-class FilterRegionFragment : Fragment() {
+class RegionSelectionFragment : Fragment() {
     // binding
     private var _binding: FragmentRegionSelectionBinding? = null
     private val binding get() = _binding!!

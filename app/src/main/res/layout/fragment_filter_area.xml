@@ -5,7 +5,7 @@
     android:id="@+id/workPlaceSelectionFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.filter.FilterRegionFragment">
+    tools:context=".ui.fragments.filter.RegionSelectionFragment">
 
     <!-- ТУЛБАР -->
     <ImageView

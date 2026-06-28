@@ -46,6 +46,55 @@
             android:layout_marginStart="16dp" />
     </LinearLayout>
 
+    <!-- Состояние: Нет интернета -->
+    <include
+        android:id="@+id/layoutNoInternet"
+        layout="@layout/layout_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/glRightBorder_16"
+        app:layout_constraintStart_toEndOf="@id/glLeftBorder_16"
+        app:layout_constraintTop_toBottomOf="@id/countryFilterHeader" />
+
+    <!-- Состояние: Ошибка / Ничего не найдено -->
+    <include
+        android:id="@+id/layoutNoFound"
+        layout="@layout/layout_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/glRightBorder_16"
+        app:layout_constraintStart_toEndOf="@id/glLeftBorder_16"
+        app:layout_constraintTop_toBottomOf="@id/countryFilterHeader" />
+
+    <!-- Состояние: Ошибка сервера -->
+    <include
+        android:id="@+id/layoutServerError"
+        layout="@layout/layout_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/glRightBorder_16"
+        app:layout_constraintStart_toEndOf="@id/glLeftBorder_16"
+        app:layout_constraintTop_toBottomOf="@id/countryFilterHeader" />
+
+    <!-- Состояние: Загрузка -->
+    <include
+        android:id="@+id/layoutLoading"
+        layout="@layout/layout_loading"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/countryFilterHeader" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCountries"
         android:layout_width="0dp"

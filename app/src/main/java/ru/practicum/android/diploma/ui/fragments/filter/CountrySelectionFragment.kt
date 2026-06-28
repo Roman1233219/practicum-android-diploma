@@ -18,6 +18,7 @@ import ru.practicum.android.diploma.databinding.FragmentCountrySelectionBinding
 import ru.practicum.android.diploma.presentation.viewmodels.CountrySelectionViewModel
 import ru.practicum.android.diploma.presentation.viewmodels.FiltrationCountryState
 import ru.practicum.android.diploma.ui.adapter.CountryAdapter
+import ru.practicum.android.diploma.util.ViewStateHelper
 
 class CountrySelectionFragment : Fragment() {
     private var _binding: FragmentCountrySelectionBinding? = null
@@ -25,6 +26,7 @@ class CountrySelectionFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: CountrySelectionViewModel by viewModel()
+    private var viewStateHelper: ViewStateHelper? = null
 
     private var adapter: CountryAdapter? = null
 
@@ -39,6 +41,15 @@ class CountrySelectionFragment : Fragment() {
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        viewStateHelper = ViewStateHelper(
+            listOf(
+                binding.layoutNoInternet.root,
+                binding.layoutNoFound.root,
+                binding.layoutServerError.root,
+                binding.layoutLoading.root
+            )
+        )
 
         adapter = CountryAdapter(onItemClick = { selectedCountry ->
             viewModel.onCountrySelected(selectedCountry)
@@ -56,24 +67,40 @@ class CountrySelectionFragment : Fragment() {
                 viewModel.uiState.collect { state ->
                     when (state) {
                         is FiltrationCountryState.Loading -> {
-                            //
+                            showLoadingState()
                         }
                         is FiltrationCountryState.Success -> {
-
                             if (state.countries.isEmpty()) {
-                                binding.rvCountries.isVisible = false
+                                showEmptyResultState()
                             } else {
+                                viewStateHelper?.showOnly(binding.rvCountries)
                                 binding.rvCountries.isVisible = true
                                 adapter?.submitList(state.countries)
                             }
                         }
-                        is FiltrationCountryState.Error -> {
-                            //
-                        }
+                        is FiltrationCountryState.ConnectionError -> showNoInternetState()
+                        is FiltrationCountryState.NotFoundError -> showEmptyResultState()
+                        is FiltrationCountryState.ServerError500 -> showServerErrorState()
                     }
                 }
             }
         }
+    }
+
+    private fun showNoInternetState() {
+        viewStateHelper?.showOnly(binding.layoutNoInternet.root)
+    }
+
+    private fun showEmptyResultState() {
+        viewStateHelper?.showOnly(binding.layoutNoFound.root)
+    }
+
+    private fun showServerErrorState() {
+        viewStateHelper?.showOnly(binding.layoutServerError.root)
+    }
+
+    private fun showLoadingState() {
+        viewStateHelper?.showOnly(binding.layoutLoading.root)
     }
 
     override fun onDestroyView() {

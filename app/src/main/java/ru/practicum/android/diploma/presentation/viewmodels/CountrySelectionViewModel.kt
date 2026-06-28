@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import ru.practicum.android.diploma.data.network.models.HttpErrorType
+import ru.practicum.android.diploma.data.network.models.toHttpErrorType
 import ru.practicum.android.diploma.domain.api.AreasInteractor
 import ru.practicum.android.diploma.domain.api.FilterSettingsRepository
 import ru.practicum.android.diploma.domain.models.ApiResult
@@ -21,13 +23,10 @@ class CountrySelectionViewModel(
         .map { result ->
             when (result) {
                 is ApiResult.Loading -> FiltrationCountryState.Loading
-
                 is ApiResult.Success -> {
-                    val countries = result.data.filter { it.parentId == null }
-                    FiltrationCountryState.Success(countries)
+                    FiltrationCountryState.Success(result.data)
                 }
-
-                is ApiResult.Error -> FiltrationCountryState.Error(result.httpCode)
+                is ApiResult.Error -> handleError(result.httpCode)
             }
         }
         .stateIn(
@@ -35,6 +34,21 @@ class CountrySelectionViewModel(
             started = SharingStarted.Lazily,
             initialValue = FiltrationCountryState.Loading
         )
+
+    private fun handleError(httpCode: Int): FiltrationCountryState {
+        when (httpCode.toHttpErrorType()) {
+            HttpErrorType.NETWORK,
+            HttpErrorType.UNKNOWN -> {
+                return FiltrationCountryState.ConnectionError(httpCode)
+            }
+            HttpErrorType.CLIENT -> {
+                return FiltrationCountryState.NotFoundError(httpCode)
+            }
+            HttpErrorType.SERVER -> {
+                return FiltrationCountryState.ServerError500(httpCode)
+            }
+        }
+    }
 
     fun onCountrySelected(country: Area) {
         val currentSettings = repository.getFilterSettings()

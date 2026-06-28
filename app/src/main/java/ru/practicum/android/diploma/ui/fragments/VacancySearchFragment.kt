@@ -22,6 +22,7 @@ import ru.practicum.android.diploma.domain.models.VacancyCard
 import ru.practicum.android.diploma.presentation.viewmodels.SearchState
 import ru.practicum.android.diploma.presentation.viewmodels.SearchViewModel
 import ru.practicum.android.diploma.ui.adapter.VacancyAdapter
+import ru.practicum.android.diploma.ui.fragments.details.VacancyDetailsFragment
 import ru.practicum.android.diploma.util.ViewStateHelper
 
 class VacancySearchFragment : Fragment() {

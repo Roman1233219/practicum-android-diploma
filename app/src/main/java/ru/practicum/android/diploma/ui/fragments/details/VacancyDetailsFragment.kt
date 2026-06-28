@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.ui.fragments
+package ru.practicum.android.diploma.ui.fragments.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,9 +17,9 @@ import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyDetailsBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
-import ru.practicum.android.diploma.presentation.details.VacancyDetailsEvent
-import ru.practicum.android.diploma.presentation.details.VacancyDetailsState
-import ru.practicum.android.diploma.presentation.details.VacancyDetailsViewModel
+import ru.practicum.android.diploma.presentation.viewmodels.details.VacancyDetailsEvent
+import ru.practicum.android.diploma.presentation.viewmodels.details.VacancyDetailsState
+import ru.practicum.android.diploma.presentation.viewmodels.details.VacancyDetailsViewModel
 import ru.practicum.android.diploma.util.CurrencyMapper
 import ru.practicum.android.diploma.util.HtmlUtils
 import ru.practicum.android.diploma.util.IntentHelper

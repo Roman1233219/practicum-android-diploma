@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.presentation.area
+package ru.practicum.android.diploma.presentation.`filter-area`
 
 import android.os.Handler
 import android.os.Looper
@@ -7,12 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.R
 
-class AreaViewModel : ViewModel() {
-    private val screenState = MutableLiveData<AreaUiState>(AreaUiState.Initial)
-    fun observeScreenState(): LiveData<AreaUiState> = screenState
+class RegionViewModel : ViewModel() {
+    private val screenState = MutableLiveData<RegionUiState>(RegionUiState.Initial)
+    fun observeScreenState(): LiveData<RegionUiState> = screenState
 
     // полный список регионов
-    private var fullAreasList: List<AreaUi> = emptyList()
+    private var fullRegionsList: List<AreaUi> = emptyList()
 
     // для поисковой строки
     private var latestSearchText: String? = null
@@ -48,9 +48,9 @@ class AreaViewModel : ViewModel() {
             AreaUi(areaId = 19, areaName = "Зарайск"),
             AreaUi(areaId = 20, areaName = "Звенигород")
         )
-        fullAreasList = areasList
+        fullRegionsList = areasList
 
-        renderScreenState(AreaUiState.Content(areasList))
+        renderScreenState(RegionUiState.Content(areasList))
     }
 
     // поиск региона
@@ -62,7 +62,7 @@ class AreaViewModel : ViewModel() {
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
 
         if (changedText.isBlank()) {
-            renderScreenState(AreaUiState.Content(fullAreasList))
+            renderScreenState(RegionUiState.Content(fullRegionsList))
             return
         }
 
@@ -75,22 +75,22 @@ class AreaViewModel : ViewModel() {
     private fun search(query: String) {
         if (query.isBlank()) {
             renderScreenState(
-                AreaUiState.Content(fullAreasList)
+                RegionUiState.Content(fullRegionsList)
             )
             return
         }
 
-        val filteredList = fullAreasList.filter {
+        val filteredList = fullRegionsList.filter {
             it.areaName.contains(query, ignoreCase = true)
         }
 
         if (filteredList.isEmpty()) {
             renderScreenState(
-                AreaUiState.Empty(R.string.placeholder_empty_area)
+                RegionUiState.Empty(R.string.placeholder_empty_area)
             )
         } else {
             renderScreenState(
-                AreaUiState.Content(filteredList)
+                RegionUiState.Content(filteredList)
             )
         }
     }
@@ -101,7 +101,7 @@ class AreaViewModel : ViewModel() {
     }
 
     // изменение состояния экрана
-    private fun renderScreenState(state: AreaUiState) {
+    private fun renderScreenState(state: RegionUiState) {
         screenState.postValue(state)
     }
 

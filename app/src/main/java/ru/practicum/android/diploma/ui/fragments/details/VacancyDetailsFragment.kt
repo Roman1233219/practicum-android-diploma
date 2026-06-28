@@ -119,7 +119,10 @@ class VacancyDetailsFragment : Fragment() {
                 setErrorContent(R.drawable.placeholder_server_error_vacancy, R.string.server_error)
             }
 
-            VacancyDetailsState.NotFound -> setErrorContent(R.drawable.placeholder_vacancy_not_found, R.string.vacancy_not_found)
+            VacancyDetailsState.NotFound -> setErrorContent(
+                R.drawable.placeholder_vacancy_not_found,
+                R.string.vacancy_not_found
+            )
         }
     }
 
@@ -194,13 +197,13 @@ class VacancyDetailsFragment : Fragment() {
         }
     }
 
-    private fun setErrorContent(imageResourceId: Int, descriptionResourceId: Int){
+    private fun setErrorContent(imageResourceId: Int, descriptionResourceId: Int) {
         binding.layoutServerError.root.isVisible = true
         binding.layoutServerError.ivPlaceholderPicture.setImageResource(imageResourceId)
         binding.layoutServerError.tvPlaceholderText.text = getString(descriptionResourceId)
     }
 
-    private fun hideErrorMessage(){
+    private fun hideErrorMessage() {
         binding.layoutServerError.root.isVisible = false
     }
 

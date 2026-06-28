@@ -19,6 +19,7 @@
     <string name="no_vacancies">Таких вакансий нет</string>
     <string name="error_fetching_vacancies">Не удалось получить\n список вакансий</string>
     <string name="server_error">Ошибка сервера</string>
+    <string name="vacancy_not_found">Вакансия не найдена или удалена</string>
     <string name="pictures_ratio">1:1</string>
     <string name="placeholder_picture_desc">Иллюстрация состояния экрана</string>
 

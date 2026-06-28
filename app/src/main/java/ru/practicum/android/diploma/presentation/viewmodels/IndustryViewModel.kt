@@ -40,7 +40,7 @@ class IndustryViewModel(val interactor: FilterIndustriesInteractor) : ViewModel(
         viewModelScope.launch {
             try {
                 renderState(IndustryState.IsLoading)
-                interactor.getIndustries(searchQuery)
+                interactor.getIndustries()
                     .collect { result ->
                         processResult(result)
                     }

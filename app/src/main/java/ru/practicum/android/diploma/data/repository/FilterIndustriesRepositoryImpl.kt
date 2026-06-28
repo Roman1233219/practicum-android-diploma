@@ -10,18 +10,11 @@ import ru.practicum.android.diploma.domain.api.FilterIndustriesRepository
 import ru.practicum.android.diploma.domain.models.Industry
 
 class FilterIndustriesRepositoryImpl(private var networkClient: NetworkClient) : FilterIndustriesRepository {
-    override fun getIndustries(query: String): Flow<List<Industry>> = flow {
-        val request = FilterIndustriesRequest(query)
+    override fun getIndustries(): Flow<List<Industry>> = flow {
+        val request = FilterIndustriesRequest()
         val data = networkClient.filterIndustryRequest(request)
         if (data.resultCode == SUCCESS_CODE && data is FilterIndustriesResponse) {
-            val filteredIndustries = if (query.isNotEmpty()) {
-                data.toModel().filter { industry ->
-                    industry.industryName.contains(query, ignoreCase = true)
-                }
-            } else {
-                data.toModel()
-            }
-            emit(filteredIndustries)
+            emit(data.toModel())
         } else {
             emit(emptyList())
         }

@@ -5,5 +5,6 @@ import ru.practicum.android.diploma.domain.models.ApiResult
 import ru.practicum.android.diploma.domain.models.Area
 
 interface AreasInteractor {
-    fun getAreas(): Flow<ApiResult<Area>>
+    fun getAreas(): Flow<ApiResult<List<Area>>>
+    fun getCountries(): Flow<ApiResult<List<Area>>>
 }

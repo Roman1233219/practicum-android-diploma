@@ -21,7 +21,7 @@ class RetrofitNetworkClient(
         return when {
             !networkConnectivityChecker(context) -> Response().apply { resultCode = NO_CONNECTION_CODE }
             dto !is FilterAreaRequest -> Response().apply { resultCode = BAD_REQUEST_CODE }
-            else -> executeRequest { apiService.getAreas() }
+            else -> executeRequest { apiService.getFakeAreas() }
         }
     }
 

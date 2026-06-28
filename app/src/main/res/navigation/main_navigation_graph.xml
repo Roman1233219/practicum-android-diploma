@@ -56,7 +56,11 @@
         android:id="@+id/countrySelectionFragment"
         android:name="ru.practicum.android.diploma.ui.fragments.filter.CountrySelectionFragment"
         android:label="fragment_country_selection"
-        tools:layout="@layout/fragment_country_selection" />
+        tools:layout="@layout/fragment_country_selection">
+        <action
+            android:id="@+id/action_filtersFragment_to_regionSelectionFragment"
+            app:destination="@id/regionSelectionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/workPlaceSelectionFragment"
         android:name="ru.practicum.android.diploma.ui.fragments.filter.FilterAreaFragment"

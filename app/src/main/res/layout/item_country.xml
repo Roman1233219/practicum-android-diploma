@@ -7,14 +7,14 @@
 
     <TextView
         android:id="@+id/tvCountry"
-        style="style/TextViewTeamLine"
+        style="@style/TextViewTeamLine"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:gravity="start|center_vertical"
         android:maxLines="1"
-        android:text="Россия" />
+        android:textColor="?attr/colorOnSurface" />
 
     <ImageView
         android:id="@+id/ivArrowForward"

@@ -35,15 +35,14 @@ class IndustrySelectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        adapter = IndustryAdapter{}
-        binding.industryList.adapter = adapter
-        binding.industryList.layoutManager = LinearLayoutManager(requireContext())
-
         // Теперь подписываемся на LiveData
         viewModel.observeLiveData().observe(viewLifecycleOwner) {
             render(it)
         }
+        adapter = IndustryAdapter{}
+        binding.industryList.adapter = adapter
+        binding.industryList.layoutManager = LinearLayoutManager(requireContext())
+
         // Установка кнопки "Назад"
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
@@ -51,6 +50,12 @@ class IndustrySelectionFragment : Fragment() {
         binding.searchIcon.setOnClickListener {
             binding.searchIndustry.setText("")
         }
+
+        binding.choose.setOnClickListener {
+            returnIndustryResult(null)
+            findNavController().navigateUp()
+        }
+
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -85,13 +90,13 @@ class IndustrySelectionFragment : Fragment() {
     }
 
     fun showContent(found: List<Industry>) {
-        adapter?.industrys = found
-        adapter?.notifyDataSetChanged()
         binding.industryList.visibility = View.VISIBLE
         binding.layoutServerError.root.visibility = View.GONE
         binding.layoutNoFound.root.visibility = View.GONE
         binding.layoutNoInternet.root.visibility = View.GONE
         binding.layoutLoading.root.visibility = View.GONE
+        adapter?.industrys = found
+        adapter?.notifyDataSetChanged()
     }
 
     fun showError() {
@@ -118,11 +123,15 @@ class IndustrySelectionFragment : Fragment() {
         binding.layoutLoading.root.visibility = View.VISIBLE
     }
 
+    private fun returnIndustryResult(industryId: String?) {
+        val result = bundleOf("industryId" to industryId)
+        parentFragmentManager.setFragmentResult("industry_selection_result", result)
+        findNavController().navigateUp()
+    }
+
 
     companion object {
-        const val INDUSTRY_ID_KEY = "INDUSTRY_ID_KEY"
-
-        fun createArgs(vacancyId: String): Bundle =
-            bundleOf(INDUSTRY_ID_KEY to vacancyId)
+        const val INDUSTRY_SELECTION_RESULT = "industry_selection_result"
+        const val INDUSTRY_ID_KEY = "industryId"
     }
 }

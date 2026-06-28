@@ -12,14 +12,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.databinding.FragmentFilterRegionBinding
+import ru.practicum.android.diploma.databinding.FragmentRegionSelectionBinding
 import ru.practicum.android.diploma.presentation.`filter-area`.AreaUi
 import ru.practicum.android.diploma.presentation.`filter-area`.RegionUiState
 import ru.practicum.android.diploma.presentation.`filter-area`.RegionViewModel
 
 class FilterRegionFragment : Fragment() {
     // binding
-    private var _binding: FragmentFilterRegionBinding? = null
+    private var _binding: FragmentRegionSelectionBinding? = null
     private val binding get() = _binding!!
 
     // viewModel
@@ -38,7 +38,7 @@ class FilterRegionFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentFilterRegionBinding.inflate(inflater, container, false)
+        _binding = FragmentRegionSelectionBinding.inflate(inflater, container, false)
         return binding.root
     }
 

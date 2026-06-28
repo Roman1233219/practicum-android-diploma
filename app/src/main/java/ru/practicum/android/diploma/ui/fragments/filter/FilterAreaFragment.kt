@@ -16,43 +16,48 @@ import ru.practicum.android.diploma.databinding.FragmentFilterAreaBinding
 import ru.practicum.android.diploma.presentation.`filter-area`.AreaUi
 import ru.practicum.android.diploma.presentation.`filter-area`.AreaUiState
 import ru.practicum.android.diploma.presentation.`filter-area`.AreaViewModel
-import ru.practicum.android.diploma.presentation.`filter-area`.RegionUiState
-import ru.practicum.android.diploma.presentation.`filter-area`.RegionViewModel
-import kotlin.getValue
 
 class FilterAreaFragment : Fragment() {
-    //binding
+
     private var _binding: FragmentFilterAreaBinding? = null
     private val binding get() = _binding!!
 
-    //viewModel
     private val viewModel by viewModel<AreaViewModel>()
 
-    // свойства для хранения текущего состояния отображения
     private var isCountrySelected = false
     private var isRegionSelected = false
 
     private var pendingCountry: AreaUi? = null
     private var pendingRegion: AreaUi? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFilterAreaBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // подпись на liveData
+        initObservers()
+        initClickListeners()
+        initNavigationResultListeners()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun initObservers() {
         viewModel.observeState().observe(viewLifecycleOwner) { state ->
             render(state)
         }
+    }
 
-        // Установка кнопки "Назад"
+    private fun initClickListeners() {
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
 
-        // кнопки выбора объекта или очистки выбора
         binding.selectCountryButton.setOnClickListener {
             if (!isCountrySelected) {
                 findNavController().navigate(R.id.action_workPlaceSelectionFragment_to_countrySelectionFragment)
@@ -62,87 +67,68 @@ class FilterAreaFragment : Fragment() {
         }
 
         binding.selectRegionButton.setOnClickListener {
-            if (!isRegionSelected) {
-                val countryId = when (val state = viewModel.observeState().value) {
-                    is AreaUiState.Content -> state.country?.areaId ?: -1
-                    else -> -1
-                }
-
-                findNavController().navigate(
-                    R.id.action_workPlaceSelectionFragment_to_regionSelectionFragment,
-                    bundleOf(
-                        "countryId" to countryId
-                    )
-                )
-            } else {
-                viewModel.selectRegion(null)
-            }
+            handleRegionClick()
         }
 
-        // кнопка Выбрать
         binding.selectButton.setOnClickListener {
-
             findNavController().navigateUp()
         }
+    }
 
-        // получение данных из других фрагментов
+    private fun handleRegionClick() {
+        if (!isRegionSelected) {
+            val countryId = when (val state = viewModel.observeState().value) {
+                is AreaUiState.Content -> state.country?.areaId ?: -1
+                else -> -1
+            }
+
+            findNavController().navigate(
+                R.id.action_workPlaceSelectionFragment_to_regionSelectionFragment,
+                bundleOf("countryId" to countryId)
+            )
+        } else {
+            viewModel.selectRegion(null)
+        }
+    }
+
+    private fun initNavigationResultListeners() {
         val savedStateHandle = findNavController().currentBackStackEntry?.savedStateHandle
 
-        // слушаем возврат страны
-        savedStateHandle
-            ?.getLiveData<AreaUi>(COUNTRY_DATA_KEY)
+        savedStateHandle?.getLiveData<AreaUi>(COUNTRY_DATA_KEY)
             ?.observe(viewLifecycleOwner) { country ->
                 pendingCountry = country
-
-                if (pendingRegion == null) {
-                    viewModel.selectCountry(country)
-                } else {
-                    viewModel.selectLocation(
-                        pendingCountry,
-                        pendingRegion
-                    )
-
-                    pendingCountry = null
-                    pendingRegion = null
-                }
-
+                handleLocationUpdate()
                 savedStateHandle.remove<AreaUi>(COUNTRY_DATA_KEY)
             }
 
-        // слушаем возврат региона
-        savedStateHandle
-            ?.getLiveData<AreaUi>(REGION_DATA_KEY)
+        savedStateHandle?.getLiveData<AreaUi>(REGION_DATA_KEY)
             ?.observe(viewLifecycleOwner) { region ->
                 pendingRegion = region
-
-                if (pendingCountry == null) {
-                    viewModel.selectRegion(region)
-                } else {
-                    viewModel.selectLocation(
-                        pendingCountry,
-                        pendingRegion
-                    )
-
-                    pendingCountry = null
-                    pendingRegion = null
-                }
-
+                handleLocationUpdate()
                 savedStateHandle.remove<AreaUi>(REGION_DATA_KEY)
             }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun handleLocationUpdate() {
+        val country = pendingCountry
+        val region = pendingRegion
+
+        if (country != null && region == null) {
+            viewModel.selectCountry(country)
+        } else if (region != null && country == null) {
+            viewModel.selectRegion(region)
+        } else if (country != null && region != null) {
+            viewModel.selectLocation(country, region)
+            pendingCountry = null
+            pendingRegion = null
+        }
     }
 
-    // состояния экранов
     private fun render(state: AreaUiState) {
         when (state) {
             is AreaUiState.Empty -> {
                 isCountrySelected = false
                 isRegionSelected = false
-
                 renderCountryView(null)
                 renderRegionView(null)
                 binding.selectButton.visibility = View.GONE
@@ -150,7 +136,6 @@ class FilterAreaFragment : Fragment() {
             is AreaUiState.Content -> {
                 isCountrySelected = state.country != null
                 isRegionSelected = state.region != null
-
                 renderCountryView(state.country)
                 renderRegionView(state.region)
                 binding.selectButton.visibility = View.VISIBLE
@@ -181,7 +166,7 @@ class FilterAreaFragment : Fragment() {
         } else {
             binding.regionHint.visibility = View.GONE
             binding.regionText.text = getString(R.string.region)
-            binding.regionText.setTextColor(getColorFromAttr((colorControlNormal)))
+            binding.regionText.setTextColor(getColorFromAttr(colorControlNormal))
             binding.regionActionIcon.setImageResource(R.drawable.ic_arrow_forward_24)
         }
     }
@@ -197,4 +182,3 @@ class FilterAreaFragment : Fragment() {
         const val REGION_DATA_KEY = "selected_region_data"
     }
 }
-

@@ -2,23 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/regionSelectionFragment"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.fragments.filter.RegionSelectionFragment"
+    tools:context=".ui.fragments.filter.FilterAreaFragment"
     android:orientation="vertical"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:theme="@style/Base.Theme.PracticumAndroidDiploma">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:paddingStart="16dp">
-
+        android:layout_height="64dp"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/padding_16">
         <ImageView
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_back_24" />
+            android:src="@drawable/ic_arrow_back_24"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -26,7 +27,59 @@
             android:textAppearance="@style/TextDisplayMedium22"
             android:text="@string/region_selection_title"
             android:textColor="?attr/colorOnSurface"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="@dimen/padding_16"
+            style="@style/TextDisplayMedium22"/>
     </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/regionSearchInput"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/padding_16"
+        app:boxBackgroundMode="none"
+        app:hintEnabled="false"
+        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/ic_search_24"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="@dimen/padding_16">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/searchEditText"
+            style="@style/inputEditTextSearchStyle"
+            android:hint="Введите регион"
+            android:textColorHint="?attr/colorControlNormal"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/regionList"
+
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    <ImageView
+        android:id="@+id/placeholderImage"
+
+        android:layout_width="328dp"
+        android:layout_height="223dp"
+        android:layout_marginTop="135dp"
+
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/placeholderText"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_16"
+
+        style="@style/TextDisplayMedium22"
+        android:textColor="?attr/colorOnSurface"
+
+        android:visibility="gone"/>
 
 </LinearLayout>

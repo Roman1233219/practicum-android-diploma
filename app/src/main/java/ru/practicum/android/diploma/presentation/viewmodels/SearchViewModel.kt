@@ -14,6 +14,7 @@ import ru.practicum.android.diploma.domain.api.FilterSettingsInteractor
 import ru.practicum.android.diploma.domain.api.VacanciesInteractor
 import ru.practicum.android.diploma.domain.models.ApiResult
 import ru.practicum.android.diploma.domain.models.FilterSettings
+import ru.practicum.android.diploma.domain.models.VacanciesSearchResult
 import ru.practicum.android.diploma.domain.models.VacancyCard
 import ru.practicum.android.diploma.util.CustomLiveData
 import ru.practicum.android.diploma.util.debounce
@@ -52,11 +53,9 @@ class SearchViewModel(
         val settings = filterInteractor.getFilterSettings()
         _isFilterSelected.value = settings != FilterSettings()
 
-        if (lastAppliedFilterSettings != null && settings != lastAppliedFilterSettings) {
-            if (lastSearchRequest.isNotBlank()) {
-                clearPagingHistory()
-                searchVacancies(lastSearchRequest)
-            }
+        if (lastAppliedFilterSettings != null && settings != lastAppliedFilterSettings && lastSearchRequest.isNotBlank()) {
+            clearPagingHistory()
+            searchVacancies(lastSearchRequest)
         }
         lastAppliedFilterSettings = settings
     }
@@ -105,7 +104,7 @@ class SearchViewModel(
         }
     }
 
-    private fun processSearchResult(result: ApiResult<ru.practicum.android.diploma.domain.models.VacanciesSearchResult>) {
+    private fun processSearchResult(result: ApiResult<VacanciesSearchResult>) {
         val replaceVacancyList = currentSearchPage == 0
         when (result) {
             is ApiResult.Error -> handleError(result.httpCode, replaceVacancyList)
@@ -114,7 +113,10 @@ class SearchViewModel(
         }
     }
 
-    private fun handleSuccess(data: ru.practicum.android.diploma.domain.models.VacanciesSearchResult, replaceVacancyList: Boolean) {
+    private fun handleSuccess(
+        data: VacanciesSearchResult,
+        replaceVacancyList: Boolean
+    ) {
         isNextPageLoading = false
         maxPages = data.pagesCount
         if (data.vacanciesFound > 0) {

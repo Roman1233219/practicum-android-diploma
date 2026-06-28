@@ -1,85 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/workPlaceSelectionFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/regionSelectionFragment"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.fragments.filter.FilterAreaFragment"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    android:theme="@style/Base.Theme.PracticumAndroidDiploma">
+    tools:context=".ui.fragments.filter.FilterAreaFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:gravity="center_vertical"
-        android:paddingStart="@dimen/padding_16">
-        <ImageView
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_back_24"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextDisplayMedium22"
-            android:text="@string/region_selection_title"
-            android:textColor="?attr/colorOnSurface"
-            android:layout_marginStart="@dimen/padding_16"
-            style="@style/TextDisplayMedium22"/>
-    </LinearLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/regionSearchInput"
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/padding_16"
-        app:boxBackgroundMode="none"
-        app:hintEnabled="false"
-        app:endIconMode="custom"
-        app:endIconDrawable="@drawable/ic_search_24"
-
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="@dimen/padding_16">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/searchEditText"
-            style="@style/inputEditTextSearchStyle"
-            android:hint="Введите регион"
-            android:textColorHint="?attr/colorControlNormal"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/regionList"
-
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
+    <!-- ТУЛБАР -->
     <ImageView
-        android:id="@+id/placeholderImage"
-
-        android:layout_width="328dp"
-        android:layout_height="223dp"
-        android:layout_marginTop="135dp"
-
-        android:visibility="gone"/>
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"
+        android:paddingHorizontal="16dp"
+        android:src="@drawable/ic_arrow_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/placeholderText"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/padding_16"
-
-        style="@style/TextDisplayMedium22"
+        android:id="@+id/toolbarTitle"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:gravity="center_vertical"
+        android:text="@string/work_place_selection_title"
+        android:textAppearance="@style/TextDisplayMedium22"
         android:textColor="?attr/colorOnSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/backButton"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        android:visibility="gone"/>
+    <!-- БЛОК: СТРАНА -->
+    <View
+        android:id="@+id/selectCountryButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintTop_toBottomOf="@id/toolbarTitle" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/countryHint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/country"
+        android:textAppearance="@style/TextDisplayRegular12"
+        android:textColor="?attr/colorControlNormal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/countryText"
+        app:layout_constraintEnd_toStartOf="@id/countryActionIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/selectCountryButton"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/countryText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/country"
+        android:textAppearance="@style/TextDisplayRegular16"
+        android:textColor="?attr/colorControlNormal"
+        app:layout_constraintBottom_toBottomOf="@id/selectCountryButton"
+        app:layout_constraintEnd_toStartOf="@id/countryActionIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/countryHint"
+        tools:text="Россия"
+        tools:textColor="?attr/colorOnSurface" />
+
+    <ImageView
+        android:id="@+id/countryActionIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_arrow_forward_24"
+        app:layout_constraintBottom_toBottomOf="@id/selectCountryButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/selectCountryButton"
+        app:tint="?attr/colorOnSurface" />
+
+    <!-- БЛОК: РЕГИОН -->
+    <View
+        android:id="@+id/selectRegionButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintTop_toBottomOf="@id/selectCountryButton" />
+
+    <TextView
+        android:id="@+id/regionHint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/region"
+        android:textAppearance="@style/TextDisplayRegular12"
+        android:textColor="?attr/colorControlNormal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/regionText"
+        app:layout_constraintEnd_toStartOf="@id/regionActionIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/selectRegionButton"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/regionText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/region"
+        android:textAppearance="@style/TextDisplayRegular16"
+        android:textColor="?attr/colorControlNormal"
+        app:layout_constraintBottom_toBottomOf="@id/selectRegionButton"
+        app:layout_constraintEnd_toStartOf="@id/regionActionIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/regionHint"
+        tools:text="Москва"
+        tools:textColor="?attr/colorOnSurface" />
+
+    <ImageView
+        android:id="@+id/regionActionIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_arrow_forward_24"
+        app:layout_constraintBottom_toBottomOf="@id/selectRegionButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/selectRegionButton"
+        app:tint="?attr/colorOnSurface" />
+
+    <!-- НИЖНЯЯ КНОПКА -->
+    <Button
+        style="@style/ButtonStyle"
+        android:id="@+id/selectButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="17dp"
+        android:layout_marginBottom="@dimen/padding_24"
+        android:text="@string/select_button_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        android:elevation="0dp"
+        app:elevation="0dp"
+        android:stateListAnimator="@null"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

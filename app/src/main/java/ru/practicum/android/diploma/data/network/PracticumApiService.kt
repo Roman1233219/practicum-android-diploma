@@ -4,14 +4,16 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
 import retrofit2.http.Query
+import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.dto.FilterAreaResponse
+import ru.practicum.android.diploma.data.dto.FilterIndustryDto
 import ru.practicum.android.diploma.data.dto.VacanciesResponse
 import ru.practicum.android.diploma.data.dto.VacancyDto
 import ru.practicum.android.diploma.data.dto.FilterIndustriesResponse
 
 interface PracticumApiService {
     @GET("areas")
-    suspend fun getAreas(): FilterAreaResponse
+    suspend fun getAreas(): List<FilterAreaDto>
 
     @GET("vacancies")
     suspend fun searchVacancies(
@@ -23,7 +25,7 @@ interface PracticumApiService {
     suspend fun getVacancyDetails(@Path("vacancy_id") vacancyId: String): VacancyDto
 
     @GET("industries")
-    suspend fun getIndustries(): FilterIndustriesResponse
+    suspend fun getIndustries(): List<FilterIndustryDto>
 
     @GET("vacancies")
     suspend fun searchVacancies(

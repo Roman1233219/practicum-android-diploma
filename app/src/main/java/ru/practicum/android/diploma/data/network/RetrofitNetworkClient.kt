@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.data.network
 
-import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -13,8 +12,7 @@ import ru.practicum.android.diploma.data.dto.VacancyDetailsResponse
 import ru.practicum.android.diploma.util.NetworkUtil
 
 class RetrofitNetworkClient(
-    private val apiService: PracticumApiService,
-    private val context: Context
+    private val apiService: PracticumApiService
 ) : NetworkClient {
 
     override suspend fun filterAreaRequest(dto: Any): Response {

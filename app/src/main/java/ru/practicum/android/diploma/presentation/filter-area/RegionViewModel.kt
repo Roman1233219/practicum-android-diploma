@@ -38,7 +38,7 @@ class RegionViewModel(
                     renderScreenState(RegionUiState.Error(R.string.placeholder_error_area))
                 } else {
                     val allRegions = mutableListOf<AreaUi>()
-                    
+
                     if (countryId != -1) {
                         // Если страна выбрана, ищем её и берем только её регионы
                         val country = areas.find { it.id == countryId }
@@ -51,7 +51,7 @@ class RegionViewModel(
                             allRegions.addAll(flattenAreas(country.areas))
                         }
                     }
-                    
+
                     fullRegionsList = allRegions.distinctBy { it.areaId }
                         .sortedBy { it.areaName }
                     renderScreenState(RegionUiState.Content(fullRegionsList))

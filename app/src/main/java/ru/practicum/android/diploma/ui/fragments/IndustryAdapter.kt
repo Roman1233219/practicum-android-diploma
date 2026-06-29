@@ -3,14 +3,24 @@ package ru.practicum.android.diploma.ui.fragments
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.domain.models.Industry
 
 class IndustryAdapter(private val onItemClick: (Industry) -> Unit) :
     RecyclerView.Adapter<IndustryViewHolder>() {
-    
+
     var industrys = listOf<Industry>()
     private var selectedPosition = -1
+
+    fun setSelectedIndustry(industryId: String?) {
+        val index = industrys.indexOfFirst { it.industryId == industryId }
+        if (index != -1 && index != selectedPosition) {
+            val previous = selectedPosition
+            selectedPosition = index
+            notifyItemChanged(previous)
+            notifyItemChanged(selectedPosition)
+        }
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -27,7 +37,7 @@ class IndustryAdapter(private val onItemClick: (Industry) -> Unit) :
     ) {
         val industry = industrys[position]
         val isSelected = position == selectedPosition
-        
+
         holder.bind(industry, isSelected) { isChecked ->
             if (isChecked) {
                 val previousSelected = selectedPosition
@@ -45,7 +55,7 @@ class IndustryAdapter(private val onItemClick: (Industry) -> Unit) :
     override fun getItemCount(): Int {
         return industrys.size
     }
-    
+
     fun getSelectedIndustry(): Industry? {
         return if (selectedPosition != -1) industrys[selectedPosition] else null
     }

@@ -31,7 +31,7 @@ val InteractorModule = module {
         FilterSettingsInteractorImpl(get())
     }
 
-    single<FilterIndustriesInteractor>{
+    single<FilterIndustriesInteractor> {
         FilterIndustriesInteractorImpl(get())
     }
 

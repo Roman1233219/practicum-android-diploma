@@ -40,6 +40,11 @@ class FiltersFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        binding.salaryInputLayout.setEndIconOnClickListener {
+            binding.salaryEditText.setText("")
+            viewModel.setSalary(null)
+        }
+
         setupClickListeners()
         setupTextWatcher()
 
@@ -69,8 +74,6 @@ class FiltersFragment : Fragment() {
         binding.resetButton.setOnClickListener {
             viewModel.resetFilters()
         }
-
-        viewModel.loadSettings()
     }
 
     private fun setupClickListeners() {
@@ -135,9 +138,14 @@ class FiltersFragment : Fragment() {
         renderWorkPlace(settings)
         renderIndustry(settings)
 
-        if (binding.salaryEditText.text.toString() != (settings.expectedSalary?.toString() ?: "")) {
-            binding.salaryEditText.setText(settings.expectedSalary?.toString() ?: "")
+        val newSalary = settings.expectedSalary?.toString() ?: ""
+        if (binding.salaryEditText.text.toString() != newSalary) {
+            binding.salaryEditText.setText(newSalary)
+            // Устанавливаем курсор в конец после программного изменения текста
+            binding.salaryEditText.setSelection(newSalary.length)
         }
+
+        binding.salaryInputLayout.isEndIconVisible = settings.expectedSalary != null
 
         if (binding.noSalaryCheckbox.isChecked != settings.notShowWithoutSalary) {
             binding.noSalaryCheckbox.isChecked = settings.notShowWithoutSalary

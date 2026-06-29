@@ -174,7 +174,8 @@
                 android:layout_marginTop="@dimen/padding_32"
                 android:hint="@string/salary"
                 android:textColorHint="@color/color_text_hint"
-                app:endIconMode="clear_text"
+                app:endIconDrawable="@drawable/ic_close_24"
+                app:endIconMode="custom"
                 app:endIconTint="?attr/colorOnSurface">
 
                 <com.google.android.material.textfield.TextInputEditText

@@ -32,17 +32,25 @@ class IndustrySelectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         initRecyclerView()
-        
+
+        setupNoInternetState()
+        setupNoFoundState()
+        setupServerErrorState()
+
         viewModel.observeLiveData().observe(viewLifecycleOwner) {
             render(it)
+        }
+
+        viewModel.selectedIndustryId.observe(viewLifecycleOwner) { id ->
+            adapter?.setSelectedIndustry(id)
         }
 
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
-        
+
         binding.searchIcon.setOnClickListener {
             binding.searchIndustry.setText("")
         }
@@ -88,6 +96,7 @@ class IndustrySelectionFragment : Fragment() {
             is IndustryState.Error -> showError()
             is IndustryState.Empty -> showEmpty()
             is IndustryState.Content -> showContent(state.industry)
+            is IndustryState.NoInternet -> showNoInternet()
         }
     }
 
@@ -99,6 +108,9 @@ class IndustrySelectionFragment : Fragment() {
         binding.layoutLoading.root.isVisible = false
         adapter?.industrys = found
         adapter?.notifyDataSetChanged()
+
+        // Восстанавливаем выбор из ViewModel после обновления списка
+        adapter?.setSelectedIndustry(viewModel.selectedIndustryId.value)
     }
 
     private fun showError() {
@@ -117,6 +129,14 @@ class IndustrySelectionFragment : Fragment() {
         binding.layoutLoading.root.isVisible = false
     }
 
+    private fun showNoInternet() {
+        binding.industryList.isVisible = false
+        binding.layoutServerError.root.isVisible = false
+        binding.layoutNoFound.root.isVisible = false
+        binding.layoutNoInternet.root.isVisible = true
+        binding.layoutLoading.root.isVisible = false
+    }
+
     private fun showLoading() {
         binding.industryList.isVisible = false
         binding.layoutServerError.root.isVisible = false
@@ -132,5 +152,23 @@ class IndustrySelectionFragment : Fragment() {
         )
         parentFragmentManager.setFragmentResult("industry_selection_result", result)
         findNavController().navigateUp()
+    }
+
+    private fun setupNoInternetState() {
+        binding.layoutNoInternet.ivPlaceholderPicture.setImageResource(R.drawable.placeholder_no_internet)
+        binding.layoutNoInternet.tvPlaceholderText.text = getString(R.string.no_internet)
+        binding.layoutNoInternet.tvPlaceholderText.isVisible = true
+    }
+
+    private fun setupNoFoundState() {
+        binding.layoutNoFound.ivPlaceholderPicture.setImageResource(R.drawable.placeholder_no_found)
+        binding.layoutNoFound.tvPlaceholderText.text = getString(R.string.no_industry)
+        binding.layoutNoFound.tvPlaceholderText.isVisible = true
+    }
+
+    private fun setupServerErrorState() {
+        binding.layoutServerError.ivPlaceholderPicture.setImageResource(R.drawable.placeholder_error_server)
+        binding.layoutServerError.tvPlaceholderText.text = getString(R.string.server_error)
+        binding.layoutServerError.tvPlaceholderText.isVisible = true
     }
 }

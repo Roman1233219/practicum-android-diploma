@@ -57,7 +57,7 @@
 
     <!--    Текст для заглушек-->
     <string name="placeholder_empty_area">Такого региона нет</string>
-    <string name="placeholder_error_area">Не удалось получить список</string>
+    <string name="placeholder_error_area">Не удалось получить\n список</string>
 
     <!--    Экран деталей вакансии-->
     <string name="contacts_title">Контакты:</string>
@@ -66,5 +66,6 @@
 
     <!--    Экран фильтра отрасль-->
     <string name="enter_industries">Введите отрасль</string>
+    <string name="no_industry">Такой отрасли нет</string>
 
 </resources>

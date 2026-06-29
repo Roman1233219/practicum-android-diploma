@@ -46,18 +46,28 @@ class SearchViewModel(
 
     init {
         _searchState.setValue(SearchState.QueryIsEmpty(isEmpty = true))
-        checkFilterState()
+        observeFilterState()
+    }
+
+    private fun observeFilterState() {
+        viewModelScope.launch {
+            filterInteractor.getFilterFlow().collect { settings ->
+                _isFilterSelected.value = settings != FilterSettings()
+
+                // Если фильтры изменились и мы уже что-то искали — перезапускаем поиск
+                if (lastAppliedFilterSettings != null && settings != lastAppliedFilterSettings && lastSearchRequest.isNotBlank()) {
+                    clearPagingHistory()
+                    searchVacancies(lastSearchRequest)
+                }
+                lastAppliedFilterSettings = settings
+            }
+        }
     }
 
     fun checkFilterState() {
+        // Оставляем для совместимости, если где-то вызывается вручную
         val settings = filterInteractor.getFilterSettings()
         _isFilterSelected.value = settings != FilterSettings()
-
-        if (lastAppliedFilterSettings != null && settings != lastAppliedFilterSettings && lastSearchRequest.isNotBlank()) {
-            clearPagingHistory()
-            searchVacancies(lastSearchRequest)
-        }
-        lastAppliedFilterSettings = settings
     }
 
     fun searchDebounce(searchQuery: String) {

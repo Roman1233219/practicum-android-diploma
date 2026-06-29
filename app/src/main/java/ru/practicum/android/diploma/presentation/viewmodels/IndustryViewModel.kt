@@ -3,15 +3,26 @@ package ru.practicum.android.diploma.presentation.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.launch
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.data.network.models.HttpErrorType
+import ru.practicum.android.diploma.data.network.models.toHttpErrorType
 import ru.practicum.android.diploma.domain.api.FilterIndustriesInteractor
+import ru.practicum.android.diploma.domain.api.FilterSettingsInteractor
+import ru.practicum.android.diploma.domain.models.ApiResult
 import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.util.debounce
 
-class IndustryViewModel(val interactor: FilterIndustriesInteractor) : ViewModel() {
+class IndustryViewModel(
+    val interactor: FilterIndustriesInteractor,
+    private val filterSettingsInteractor: FilterSettingsInteractor
+) : ViewModel() {
     private val liveData = MutableLiveData<IndustryState>(IndustryState.IsLoading)
     fun observeLiveData(): LiveData<IndustryState> = liveData
+
+    private val _selectedIndustryId = MutableLiveData<String?>(null)
+    val selectedIndustryId: LiveData<String?> = _selectedIndustryId
 
     private var allIndustries: List<Industry> = emptyList()
     private var lastSearchRequest: String = ""
@@ -22,25 +33,41 @@ class IndustryViewModel(val interactor: FilterIndustriesInteractor) : ViewModel(
     }
 
     init {
+        loadSettings()
         loadIndustries()
+    }
+
+    private fun loadSettings() {
+        viewModelScope.launch {
+            val settings = filterSettingsInteractor.getTempFilterFlow().first()
+            _selectedIndustryId.value = settings.industryId
+        }
     }
 
     private fun loadIndustries() {
         viewModelScope.launch {
-            try {
-                renderState(IndustryState.IsLoading)
-                interactor.getIndustries().collect { industries ->
-                    // Выпрямляем список, так как API может возвращать вложенные структуры
-                    // Но судя по IndustryConverter, там уже плоский список
-                    allIndustries = industries.sortedBy { it.industryName }
-                    if (allIndustries.isEmpty()) {
-                        renderState(IndustryState.Empty(""))
-                    } else {
-                        renderState(IndustryState.Content(allIndustries))
+            renderState(IndustryState.IsLoading)
+            interactor.getIndustries().collect { result ->
+                when (result) {
+                    is ApiResult.Success -> {
+                        allIndustries = result.data.sortedBy { it.industryName }
+                        if (allIndustries.isEmpty()) {
+                            renderState(IndustryState.Empty(""))
+                        } else {
+                            renderState(IndustryState.Content(allIndustries))
+                        }
                     }
+
+                    is ApiResult.Error -> {
+                        if (result.httpCode.toHttpErrorType() == HttpErrorType.NETWORK) {
+                            renderState(IndustryState.NoInternet)
+                        } else {
+                            renderState(IndustryState.Error(""))
+                        }
+                    }
+
+                    else -> Unit
                 }
-            } catch (e: Exception) {
-                renderState(IndustryState.Error(""))
             }
         }
     }

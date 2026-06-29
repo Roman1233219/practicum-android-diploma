@@ -4,11 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.FilterAreaInteractor
+import ru.practicum.android.diploma.domain.api.FilterSettingsInteractor
 import ru.practicum.android.diploma.domain.models.Area
 
-class AreaViewModel(private val interactor: FilterAreaInteractor) : ViewModel() {
+class AreaViewModel(
+    private val areaInteractor: FilterAreaInteractor,
+    private val settingsInteractor: FilterSettingsInteractor
+) : ViewModel() {
 
     private val _screenState = MutableLiveData<AreaUiState>(AreaUiState.Empty)
     fun observeState(): LiveData<AreaUiState> = _screenState
@@ -16,19 +21,38 @@ class AreaViewModel(private val interactor: FilterAreaInteractor) : ViewModel() 
     private var selectedCountry: AreaUi? = null
     private var selectedRegion: AreaUi? = null
 
+    init {
+        loadCurrentSettings()
+    }
+
+    private fun loadCurrentSettings() {
+        viewModelScope.launch {
+            // Загружаем именно временный фильтр, так как мы на экране редактирования
+            val settings = settingsInteractor.getTempFilterFlow().first()
+
+            if (settings.countryId != null) {
+                selectedCountry = AreaUi(settings.countryId.toInt(), settings.countryName ?: "")
+            }
+            if (settings.regionId != null) {
+                selectedRegion = AreaUi(settings.regionId.toInt(), settings.regionName ?: "")
+            }
+            renderState()
+        }
+    }
+
     fun selectCountry(country: AreaUi?) {
         selectedCountry = country
-        // При смене страны всегда сбрасываем регион (согласно ТЗ)
         selectedRegion = null
+        saveSettings()
         renderState()
     }
 
     fun selectRegion(region: AreaUi?) {
         selectedRegion = region
         if (region != null && selectedCountry == null) {
-            // Если страна не выбрана, пытаемся найти её по parentId региона
             findCountryByRegion(region)
         } else {
+            saveSettings()
             renderState()
         }
     }
@@ -39,12 +63,26 @@ class AreaViewModel(private val interactor: FilterAreaInteractor) : ViewModel() 
     ) {
         selectedCountry = country
         selectedRegion = region
+        saveSettings()
         renderState()
+    }
+
+    private fun saveSettings() {
+        viewModelScope.launch {
+            val current = settingsInteractor.getTempFilterFlow().first()
+            val updated = current.copy(
+                countryId = selectedCountry?.areaId?.toString(),
+                countryName = selectedCountry?.areaName,
+                regionId = selectedRegion?.areaId?.toString(),
+                regionName = selectedRegion?.areaName
+            )
+            settingsInteractor.saveTempFilter(updated)
+        }
     }
 
     private fun findCountryByRegion(region: AreaUi) {
         viewModelScope.launch {
-            interactor.getAreas().collect { countries ->
+            areaInteractor.getAreas().collect { countries ->
                 val country = findParentCountry(countries, region)
                 if (country != null) {
                     selectedCountry = AreaUi(

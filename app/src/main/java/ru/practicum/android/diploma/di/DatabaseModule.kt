@@ -17,4 +17,5 @@ val DatabaseModule = module {
     }
 
     single { get<AppDatabase>().vacancyDao() }
+    single { get<AppDatabase>().filterSettingsDao() }
 }

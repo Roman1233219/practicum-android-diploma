@@ -5,16 +5,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.first
 import ru.practicum.android.diploma.data.network.models.HttpErrorType
 import ru.practicum.android.diploma.data.network.models.toHttpErrorType
 import ru.practicum.android.diploma.domain.api.FilterIndustriesInteractor
+import ru.practicum.android.diploma.domain.api.FilterSettingsInteractor
 import ru.practicum.android.diploma.domain.models.ApiResult
 import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.util.debounce
 
-class IndustryViewModel(val interactor: FilterIndustriesInteractor) : ViewModel() {
+class IndustryViewModel(
+    val interactor: FilterIndustriesInteractor,
+    private val filterSettingsInteractor: FilterSettingsInteractor
+) : ViewModel() {
     private val liveData = MutableLiveData<IndustryState>(IndustryState.IsLoading)
     fun observeLiveData(): LiveData<IndustryState> = liveData
+
+    private val _selectedIndustryId = MutableLiveData<String?>(null)
+    val selectedIndustryId: LiveData<String?> = _selectedIndustryId
 
     private var allIndustries: List<Industry> = emptyList()
     private var lastSearchRequest: String = ""
@@ -25,7 +33,15 @@ class IndustryViewModel(val interactor: FilterIndustriesInteractor) : ViewModel(
     }
 
     init {
+        loadSettings()
         loadIndustries()
+    }
+
+    private fun loadSettings() {
+        viewModelScope.launch {
+            val settings = filterSettingsInteractor.getTempFilterFlow().first()
+            _selectedIndustryId.value = settings.industryId
+        }
     }
 
     private fun loadIndustries() {

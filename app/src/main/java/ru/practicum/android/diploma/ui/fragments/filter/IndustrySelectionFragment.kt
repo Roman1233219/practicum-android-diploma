@@ -43,6 +43,10 @@ class IndustrySelectionFragment : Fragment() {
             render(it)
         }
 
+        viewModel.selectedIndustryId.observe(viewLifecycleOwner) { id ->
+            adapter?.setSelectedIndustry(id)
+        }
+
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -104,6 +108,9 @@ class IndustrySelectionFragment : Fragment() {
         binding.layoutLoading.root.isVisible = false
         adapter?.industrys = found
         adapter?.notifyDataSetChanged()
+        
+        // Восстанавливаем выбор из ViewModel после обновления списка
+        adapter?.setSelectedIndustry(viewModel.selectedIndustryId.value)
     }
 
     private fun showError() {

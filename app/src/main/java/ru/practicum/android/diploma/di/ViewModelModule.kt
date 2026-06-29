@@ -31,5 +31,5 @@ val ViewModelModule = module {
         VacancyDetailsViewModel(vacancyId, get(), get())
     }
 
-    viewModel { IndustryViewModel(get()) }
+    viewModel { IndustryViewModel(get(), get()) }
 }

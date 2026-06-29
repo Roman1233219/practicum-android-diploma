@@ -120,15 +120,18 @@ class FiltersViewModel(
     }
 
     private fun updateState() {
-        val hasAnyFilter = currentSettings.countryId != null ||
-            currentSettings.regionId != null ||
-            currentSettings.industryId != null ||
+        val hasAnyFilter = !currentSettings.countryId.isNullOrBlank() && currentSettings.countryId != "0" ||
+            !currentSettings.regionId.isNullOrBlank() && currentSettings.regionId != "0" ||
+            !currentSettings.industryId.isNullOrBlank() ||
             currentSettings.expectedSalary != null ||
             currentSettings.notShowWithoutSalary
 
-        // Теперь мы не чистим базу автоматически здесь, 
-        // так как сохранение во временный фильтр идет автоматически при каждом вводе.
-        // Основной фильтр изменится только при нажатии "Применить" или через спец. логику.
+        // Если экран стал пустым — принудительно очищаем и основной фильтр в БД, чтобы погасла иконка
+        if (!hasAnyFilter) {
+            viewModelScope.launch {
+                interactor.saveFilterSettings(FilterSettings())
+            }
+        }
 
         val canApply = hasAnyFilter
         val canReset = hasAnyFilter

@@ -12,6 +12,16 @@ class IndustryAdapter(private val onItemClick: (Industry) -> Unit) :
     var industrys = listOf<Industry>()
     private var selectedPosition = -1
 
+    fun setSelectedIndustry(industryId: String?) {
+        val index = industrys.indexOfFirst { it.industryId == industryId }
+        if (index != -1 && index != selectedPosition) {
+            val previous = selectedPosition
+            selectedPosition = index
+            notifyItemChanged(previous)
+            notifyItemChanged(selectedPosition)
+        }
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

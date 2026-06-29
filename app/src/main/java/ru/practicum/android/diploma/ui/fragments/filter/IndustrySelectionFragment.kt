@@ -34,7 +34,11 @@ class IndustrySelectionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         initRecyclerView()
-        
+
+        setupNoInternetState()
+        setupNoFoundState()
+        setupServerErrorState()
+
         viewModel.observeLiveData().observe(viewLifecycleOwner) {
             render(it)
         }
@@ -112,7 +116,7 @@ class IndustrySelectionFragment : Fragment() {
     private fun showEmpty() {
         binding.industryList.isVisible = false
         binding.layoutServerError.root.isVisible = false
-        binding.layoutNoFound.root.isVisible = true
+        binding.layoutNoFound.root.isVisible = false
         binding.layoutNoInternet.root.isVisible = false
         binding.layoutLoading.root.isVisible = false
     }
@@ -132,5 +136,23 @@ class IndustrySelectionFragment : Fragment() {
         )
         parentFragmentManager.setFragmentResult("industry_selection_result", result)
         findNavController().navigateUp()
+    }
+
+    private fun setupNoInternetState() {
+        binding.layoutNoInternet.ivPlaceholderPicture.setImageResource(R.drawable.placeholder_no_internet)
+        binding.layoutNoInternet.tvPlaceholderText.text = getString(R.string.no_internet)
+        binding.layoutNoInternet.tvPlaceholderText.isVisible = true
+    }
+
+    private fun setupNoFoundState() {
+        binding.layoutNoFound.ivPlaceholderPicture.setImageResource(R.drawable.placeholder_no_found)
+        binding.layoutNoFound.tvPlaceholderText.text = getString(R.string.placeholder_empty_area)
+        binding.layoutNoFound.tvPlaceholderText.isVisible = true
+    }
+
+    private fun setupServerErrorState() {
+        binding.layoutServerError.ivPlaceholderPicture.setImageResource(R.drawable.placeholder_error_server)
+        binding.layoutServerError.tvPlaceholderText.text = getString(R.string.server_error)
+        binding.layoutServerError.tvPlaceholderText.isVisible = true
     }
 }

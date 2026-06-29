@@ -115,7 +115,7 @@ class RegionSelectionFragment : Fragment() {
     }
 
     private fun showEmpty(messageRes: Int) {
-        binding.placeholderImage.setImageResource(R.drawable.placeholder_empty)
+        binding.placeholderImage.setImageResource(R.drawable.placeholder_no_found)
         binding.placeholderText.text = getString(messageRes)
 
         binding.placeholderImage.visibility = View.VISIBLE

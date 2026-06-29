@@ -5,6 +5,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.FilterAreaRequest
+import ru.practicum.android.diploma.data.dto.FilterAreaResponse
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacanciesRequest
 import ru.practicum.android.diploma.data.dto.VacancyDetailsRequest
@@ -19,7 +20,10 @@ class RetrofitNetworkClient(
         return when {
             !NetworkUtil.connectivityChecker() -> Response().apply { resultCode = NO_CONNECTION_CODE }
             dto !is FilterAreaRequest -> Response().apply { resultCode = BAD_REQUEST_CODE }
-            else -> executeRequest { apiService.getFakeAreas() }
+            else -> executeRequest {
+                val listFilterAreaDto = apiService.getAreas()
+                FilterAreaResponse(listFilterAreaDto)
+            }
         }
     }
 

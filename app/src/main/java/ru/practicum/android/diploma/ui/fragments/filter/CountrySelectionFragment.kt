@@ -51,6 +51,10 @@ class CountrySelectionFragment : Fragment() {
             )
         )
 
+        setupNoInternetState()
+        setupNoFoundState()
+        setupServerErrorState()
+
         adapter = CountryAdapter(onItemClick = { selectedCountry ->
             viewModel.onCountrySelected(selectedCountry)
             findNavController().navigate(R.id.action_filtersFragment_to_workPlaceSelectionFragment)
@@ -85,6 +89,24 @@ class CountrySelectionFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun setupNoInternetState() {
+        binding.layoutNoInternet.ivPlaceholderPicture.setImageResource(R.drawable.placeholder_no_internet)
+        binding.layoutNoInternet.tvPlaceholderText.text = getString(R.string.no_internet)
+        binding.layoutNoInternet.tvPlaceholderText.isVisible = true
+    }
+
+    private fun setupNoFoundState() {
+        binding.layoutNoFound.ivPlaceholderPicture.setImageResource(R.drawable.placeholder_no_found)
+        binding.layoutNoFound.tvPlaceholderText.text = getString(R.string.error_fetching_vacancies)
+        binding.layoutNoFound.tvPlaceholderText.isVisible = true
+    }
+
+    private fun setupServerErrorState() {
+        binding.layoutServerError.ivPlaceholderPicture.setImageResource(R.drawable.placeholder_error_server)
+        binding.layoutServerError.tvPlaceholderText.text = getString(R.string.server_error)
+        binding.layoutServerError.tvPlaceholderText.isVisible = true
     }
 
     private fun showNoInternetState() {

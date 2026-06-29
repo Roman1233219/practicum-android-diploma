@@ -5,11 +5,13 @@ import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.converters.toModel
 import ru.practicum.android.diploma.data.network.PracticumApiService
 import ru.practicum.android.diploma.data.network.models.HttpErrorType.Companion.CLIENT_ERROR_START
+import ru.practicum.android.diploma.data.network.models.HttpErrorType.Companion.NO_CONNECTION_CODE
 import ru.practicum.android.diploma.domain.api.AreasRepository
 import ru.practicum.android.diploma.domain.models.ApiResult
 import ru.practicum.android.diploma.domain.models.Area
+import ru.practicum.android.diploma.util.NetworkUtil
 
-class AreasRepositoryImpl(private val apiService: PracticumApiService,) : AreasRepository {
+class AreasRepositoryImpl(private val apiService: PracticumApiService) : AreasRepository {
     override fun getAreas(): Flow<ApiResult<List<Area>>> = flow {
         emit(ApiResult.Loading)
 
@@ -29,21 +31,24 @@ class AreasRepositoryImpl(private val apiService: PracticumApiService,) : AreasR
     }
 
     override fun getCountries(): Flow<ApiResult<List<Area>>> = flow {
-        emit(ApiResult.Loading)
+        if (!NetworkUtil.connectivityChecker())
+            emit(ApiResult.Error(NO_CONNECTION_CODE))
+        else {
+            emit(ApiResult.Loading)
+            val response = apiService.getAreas()
+            if (response.isNotEmpty()) {
+                val rootDtos = response
+                val domainTrees = rootDtos.map { it.toModel() }
+                val flatList = mutableListOf<Area>()
+                domainTrees.forEach { treeRoot ->
+                    flattenTree(treeRoot, flatList)
+                }
 
-        val response = apiService.getAreas()
-        if (response.isNotEmpty()) {
-            val rootDtos = response
-            val domainTrees = rootDtos.map { it.toModel() }
-            val flatList = mutableListOf<Area>()
-            domainTrees.forEach { treeRoot ->
-                flattenTree(treeRoot, flatList)
+                val countries = flatList.filter { it.parentId == null }
+                emit(ApiResult.Success(countries))
+            } else {
+                emit(ApiResult.Error(CLIENT_ERROR_START))
             }
-
-            val countries = flatList.filter { it.parentId == null }
-            emit(ApiResult.Success(countries))
-        } else {
-            emit(ApiResult.Error(CLIENT_ERROR_START))
         }
     }
 

@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacanciesRequest
 import ru.practicum.android.diploma.data.dto.VacancyDetailsRequest
 import ru.practicum.android.diploma.data.dto.VacancyDetailsResponse
-import ru.practicum.android.diploma.util.networkConnectivityChecker
+import ru.practicum.android.diploma.util.NetworkUtil
 
 class RetrofitNetworkClient(
     private val apiService: PracticumApiService,
@@ -19,7 +19,7 @@ class RetrofitNetworkClient(
 
     override suspend fun filterAreaRequest(dto: Any): Response {
         return when {
-            !networkConnectivityChecker(context) -> Response().apply { resultCode = NO_CONNECTION_CODE }
+            !NetworkUtil.connectivityChecker() -> Response().apply { resultCode = NO_CONNECTION_CODE }
             dto !is FilterAreaRequest -> Response().apply { resultCode = BAD_REQUEST_CODE }
             else -> executeRequest { apiService.getFakeAreas() }
         }
@@ -27,7 +27,7 @@ class RetrofitNetworkClient(
 
     override suspend fun searchVacancies(dto: Any): Response {
         return when {
-            !networkConnectivityChecker(context) -> Response().apply { resultCode = NO_CONNECTION_CODE }
+            !NetworkUtil.connectivityChecker() -> Response().apply { resultCode = NO_CONNECTION_CODE }
             dto !is VacanciesRequest -> Response().apply { resultCode = BAD_REQUEST_CODE }
             else -> executeRequest {
                 val options = createSearchOptions(dto)
@@ -38,7 +38,7 @@ class RetrofitNetworkClient(
 
     override suspend fun getVacancyDetails(dto: Any): Response {
         return when {
-            !networkConnectivityChecker(context) -> Response().apply { resultCode = NO_CONNECTION_CODE }
+            !NetworkUtil.connectivityChecker() -> Response().apply { resultCode = NO_CONNECTION_CODE }
             dto !is VacancyDetailsRequest -> Response().apply { resultCode = BAD_REQUEST_CODE }
             else -> executeRequest {
                 val vacancyDto = apiService.getVacancyDetails(dto.vacancyId)

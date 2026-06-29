@@ -107,8 +107,20 @@ class FiltersViewModel(
     }
 
     private fun updateState() {
-        val canApply = currentSettings != initialSettings
-        val canReset = currentSettings != FilterSettings()
+        val hasAnyFilter = currentSettings.countryId != null ||
+            currentSettings.regionId != null ||
+            currentSettings.industryId != null ||
+            currentSettings.expectedSalary != null ||
+            currentSettings.notShowWithoutSalary
+
+        if (!hasAnyFilter) {
+            viewModelScope.launch {
+                interactor.saveFilterSettings(FilterSettings())
+            }
+        }
+
+        val canApply = hasAnyFilter
+        val canReset = hasAnyFilter
         _state.value = FiltersState.Content(
             settings = currentSettings,
             canApply = canApply,

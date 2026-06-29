@@ -71,6 +71,16 @@ class FilterAreaFragment : Fragment() {
         }
 
         binding.selectButton.setOnClickListener {
+            val state = viewModel.observeState().value
+            if (state is AreaUiState.Content) {
+                val result = bundleOf(
+                    "country_name" to state.country?.areaName,
+                    "country_id" to state.country?.areaId,
+                    "region_name" to state.region?.areaName,
+                    "region_id" to state.region?.areaId
+                )
+                parentFragmentManager.setFragmentResult("area_selection_result", result)
+            }
             findNavController().navigateUp()
         }
     }

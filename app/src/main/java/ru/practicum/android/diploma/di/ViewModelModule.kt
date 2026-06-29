@@ -21,7 +21,7 @@ val ViewModelModule = module {
 
     viewModel { CountrySelectionViewModel(get(), get()) }
 
-    viewModel { AreaViewModel(get()) }
+    viewModel { AreaViewModel(get(), get()) }
 
     viewModel { (countryId: Int) -> RegionViewModel(countryId, get()) }
 

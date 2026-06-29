@@ -25,68 +25,76 @@ class FiltersViewModel(
     fun loadSettings() {
         _state.value = FiltersState.Loading
         viewModelScope.launch {
-            // Загружаем актуальные настройки из основного фильтра Room
-            val settings = interactor.getFilterSettings()
-            initialSettings = settings
-            currentSettings = settings
-            updateState()
+            // 1. Инициализируем временный фильтр (копируем из постоянного, если он пуст)
+            // Но по ТЗ "сохраняются автоматически", значит при входе мы должны видеть
+            // то, что не досохранили в прошлый раз.
+            // Поэтому просто подписываемся на временный фильтр.
+            
+            // Загружаем постоянный фильтр для сравнения (canApply)
+            launch {
+                interactor.getFilterFlow().collect { settings ->
+                    initialSettings = settings
+                    updateState()
+                }
+            }
+
+            // Подписываемся на временный фильтр для отображения и редактирования
+            launch {
+                interactor.getTempFilterFlow().collect { settings ->
+                    currentSettings = settings
+                    updateState()
+                }
+            }
         }
     }
 
     fun setSalary(salary: String?) {
         val salaryInt = salary?.toIntOrNull()
         if (currentSettings.expectedSalary != salaryInt) {
-            currentSettings = currentSettings.copy(expectedSalary = salaryInt)
-            updateState()
+            saveTempSettings(currentSettings.copy(expectedSalary = salaryInt))
         }
     }
 
     fun setNotShowWithoutSalary(checked: Boolean) {
         if (currentSettings.notShowWithoutSalary != checked) {
-            currentSettings = currentSettings.copy(notShowWithoutSalary = checked)
-            updateState()
+            saveTempSettings(currentSettings.copy(notShowWithoutSalary = checked))
         }
     }
 
     fun applyFilters() {
         viewModelScope.launch {
-            // Сохраняем сразу в основной фильтр в Room
-            interactor.saveFilterSettings(currentSettings)
-            initialSettings = currentSettings
-            updateState()
+            interactor.applyTempFilter()
         }
     }
 
     fun resetFilters() {
-        currentSettings = FilterSettings()
-        updateState()
+        viewModelScope.launch {
+            interactor.clearTempFilter()
+        }
     }
 
     fun clearWorkPlace() {
-        currentSettings = currentSettings.copy(
+        saveTempSettings(currentSettings.copy(
             countryId = null,
             countryName = null,
             regionId = null,
             regionName = null
-        )
-        updateState()
+        ))
     }
 
     fun clearIndustry() {
-        currentSettings = currentSettings.copy(
+        saveTempSettings(currentSettings.copy(
             industryId = null,
             industryName = null
-        )
-        updateState()
+        ))
     }
 
     fun setIndustry(industryName: String?, industryId: String?) {
         if (currentSettings.industryName != industryName || currentSettings.industryId != industryId) {
-            currentSettings = currentSettings.copy(
+            saveTempSettings(currentSettings.copy(
                 industryName = industryName,
                 industryId = industryId
-            )
-            updateState()
+            ))
         }
     }
 
@@ -96,13 +104,18 @@ class FiltersViewModel(
         if (currentSettings.countryName != countryName || currentSettings.countryId != countryIdStr ||
             currentSettings.regionName != regionName || currentSettings.regionId != regionIdStr
         ) {
-            currentSettings = currentSettings.copy(
+            saveTempSettings(currentSettings.copy(
                 countryName = countryName,
                 countryId = countryIdStr,
                 regionName = regionName,
                 regionId = regionIdStr
-            )
-            updateState()
+            ))
+        }
+    }
+
+    private fun saveTempSettings(settings: FilterSettings) {
+        viewModelScope.launch {
+            interactor.saveTempFilter(settings)
         }
     }
 
@@ -113,11 +126,9 @@ class FiltersViewModel(
             currentSettings.expectedSalary != null ||
             currentSettings.notShowWithoutSalary
 
-        if (!hasAnyFilter) {
-            viewModelScope.launch {
-                interactor.saveFilterSettings(FilterSettings())
-            }
-        }
+        // Теперь мы не чистим базу автоматически здесь, 
+        // так как сохранение во временный фильтр идет автоматически при каждом вводе.
+        // Основной фильтр изменится только при нажатии "Применить" или через спец. логику.
 
         val canApply = hasAnyFilter
         val canReset = hasAnyFilter

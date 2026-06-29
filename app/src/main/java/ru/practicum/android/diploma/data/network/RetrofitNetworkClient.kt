@@ -6,6 +6,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.FilterAreaRequest
+import ru.practicum.android.diploma.data.dto.FilterIndustriesRequest
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacanciesRequest
 import ru.practicum.android.diploma.data.dto.VacancyDetailsRequest
@@ -22,6 +23,14 @@ class RetrofitNetworkClient(
             !networkConnectivityChecker(context) -> Response().apply { resultCode = NO_CONNECTION_CODE }
             dto !is FilterAreaRequest -> Response().apply { resultCode = BAD_REQUEST_CODE }
             else -> executeRequest { apiService.getAreas() }
+        }
+    }
+
+    override suspend fun filterIndustryRequest(dto: Any): Response {
+        return when {
+            !networkConnectivityChecker(context) -> Response().apply { resultCode = NO_CONNECTION_CODE }
+            dto !is FilterIndustriesRequest -> Response().apply { resultCode = BAD_REQUEST_CODE }
+            else -> executeRequest { apiService.getIndustries() }
         }
     }
 

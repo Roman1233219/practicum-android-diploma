@@ -6,6 +6,7 @@ import ru.practicum.android.diploma.presentation.`filter-area`.AreaViewModel
 import ru.practicum.android.diploma.presentation.`filter-area`.RegionViewModel
 import ru.practicum.android.diploma.presentation.viewmodels.FavouritesViewModel
 import ru.practicum.android.diploma.presentation.viewmodels.FiltersViewModel
+import ru.practicum.android.diploma.presentation.viewmodels.IndustryViewModel
 import ru.practicum.android.diploma.presentation.viewmodels.SearchViewModel
 import ru.practicum.android.diploma.presentation.viewmodels.details.VacancyDetailsViewModel
 
@@ -23,4 +24,6 @@ val ViewModelModule = module {
     viewModel { (vacancyId: String) ->
         VacancyDetailsViewModel(vacancyId, get(), get())
     }
+
+    viewModel { IndustryViewModel(get()) }
 }

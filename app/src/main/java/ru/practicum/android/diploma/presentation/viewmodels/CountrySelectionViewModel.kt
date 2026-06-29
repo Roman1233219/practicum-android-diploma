@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -51,12 +50,6 @@ class CountrySelectionViewModel(
     }
 
     fun onCountrySelected(country: Area) {
-        val currentSettings = repository.getFilterSettings()
-        val newSettings = currentSettings.copy(
-            countryId = country.id.toString(),
-            countryName = country.name
-        )
-
-        repository.saveFilterSettings(newSettings)
+        repository.saveCountry(country)
     }
 }

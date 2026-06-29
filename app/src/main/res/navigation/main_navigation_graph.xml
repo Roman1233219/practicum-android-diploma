@@ -58,8 +58,8 @@
         android:label="fragment_country_selection"
         tools:layout="@layout/fragment_country_selection">
         <action
-            android:id="@+id/action_filtersFragment_to_regionSelectionFragment"
-            app:destination="@id/regionSelectionFragment" />
+            android:id="@+id/action_filtersFragment_to_workPlaceSelectionFragment"
+            app:destination="@id/workPlaceSelectionFragment" />
     </fragment>
     <fragment
         android:id="@+id/workPlaceSelectionFragment"

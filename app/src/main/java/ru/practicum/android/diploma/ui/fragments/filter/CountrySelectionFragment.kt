@@ -53,7 +53,7 @@ class CountrySelectionFragment : Fragment() {
 
         adapter = CountryAdapter(onItemClick = { selectedCountry ->
             viewModel.onCountrySelected(selectedCountry)
-            findNavController().navigate(R.id.action_filtersFragment_to_regionSelectionFragment)
+            findNavController().navigate(R.id.action_filtersFragment_to_workPlaceSelectionFragment)
         })
         binding.rvCountries.adapter = adapter
         binding.rvCountries.layoutManager = LinearLayoutManager(requireContext())

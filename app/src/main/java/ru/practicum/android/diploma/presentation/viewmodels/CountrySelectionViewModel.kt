@@ -34,20 +34,13 @@ class CountrySelectionViewModel(
             initialValue = FiltrationCountryState.Loading
         )
 
-    private fun handleError(httpCode: Int): FiltrationCountryState {
+    private fun handleError(httpCode: Int): FiltrationCountryState =
         when (httpCode.toHttpErrorType()) {
             HttpErrorType.NETWORK,
-            HttpErrorType.UNKNOWN -> {
-                return FiltrationCountryState.ConnectionError(httpCode)
-            }
-            HttpErrorType.CLIENT -> {
-                return FiltrationCountryState.NotFoundError(httpCode)
-            }
-            HttpErrorType.SERVER -> {
-                return FiltrationCountryState.ServerError500(httpCode)
-            }
+            HttpErrorType.UNKNOWN -> FiltrationCountryState.ConnectionError(httpCode)
+            HttpErrorType.CLIENT -> FiltrationCountryState.NotFoundError(httpCode)
+            HttpErrorType.SERVER -> FiltrationCountryState.ServerError500(httpCode)
         }
-    }
 
     fun onCountrySelected(country: Area) {
         repository.saveCountry(country)

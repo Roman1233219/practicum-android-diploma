@@ -1,20 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/countrySelectionFragment"
-    tools:context=".ui.fragments.filter.CountrySelectionFragment"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    android:theme="@style/Base.Theme.PracticumAndroidDiploma">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Base.Theme.PracticumAndroidDiploma"
+    tools:context=".ui.fragments.filter.CountrySelectionFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/glLeftBorder_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/padding_16" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/glRightBorder_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/padding_16" />
 
     <LinearLayout
+        android:id="@+id/countryFilterHeader"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:gravity="center_vertical"
-        android:paddingStart="@dimen/padding_16">
+        android:paddingStart="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
         <ImageView
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
@@ -25,54 +40,69 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextDisplayMedium22"
+            android:layout_marginStart="@dimen/padding_16"
             android:text="@string/country_selection_title"
-            android:textColor="?attr/colorOnSurface"
-            android:layout_marginStart="@dimen/padding_16" />
+            android:textAppearance="@style/TextDisplayMedium22"
+            android:textColor="?attr/colorOnSurface" />
     </LinearLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
+    <!-- Состояние: Нет интернета -->
+    <include
+        android:id="@+id/layoutNoInternet"
+        layout="@layout/layout_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/glRightBorder_16"
+        app:layout_constraintStart_toEndOf="@id/glLeftBorder_16"
+        app:layout_constraintTop_toBottomOf="@id/countryFilterHeader" />
+
+    <!-- Состояние: Ошибка / Ничего не найдено -->
+    <include
+        android:id="@+id/layoutNoFound"
+        layout="@layout/layout_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/glRightBorder_16"
+        app:layout_constraintStart_toEndOf="@id/glLeftBorder_16"
+        app:layout_constraintTop_toBottomOf="@id/countryFilterHeader" />
+
+    <!-- Состояние: Ошибка сервера -->
+    <include
+        android:id="@+id/layoutServerError"
+        layout="@layout/layout_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/glRightBorder_16"
+        app:layout_constraintStart_toEndOf="@id/glLeftBorder_16"
+        app:layout_constraintTop_toBottomOf="@id/countryFilterHeader" />
+
+    <!-- Состояние: Загрузка -->
+    <include
+        android:id="@+id/layoutLoading"
+        layout="@layout/layout_loading"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/countryFilterHeader" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/countryList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_area" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCountries"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/glRightBorder_16"
+        app:layout_constraintStart_toEndOf="@id/glLeftBorder_16"
+        app:layout_constraintTop_toBottomOf="@id/countryFilterHeader"
+        tools:listitem="@layout/item_area" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/errorContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <ImageView
-                android:id="@+id/errorImage"
-                android:layout_width="328dp"
-                android:layout_height="223dp"
-                android:src="@drawable/placeholder_error_area" />
-
-            <TextView
-                android:id="@+id/errorText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/placeholder_error_area"
-                android:textAppearance="@style/TextDisplayMedium22"
-                android:textColor="?attr/colorOnSurface" />
-        </LinearLayout>
-    </FrameLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

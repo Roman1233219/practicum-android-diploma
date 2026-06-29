@@ -43,6 +43,20 @@ class FiltersFragment : Fragment() {
         setupClickListeners()
         setupTextWatcher()
 
+        parentFragmentManager.setFragmentResultListener("industry_selection_result", viewLifecycleOwner) { _, bundle ->
+            val name = bundle.getString("industry_name")
+            val id = bundle.getString("industry_id")
+            viewModel.setIndustry(name, id)
+        }
+
+        parentFragmentManager.setFragmentResultListener("area_selection_result", viewLifecycleOwner) { _, bundle ->
+            val countryName = bundle.getString("country_name")
+            val countryId = if (bundle.containsKey("country_id")) bundle.getInt("country_id") else null
+            val regionName = bundle.getString("region_name")
+            val regionId = if (bundle.containsKey("region_id")) bundle.getInt("region_id") else null
+            viewModel.setArea(countryName, countryId, regionName, regionId)
+        }
+
         binding.noSalaryCheckbox.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setNotShowWithoutSalary(isChecked)
         }

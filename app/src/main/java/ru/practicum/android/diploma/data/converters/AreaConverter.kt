@@ -16,3 +16,10 @@ fun FilterAreaDto.toModel(): Area {
         areas = areas.map { it.toModel() }
     )
 }
+
+fun Area.toDto(): FilterAreaDto = FilterAreaDto(
+    id = this.id,
+    name = this.name,
+    parentId = this.parentId,
+    areas = this.areas.map { it.toDto() }
+)

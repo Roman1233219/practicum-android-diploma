@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.di.ViewModelModule
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
+        instance = this
 
         startKoin {
             printLogger()
@@ -28,5 +29,10 @@ class App : Application() {
                 )
             )
         }
+    }
+
+    companion object {
+        lateinit var instance: App
+            private set
     }
 }

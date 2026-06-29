@@ -6,21 +6,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentCountrySelectionBinding
 import ru.practicum.android.diploma.presentation.`filter-area`.AreaUi
-import ru.practicum.android.diploma.presentation.`filter-area`.CountryUiState
-import ru.practicum.android.diploma.presentation.`filter-area`.CountryViewModel
+import ru.practicum.android.diploma.presentation.viewmodels.CountrySelectionViewModel
+import ru.practicum.android.diploma.presentation.viewmodels.FiltrationCountryState
+import ru.practicum.android.diploma.ui.adapter.CountryAdapter
+import ru.practicum.android.diploma.util.ViewStateHelper
 
 class CountrySelectionFragment : Fragment() {
     private var _binding: FragmentCountrySelectionBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by viewModel<CountryViewModel>()
+    private val viewModel: CountrySelectionViewModel by viewModel()
+    private var viewStateHelper: ViewStateHelper? = null
 
-    private var adapter: AreaAdapter? = null
+    private var adapter: CountryAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCountrySelectionBinding.inflate(inflater, container, false)
@@ -30,60 +38,99 @@ class CountrySelectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initRecyclerView()
-
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
 
-        viewModel.state.observe(viewLifecycleOwner) { state ->
-            render(state)
-        }
+        viewStateHelper = ViewStateHelper(
+            listOf(
+                binding.layoutNoInternet.root,
+                binding.layoutNoFound.root,
+                binding.layoutServerError.root,
+                binding.layoutLoading.root
+            )
+        )
+
+        setupNoInternetState()
+        setupNoFoundState()
+        setupServerErrorState()
+
+        adapter = CountryAdapter(onItemClick = { selectedCountry ->
+            viewModel.onCountrySelected(selectedCountry)
+            val area = AreaUi(
+                areaId = selectedCountry.id,
+                areaName = selectedCountry.name
+            )
+            findNavController()
+                .previousBackStackEntry
+                ?.savedStateHandle
+                ?.set(FilterAreaFragment.COUNTRY_DATA_KEY, area)
+            findNavController().navigateUp()
+        })
+        binding.rvCountries.adapter = adapter
+        binding.rvCountries.layoutManager = LinearLayoutManager(requireContext())
+
+        observeUiState()
     }
 
-    private fun initRecyclerView() {
-        adapter = AreaAdapter(emptyList()) { country ->
-            selectCountry(country)
-        }
-        binding.countryList.layoutManager = LinearLayoutManager(requireContext())
-        binding.countryList.adapter = adapter
-    }
-
-    private fun selectCountry(country: AreaUi) {
-        findNavController()
-            .previousBackStackEntry
-            ?.savedStateHandle
-            ?.set(FilterAreaFragment.COUNTRY_DATA_KEY, country)
-        findNavController().navigateUp()
-    }
-
-    private fun render(state: CountryUiState) {
-        when (state) {
-            is CountryUiState.Loading -> {
-                binding.progressBar.isVisible = true
-                binding.countryList.isVisible = false
-                binding.errorContainer.isVisible = false
+    private fun observeUiState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    when (state) {
+                        is FiltrationCountryState.Loading -> {
+                            showLoadingState()
+                        }
+                        is FiltrationCountryState.Success -> {
+                            if (state.countries.isEmpty()) {
+                                showEmptyResultState()
+                            } else {
+                                viewStateHelper?.showOnly(binding.rvCountries)
+                                binding.rvCountries.isVisible = true
+                                adapter?.submitList(state.countries)
+                            }
+                        }
+                        is FiltrationCountryState.ConnectionError -> showNoInternetState()
+                        is FiltrationCountryState.NotFoundError -> showEmptyResultState()
+                        is FiltrationCountryState.ServerError500 -> showServerErrorState()
+                    }
+                }
             }
-            is CountryUiState.Content -> {
-                binding.progressBar.isVisible = false
-                binding.countryList.isVisible = true
-                binding.errorContainer.isVisible = false
-                updateList(state.countries)
-            }
-            is CountryUiState.Error -> {
-                binding.progressBar.isVisible = false
-                binding.countryList.isVisible = false
-                binding.errorContainer.isVisible = true
-                binding.errorText.text = getString(state.messageRes)
-            }
         }
     }
 
-    private fun updateList(countries: List<AreaUi>) {
-        adapter = AreaAdapter(countries) { country ->
-            selectCountry(country)
-        }
-        binding.countryList.adapter = adapter
+    private fun setupNoInternetState() {
+        binding.layoutNoInternet.ivPlaceholderPicture.setImageResource(R.drawable.placeholder_no_internet)
+        binding.layoutNoInternet.tvPlaceholderText.text = getString(R.string.no_internet)
+        binding.layoutNoInternet.tvPlaceholderText.isVisible = true
+    }
+
+    private fun setupNoFoundState() {
+        binding.layoutNoFound.ivPlaceholderPicture.setImageResource(R.drawable.placeholder_no_found)
+        binding.layoutNoFound.tvPlaceholderText.text = getString(R.string.error_fetching_vacancies)
+        binding.layoutNoFound.tvPlaceholderText.isVisible = true
+    }
+
+    private fun setupServerErrorState() {
+        binding.layoutServerError.ivPlaceholderPicture.setImageResource(R.drawable.placeholder_error_server)
+        binding.layoutServerError.tvPlaceholderText.text = getString(R.string.server_error)
+        binding.layoutServerError.tvPlaceholderText.isVisible = true
+    }
+
+    private fun showNoInternetState() {
+        viewStateHelper?.showOnly(binding.layoutNoInternet.root)
+    }
+
+    private fun showEmptyResultState() {
+        viewStateHelper?.showOnly(binding.layoutNoFound.root)
+    }
+
+    private fun showServerErrorState() {
+        viewStateHelper?.showOnly(binding.layoutServerError.root)
+    }
+
+    private fun showLoadingState() {
+        viewStateHelper?.showOnly(binding.layoutLoading.root)
     }
 
     override fun onDestroyView() {

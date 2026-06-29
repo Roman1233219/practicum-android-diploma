@@ -68,6 +68,32 @@ class FiltersViewModel(
         updateState()
     }
 
+    fun setIndustry(industryName: String?, industryId: String?) {
+        if (currentSettings.industryName != industryName || currentSettings.industryId != industryId) {
+            currentSettings = currentSettings.copy(
+                industryName = industryName,
+                industryId = industryId
+            )
+            updateState()
+        }
+    }
+
+    fun setArea(countryName: String?, countryId: Int?, regionName: String?, regionId: Int?) {
+        val countryIdStr = countryId?.toString()
+        val regionIdStr = regionId?.toString()
+        if (currentSettings.countryName != countryName || currentSettings.countryId != countryIdStr ||
+            currentSettings.regionName != regionName || currentSettings.regionId != regionIdStr
+        ) {
+            currentSettings = currentSettings.copy(
+                countryName = countryName,
+                countryId = countryIdStr,
+                regionName = regionName,
+                regionId = regionIdStr
+            )
+            updateState()
+        }
+    }
+
     private fun updateState() {
         val canApply = currentSettings != initialSettings
         val canReset = currentSettings != FilterSettings()

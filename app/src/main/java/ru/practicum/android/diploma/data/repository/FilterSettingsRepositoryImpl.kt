@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.google.gson.Gson
 import ru.practicum.android.diploma.domain.api.FilterSettingsRepository
+import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.domain.models.FilterSettings
 
 class FilterSettingsRepositoryImpl(
@@ -24,6 +25,17 @@ class FilterSettingsRepositoryImpl(
         val json = gson.toJson(settings)
         sharedPreferences.edit {
             putString(FILTER_SETTINGS_KEY, json)
+        }
+    }
+
+    override fun saveCountry(country: Area) {
+        val settings = getFilterSettings().copy(
+            countryId = country.id.toString(),
+            countryName = country.name
+        )
+
+        sharedPreferences.edit {
+            putString(FILTER_SETTINGS_KEY, gson.toJson(settings))
         }
     }
 

@@ -31,7 +31,7 @@ val RepositoryModule = module {
         FilterSettingsRepositoryImpl(get(), get(), get())
     }
 
-    single<FilterIndustriesRepository>{
+    single<FilterIndustriesRepository> {
         FilterIndustriesRepositoryImpl(get())
     }
 

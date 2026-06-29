@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.domain.models
 
-class Industry (
+class Industry(
     val industryId: String,
     val industryName: String
 )

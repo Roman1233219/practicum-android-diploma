@@ -29,7 +29,7 @@ class AreaViewModel(
         viewModelScope.launch {
             // Загружаем именно временный фильтр, так как мы на экране редактирования
             val settings = settingsInteractor.getTempFilterFlow().first()
-            
+
             if (settings.countryId != null) {
                 selectedCountry = AreaUi(settings.countryId.toInt(), settings.countryName ?: "")
             }

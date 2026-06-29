@@ -32,7 +32,7 @@ class IndustrySelectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         initRecyclerView()
 
         setupNoInternetState()
@@ -50,7 +50,7 @@ class IndustrySelectionFragment : Fragment() {
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
-        
+
         binding.searchIcon.setOnClickListener {
             binding.searchIndustry.setText("")
         }
@@ -108,7 +108,7 @@ class IndustrySelectionFragment : Fragment() {
         binding.layoutLoading.root.isVisible = false
         adapter?.industrys = found
         adapter?.notifyDataSetChanged()
-        
+
         // Восстанавливаем выбор из ViewModel после обновления списка
         adapter?.setSelectedIndustry(viewModel.selectedIndustryId.value)
     }

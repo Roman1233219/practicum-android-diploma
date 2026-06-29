@@ -6,7 +6,7 @@ import ru.practicum.android.diploma.domain.api.AreasRepository
 import ru.practicum.android.diploma.domain.models.ApiResult
 import ru.practicum.android.diploma.domain.models.Area
 
-class AreasInteractorImpl(private val repository: AreasRepository): AreasInteractor {
+class AreasInteractorImpl(private val repository: AreasRepository) : AreasInteractor {
     override fun getAreas(): Flow<ApiResult<List<Area>>> {
         return repository.getAreas()
     }

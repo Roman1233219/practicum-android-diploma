@@ -53,7 +53,7 @@ class SearchViewModel(
         viewModelScope.launch {
             filterInteractor.getFilterFlow().collect { settings ->
                 _isFilterSelected.value = settings != FilterSettings()
-                
+
                 // Если фильтры изменились и мы уже что-то искали — перезапускаем поиск
                 if (lastAppliedFilterSettings != null && settings != lastAppliedFilterSettings && lastSearchRequest.isNotBlank()) {
                     clearPagingHistory()

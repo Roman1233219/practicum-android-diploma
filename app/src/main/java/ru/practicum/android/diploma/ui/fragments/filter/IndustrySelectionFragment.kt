@@ -92,6 +92,7 @@ class IndustrySelectionFragment : Fragment() {
             is IndustryState.Error -> showError()
             is IndustryState.Empty -> showEmpty()
             is IndustryState.Content -> showContent(state.industry)
+            is IndustryState.NoInternet -> showNoInternet()
         }
     }
 
@@ -116,8 +117,16 @@ class IndustrySelectionFragment : Fragment() {
     private fun showEmpty() {
         binding.industryList.isVisible = false
         binding.layoutServerError.root.isVisible = false
-        binding.layoutNoFound.root.isVisible = false
+        binding.layoutNoFound.root.isVisible = true
         binding.layoutNoInternet.root.isVisible = false
+        binding.layoutLoading.root.isVisible = false
+    }
+
+    private fun showNoInternet() {
+        binding.industryList.isVisible = false
+        binding.layoutServerError.root.isVisible = false
+        binding.layoutNoFound.root.isVisible = false
+        binding.layoutNoInternet.root.isVisible = true
         binding.layoutLoading.root.isVisible = false
     }
 
@@ -146,7 +155,7 @@ class IndustrySelectionFragment : Fragment() {
 
     private fun setupNoFoundState() {
         binding.layoutNoFound.ivPlaceholderPicture.setImageResource(R.drawable.placeholder_no_found)
-        binding.layoutNoFound.tvPlaceholderText.text = getString(R.string.placeholder_empty_area)
+        binding.layoutNoFound.tvPlaceholderText.text = getString(R.string.no_industry)
         binding.layoutNoFound.tvPlaceholderText.isVisible = true
     }
 

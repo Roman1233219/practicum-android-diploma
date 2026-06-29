@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewModelScope
+import ru.practicum.android.diploma.data.network.models.HttpErrorType
+import ru.practicum.android.diploma.data.network.models.toHttpErrorType
 import ru.practicum.android.diploma.domain.api.FilterIndustriesInteractor
+import ru.practicum.android.diploma.domain.models.ApiResult
 import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.util.debounce
 
@@ -27,20 +30,28 @@ class IndustryViewModel(val interactor: FilterIndustriesInteractor) : ViewModel(
 
     private fun loadIndustries() {
         viewModelScope.launch {
-            try {
-                renderState(IndustryState.IsLoading)
-                interactor.getIndustries().collect { industries ->
-                    // Выпрямляем список, так как API может возвращать вложенные структуры
-                    // Но судя по IndustryConverter, там уже плоский список
-                    allIndustries = industries.sortedBy { it.industryName }
-                    if (allIndustries.isEmpty()) {
-                        renderState(IndustryState.Empty(""))
-                    } else {
-                        renderState(IndustryState.Content(allIndustries))
+            renderState(IndustryState.IsLoading)
+            interactor.getIndustries().collect { result ->
+                when (result) {
+                    is ApiResult.Success -> {
+                        allIndustries = result.data.sortedBy { it.industryName }
+                        if (allIndustries.isEmpty()) {
+                            renderState(IndustryState.Empty(""))
+                        } else {
+                            renderState(IndustryState.Content(allIndustries))
+                        }
                     }
+
+                    is ApiResult.Error -> {
+                        if (result.httpCode.toHttpErrorType() == HttpErrorType.NETWORK) {
+                            renderState(IndustryState.NoInternet)
+                        } else {
+                            renderState(IndustryState.Error(""))
+                        }
+                    }
+
+                    else -> Unit
                 }
-            } catch (e: Exception) {
-                renderState(IndustryState.Error(""))
             }
         }
     }

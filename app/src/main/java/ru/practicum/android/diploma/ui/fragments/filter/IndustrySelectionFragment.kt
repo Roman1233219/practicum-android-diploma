@@ -1,32 +1,137 @@
 package ru.practicum.android.diploma.ui.fragments.filter
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.bundle.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import ru.practicum.android.diploma.databinding.FragmentIndustrySelectionBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.databinding.FragmentFilterIndustryBinding
+import ru.practicum.android.diploma.domain.models.Industry
+import ru.practicum.android.diploma.presentation.viewmodels.IndustryState
+import ru.practicum.android.diploma.presentation.viewmodels.IndustryViewModel
+import ru.practicum.android.diploma.presentation.viewmodels.SearchViewModel
+import ru.practicum.android.diploma.ui.adapter.VacancyAdapter
+import ru.practicum.android.diploma.ui.fragments.IndustryAdapter
+import ru.practicum.android.diploma.util.ViewStateHelper
+import kotlin.getValue
 
 class IndustrySelectionFragment : Fragment() {
-    private var _binding: FragmentIndustrySelectionBinding? = null
+    private var _binding: FragmentFilterIndustryBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: IndustryViewModel by viewModel()
+    private var adapter: IndustryAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentIndustrySelectionBinding.inflate(inflater, container, false)
+        _binding = FragmentFilterIndustryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Теперь подписываемся на LiveData
+        viewModel.observeLiveData().observe(viewLifecycleOwner) {
+            render(it)
+        }
+        adapter = IndustryAdapter{}
+        binding.industryList.adapter = adapter
+        binding.industryList.layoutManager = LinearLayoutManager(requireContext())
+
         // Установка кнопки "Назад"
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
+        binding.searchIcon.setOnClickListener {
+            binding.searchIndustry.setText("")
+        }
+
+        binding.choose.setOnClickListener {
+            returnIndustryResult(null)
+            findNavController().navigateUp()
+        }
+
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val query = s?.toString() ?: ""
+
+                if (query.isEmpty()) {
+                    binding.searchIcon.setImageResource(R.drawable.ic_search_24)
+                    viewModel.searchDebounce("")
+                } else {
+                    binding.searchIcon.setImageResource(R.drawable.ic_close_24)
+                    viewModel.searchDebounce(query)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) = Unit
+        }
+        binding.searchIndustry.addTextChangedListener(textWatcher)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun render(state: IndustryState) {
+        when (state) {
+            is IndustryState.IsLoading -> showLoading()
+            is IndustryState.Error -> showError()
+            is IndustryState.Empty -> showEmpty()
+            is IndustryState.Content -> showContent(state.industry)
+        }
+    }
+
+    fun showContent(found: List<Industry>) {
+        binding.industryList.visibility = View.VISIBLE
+        binding.layoutServerError.root.visibility = View.GONE
+        binding.layoutNoFound.root.visibility = View.GONE
+        binding.layoutNoInternet.root.visibility = View.GONE
+        binding.layoutLoading.root.visibility = View.GONE
+        adapter?.industrys = found
+        adapter?.notifyDataSetChanged()
+    }
+
+    fun showError() {
+        binding.industryList.visibility = View.GONE
+        binding.layoutServerError.root.visibility = View.VISIBLE
+        binding.layoutNoFound.root.visibility = View.GONE
+        binding.layoutNoInternet.root.visibility = View.GONE
+        binding.layoutLoading.root.visibility = View.GONE
+    }
+
+    fun showEmpty() {
+        binding.industryList.visibility = View.GONE
+        binding.layoutServerError.root.visibility = View.GONE
+        binding.layoutNoFound.root.visibility = View.VISIBLE
+        binding.layoutNoInternet.root.visibility = View.GONE
+        binding.layoutLoading.root.visibility = View.GONE
+    }
+
+    fun showLoading() {
+        binding.industryList.visibility = View.GONE
+        binding.layoutServerError.root.visibility = View.GONE
+        binding.layoutNoFound.root.visibility = View.GONE
+        binding.layoutNoInternet.root.visibility = View.GONE
+        binding.layoutLoading.root.visibility = View.VISIBLE
+    }
+
+    private fun returnIndustryResult(industryId: String?) {
+        val result = bundleOf("industryId" to industryId)
+        parentFragmentManager.setFragmentResult("industry_selection_result", result)
+        findNavController().navigateUp()
+    }
+
+
+    companion object {
+        const val INDUSTRY_SELECTION_RESULT = "industry_selection_result"
+        const val INDUSTRY_ID_KEY = "industryId"
     }
 }

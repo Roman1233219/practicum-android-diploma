@@ -4,5 +4,5 @@ data class Area(
     val id: Int,
     val name: String,
     val parentId: Int?,
-    val areas: MutableList<Area> = mutableListOf()
+    val areas: List<Area> = emptyList()
 )

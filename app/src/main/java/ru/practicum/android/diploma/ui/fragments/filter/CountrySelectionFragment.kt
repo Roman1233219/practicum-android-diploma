@@ -23,7 +23,6 @@ import ru.practicum.android.diploma.util.ViewStateHelper
 
 class CountrySelectionFragment : Fragment() {
     private var _binding: FragmentCountrySelectionBinding? = null
-
     private val binding get() = _binding!!
 
     private val viewModel: CountrySelectionViewModel by viewModel()
@@ -31,14 +30,14 @@ class CountrySelectionFragment : Fragment() {
 
     private var adapter: CountryAdapter? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCountrySelectionBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Установка кнопки "Назад"
+
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -75,7 +74,7 @@ class CountrySelectionFragment : Fragment() {
     }
 
     private fun observeUiState() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     when (state) {

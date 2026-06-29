@@ -1,11 +1,14 @@
 package ru.practicum.android.diploma.data.network
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.FilterAreaRequest
 import ru.practicum.android.diploma.data.dto.FilterAreaResponse
+import ru.practicum.android.diploma.data.dto.FilterIndustriesRequest
+import ru.practicum.android.diploma.data.dto.FilterIndustriesResponse
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacanciesRequest
 import ru.practicum.android.diploma.data.dto.VacancyDetailsRequest
@@ -20,9 +23,35 @@ class RetrofitNetworkClient(
         return when {
             !NetworkUtil.connectivityChecker() -> Response().apply { resultCode = NO_CONNECTION_CODE }
             dto !is FilterAreaRequest -> Response().apply { resultCode = BAD_REQUEST_CODE }
-            else -> executeRequest {
-                val listFilterAreaDto = apiService.getAreas()
-                FilterAreaResponse(listFilterAreaDto)
+            else -> withContext(Dispatchers.IO) {
+                try {
+                    val list = apiService.getAreas()
+                    Log.d("RetrofitNetworkClient", "getAreas success, size: ${list.size}")
+                    FilterAreaResponse(results = list).apply { resultCode = SUCCESS_CODE }
+                } catch (ex: HttpException) {
+                    Log.e("RetrofitNetworkClient", "getAreas HttpException: ${ex.code()}")
+                    Response().apply { resultCode = ex.code() }
+                } catch (ex: Exception) {
+                    Log.e("RetrofitNetworkClient", "getAreas Exception: ${ex.message}")
+                    Response().apply { resultCode = SERVER_ERROR_CODE }
+                }
+            }
+        }
+    }
+
+    override suspend fun filterIndustryRequest(dto: Any): Response {
+        return when {
+            !NetworkUtil.connectivityChecker() -> Response().apply { resultCode = NO_CONNECTION_CODE }
+            dto !is FilterIndustriesRequest -> Response().apply { resultCode = BAD_REQUEST_CODE }
+            else -> withContext(Dispatchers.IO) {
+                try {
+                    val list = apiService.getIndustries()
+                    FilterIndustriesResponse(results = list).apply { resultCode = SUCCESS_CODE }
+                } catch (ex: HttpException) {
+                    Response().apply { resultCode = ex.code() }
+                } catch (ex: Exception) {
+                    Response().apply { resultCode = SERVER_ERROR_CODE }
+                }
             }
         }
     }

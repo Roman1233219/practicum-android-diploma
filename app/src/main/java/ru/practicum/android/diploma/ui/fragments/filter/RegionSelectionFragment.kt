@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentRegionSelectionBinding
 import ru.practicum.android.diploma.presentation.`filter-area`.AreaUi
@@ -23,7 +24,9 @@ class RegionSelectionFragment : Fragment() {
     private val binding get() = _binding!!
 
     // viewModel
-    private val viewModel by viewModel<RegionViewModel>()
+    private val viewModel by viewModel<RegionViewModel> {
+        parametersOf(arguments?.getInt("countryId") ?: -1)
+    }
 
     // список регионов
     private val regions = mutableListOf<AreaUi>()

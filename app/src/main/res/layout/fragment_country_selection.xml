@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/countrySelectionFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/countrySelectionFragment"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.fragments.filter.CountrySelectionFragment"
-    android:orientation="vertical"
-    android:gravity="center_horizontal">
+    android:theme="@style/Base.Theme.PracticumAndroidDiploma"
+    tools:context=".ui.fragments.filter.CountrySelectionFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/glLeftBorder_16"
@@ -27,23 +26,24 @@
         android:id="@+id/countryFilterHeader"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:paddingTop="20dp"
+        android:gravity="center_vertical"
         android:paddingStart="16dp"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_back_24" />
+            android:src="@drawable/ic_arrow_back_24"
+            app:tint="?attr/colorOnSurface" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextDisplayMedium22"
+            android:layout_marginStart="@dimen/padding_16"
             android:text="@string/country_selection_title"
-            android:textColor="?attr/colorOnSurface"
-            android:layout_marginStart="16dp" />
+            android:textAppearance="@style/TextDisplayMedium22"
+            android:textColor="?attr/colorOnSurface" />
     </LinearLayout>
 
     <!-- Состояние: Нет интернета -->
@@ -94,15 +94,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/countryFilterHeader" />
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCountries"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/countryFilterHeader"
-        app:layout_constraintStart_toEndOf="@id/glLeftBorder_16"
         app:layout_constraintEnd_toStartOf="@id/glRightBorder_16"
-        tools:listitem="@layout/item_country" />
+        app:layout_constraintStart_toEndOf="@id/glLeftBorder_16"
+        app:layout_constraintTop_toBottomOf="@id/countryFilterHeader"
+        tools:listitem="@layout/item_area" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,20 +13,24 @@ import ru.practicum.android.diploma.util.NetworkUtil
 
 class AreasRepositoryImpl(private val apiService: PracticumApiService) : AreasRepository {
     override fun getAreas(): Flow<ApiResult<List<Area>>> = flow {
-        emit(ApiResult.Loading)
+        if (!NetworkUtil.connectivityChecker())
+            emit(ApiResult.Error(NO_CONNECTION_CODE))
+        else {
+            emit(ApiResult.Loading)
 
-        val response = apiService.getAreas()
-        if (response.isNotEmpty()) {
-            val rootDtos = response
-            val domainTrees = rootDtos.map { it.toModel() }
-            val flatList = mutableListOf<Area>()
-            domainTrees.forEach { treeRoot ->
-                flattenTree(treeRoot, flatList)
+            val response = apiService.getAreas()
+            if (response.isNotEmpty()) {
+                val rootDtos = response
+                val domainTrees = rootDtos.map { it.toModel() }
+                val flatList = mutableListOf<Area>()
+                domainTrees.forEach { treeRoot ->
+                    flattenTree(treeRoot, flatList)
+                }
+
+                emit(ApiResult.Success(flatList))
+            } else {
+                emit(ApiResult.Error(CLIENT_ERROR_START))
             }
-
-            emit(ApiResult.Success(flatList))
-        } else {
-            emit(ApiResult.Error(CLIENT_ERROR_START))
         }
     }
 

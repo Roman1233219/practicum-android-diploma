@@ -25,7 +25,8 @@ class RootActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.vacancySearchFragment,
                 R.id.favouritesFragment,
-                R.id.teamFragment -> {
+                R.id.teamFragment,
+                R.id.industrySelectionFragment -> {
                     binding.bottomNavigationPanel.visibility = View.VISIBLE
                     binding.flDivider.visibility = View.VISIBLE
                 }

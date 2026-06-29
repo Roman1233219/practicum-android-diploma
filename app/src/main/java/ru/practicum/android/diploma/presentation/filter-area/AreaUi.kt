@@ -9,5 +9,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class AreaUi(
     val areaId: Int,
-    val areaName: String
+    val areaName: String,
+    val parentId: Int? = null
 ) : Parcelable

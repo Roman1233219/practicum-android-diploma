@@ -3,6 +3,8 @@ package ru.practicum.android.diploma.presentation.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.FilterSettingsInteractor
 import ru.practicum.android.diploma.domain.models.FilterSettings
 
@@ -16,12 +18,19 @@ class FiltersViewModel(
     private var currentSettings: FilterSettings = FilterSettings()
     private var initialSettings: FilterSettings = FilterSettings()
 
+    init {
+        loadSettings()
+    }
+
     fun loadSettings() {
         _state.value = FiltersState.Loading
-        val settings = interactor.getFilterSettings()
-        initialSettings = settings
-        currentSettings = settings
-        updateState()
+        viewModelScope.launch {
+            // Загружаем актуальные настройки из основного фильтра Room
+            val settings = interactor.getFilterSettings()
+            initialSettings = settings
+            currentSettings = settings
+            updateState()
+        }
     }
 
     fun setSalary(salary: String?) {
@@ -40,9 +49,12 @@ class FiltersViewModel(
     }
 
     fun applyFilters() {
-        interactor.saveFilterSettings(currentSettings)
-        initialSettings = currentSettings
-        updateState()
+        viewModelScope.launch {
+            // Сохраняем сразу в основной фильтр в Room
+            interactor.saveFilterSettings(currentSettings)
+            initialSettings = currentSettings
+            updateState()
+        }
     }
 
     fun resetFilters() {

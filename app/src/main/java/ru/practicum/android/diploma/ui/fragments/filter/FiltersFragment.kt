@@ -69,8 +69,6 @@ class FiltersFragment : Fragment() {
         binding.resetButton.setOnClickListener {
             viewModel.resetFilters()
         }
-
-        viewModel.loadSettings()
     }
 
     private fun setupClickListeners() {

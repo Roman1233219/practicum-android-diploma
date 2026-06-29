@@ -8,7 +8,9 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.FilterAreaInteractor
 import ru.practicum.android.diploma.domain.models.Area
 
-class AreaViewModel(private val interactor: FilterAreaInteractor) : ViewModel() {
+class AreaViewModel(
+    private val areaInteractor: FilterAreaInteractor
+) : ViewModel() {
 
     private val _screenState = MutableLiveData<AreaUiState>(AreaUiState.Empty)
     fun observeState(): LiveData<AreaUiState> = _screenState
@@ -44,7 +46,7 @@ class AreaViewModel(private val interactor: FilterAreaInteractor) : ViewModel() 
 
     private fun findCountryByRegion(region: AreaUi) {
         viewModelScope.launch {
-            interactor.getAreas().collect { countries ->
+            areaInteractor.getAreas().collect { countries ->
                 val country = findParentCountry(countries, region)
                 if (country != null) {
                     selectedCountry = AreaUi(

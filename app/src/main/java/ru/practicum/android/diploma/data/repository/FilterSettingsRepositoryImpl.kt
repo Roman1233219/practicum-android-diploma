@@ -35,14 +35,8 @@ class FilterSettingsRepositoryImpl(
     }
 
     override fun saveCountry(country: Area) {
-        val settings = getFilterSettings().copy(
-            countryId = country.id.toString(),
-            countryName = country.name
-        )
-
-        sharedPreferences.edit {
-            putString(FILTER_SETTINGS_KEY, gson.toJson(settings))
-        }
+        // Метод больше не используется напрямую, так как мы перешли на Room и временные фильтры.
+        // Оставляем пустым или удаляем вызовы из ViewModels.
     }
 
     override fun clearFilterSettings() {

@@ -70,6 +70,7 @@ class FiltersViewModel(
     fun resetFilters() {
         viewModelScope.launch {
             interactor.clearTempFilter()
+            interactor.saveFilterSettings(FilterSettings())
         }
     }
 
@@ -99,15 +100,20 @@ class FiltersViewModel(
     }
 
     fun setArea(countryName: String?, countryId: Int?, regionName: String?, regionId: Int?) {
-        val countryIdStr = countryId?.toString()
-        val regionIdStr = regionId?.toString()
-        if (currentSettings.countryName != countryName || currentSettings.countryId != countryIdStr ||
-            currentSettings.regionName != regionName || currentSettings.regionId != regionIdStr
+        // Отсекаем "0", которые прилетают из-за особенностей getInt в Bundle
+        val countryIdStr = if (countryId == null || countryId == 0) null else countryId.toString()
+        val regionIdStr = if (regionId == null || regionId == 0) null else regionId.toString()
+
+        val finalCountryName = if (countryIdStr == null) null else countryName
+        val finalRegionName = if (regionIdStr == null) null else regionName
+
+        if (currentSettings.countryName != finalCountryName || currentSettings.countryId != countryIdStr ||
+            currentSettings.regionName != finalRegionName || currentSettings.regionId != regionIdStr
         ) {
             saveTempSettings(currentSettings.copy(
-                countryName = countryName,
+                countryName = finalCountryName,
                 countryId = countryIdStr,
-                regionName = regionName,
+                regionName = finalRegionName,
                 regionId = regionIdStr
             ))
         }
@@ -116,6 +122,18 @@ class FiltersViewModel(
     private fun saveTempSettings(settings: FilterSettings) {
         viewModelScope.launch {
             interactor.saveTempFilter(settings)
+
+            // Если после изменения временного фильтра он стал пустым,
+            // мы должны очистить и основной фильтр, так как кнопка "Применить" скроется.
+            val hasAnyFilter = !settings.countryId.isNullOrBlank() && settings.countryId != "0" ||
+                !settings.regionId.isNullOrBlank() && settings.regionId != "0" ||
+                !settings.industryId.isNullOrBlank() ||
+                settings.expectedSalary != null ||
+                settings.notShowWithoutSalary
+
+            if (!hasAnyFilter) {
+                interactor.saveFilterSettings(FilterSettings())
+            }
         }
     }
 
@@ -125,13 +143,6 @@ class FiltersViewModel(
             !currentSettings.industryId.isNullOrBlank() ||
             currentSettings.expectedSalary != null ||
             currentSettings.notShowWithoutSalary
-
-        // Если экран стал пустым — принудительно очищаем и основной фильтр в БД, чтобы погасла иконка
-        if (!hasAnyFilter) {
-            viewModelScope.launch {
-                interactor.saveFilterSettings(FilterSettings())
-            }
-        }
 
         val canApply = hasAnyFilter
         val canReset = hasAnyFilter

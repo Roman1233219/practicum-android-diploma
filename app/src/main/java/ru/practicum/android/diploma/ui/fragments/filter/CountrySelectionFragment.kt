@@ -56,7 +56,6 @@ class CountrySelectionFragment : Fragment() {
         setupServerErrorState()
 
         adapter = CountryAdapter(onItemClick = { selectedCountry ->
-            viewModel.onCountrySelected(selectedCountry)
             val area = AreaUi(
                 areaId = selectedCountry.id,
                 areaName = selectedCountry.name

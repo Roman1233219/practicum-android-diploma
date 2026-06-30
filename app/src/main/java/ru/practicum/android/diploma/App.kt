@@ -33,6 +33,6 @@ class App : Application() {
 
     companion object {
         private var _instance: App? = null
-        val instance: App get() = _instance ?: throw IllegalStateException("App instance not initialized")
+        val instance: App get() = _instance ?: error("App instance not initialized")
     }
 }

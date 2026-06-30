@@ -46,10 +46,11 @@ class VacancyDetailsViewModel(
                     }
 
                     is ApiResult.Error -> when (result.httpCode) {
-                        404 -> {
+                        HTTP_NOT_FOUND -> {
                             _state.value = VacancyDetailsState.NotFound
                         }
-                        500 -> {
+
+                        HTTP_SERVER_ERROR -> {
                             _state.value = VacancyDetailsState.Error
                         }
 
@@ -130,5 +131,10 @@ class VacancyDetailsViewModel(
                 }
             }
         }
+    }
+
+    companion object {
+        private const val HTTP_NOT_FOUND = 404
+        private const val HTTP_SERVER_ERROR = 500
     }
 }

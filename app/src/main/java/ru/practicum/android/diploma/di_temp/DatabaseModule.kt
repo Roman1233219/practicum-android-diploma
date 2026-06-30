@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.di
+package ru.practicum.android.diploma.di_temp
 
 import androidx.room.Room
 import org.koin.android.ext.koin.androidContext

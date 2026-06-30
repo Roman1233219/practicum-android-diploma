@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.di
+package ru.practicum.android.diploma.di_temp
 
 import android.content.Context
 import android.content.SharedPreferences

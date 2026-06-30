@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.di
+package ru.practicum.android.diploma.di_temp
 
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module

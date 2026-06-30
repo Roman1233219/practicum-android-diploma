@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.di
+package ru.practicum.android.diploma.di_temp
 
 import okhttp3.OkHttpClient
 import org.koin.dsl.module

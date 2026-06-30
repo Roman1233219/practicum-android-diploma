@@ -108,10 +108,7 @@ class AreaViewModel(
 
     private fun isRegionInCountry(parent: Area, regionId: Int): Boolean {
         if (parent.id == regionId) return true
-        for (child in parent.areas) {
-            if (isRegionInCountry(child, regionId)) return true
-        }
-        return false
+        return parent.areas.any { isRegionInCountry(it, regionId) }
     }
 
     private fun renderState() {

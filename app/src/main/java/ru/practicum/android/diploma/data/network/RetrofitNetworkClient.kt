@@ -29,10 +29,13 @@ class RetrofitNetworkClient(
                     val list = apiService.getAreas()
                     FilterAreaResponse(results = list).apply { resultCode = SUCCESS_CODE }
                 } catch (ex: HttpException) {
+                    Log.e("RetrofitNetworkClient", "filterAreaRequest HttpException: ${ex.message}", ex)
                     Response().apply { resultCode = ex.code() }
                 } catch (ex: IOException) {
+                    Log.e("RetrofitNetworkClient", "filterAreaRequest IOException: ${ex.message}", ex)
                     Response().apply { resultCode = NO_CONNECTION_CODE }
                 } catch (@Suppress("TooGenericExceptionCaught") ex: Exception) {
+                    Log.e("RetrofitNetworkClient", "filterAreaRequest Unexpected error: ${ex.message}", ex)
                     Response().apply { resultCode = SERVER_ERROR_CODE }
                 }
             }
@@ -48,10 +51,13 @@ class RetrofitNetworkClient(
                     val list = apiService.getIndustries()
                     FilterIndustriesResponse(results = list).apply { resultCode = SUCCESS_CODE }
                 } catch (ex: HttpException) {
+                    Log.e("RetrofitNetworkClient", "filterAreaRequest HttpException: ${ex.message}", ex)
                     Response().apply { resultCode = ex.code() }
                 } catch (ex: IOException) {
+                    Log.e("RetrofitNetworkClient", "filterAreaRequest IOException: ${ex.message}", ex)
                     Response().apply { resultCode = NO_CONNECTION_CODE }
                 } catch (@Suppress("TooGenericExceptionCaught") ex: Exception) {
+                    Log.e("RetrofitNetworkClient", "filterAreaRequest Unexpected error: ${ex.message}", ex)
                     Response().apply { resultCode = SERVER_ERROR_CODE }
                 }
             }
@@ -85,10 +91,13 @@ class RetrofitNetworkClient(
             try {
                 request().apply { resultCode = SUCCESS_CODE }
             } catch (ex: HttpException) {
+                Log.e("RetrofitNetworkClient", "executeRequest HttpException: ${ex.message}", ex)
                 Response().apply { resultCode = ex.code() }
             } catch (ex: IOException) {
+                Log.e("RetrofitNetworkClient", "executeRequest IOException: ${ex.message}", ex)
                 Response().apply { resultCode = NO_CONNECTION_CODE }
             } catch (@Suppress("TooGenericExceptionCaught") ex: Exception) {
+                Log.e("RetrofitNetworkClient", "executeRequest Unexpected error: ${ex.message}", ex)
                 Response().apply { resultCode = SERVER_ERROR_CODE }
             }
         }

@@ -2,9 +2,9 @@ package ru.practicum.android.diploma.di
 
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
-import ru.practicum.android.diploma.presentation.`filter-area`.AreaViewModel
-import ru.practicum.android.diploma.presentation.`filter-area`.CountryViewModel
-import ru.practicum.android.diploma.presentation.`filter-area`.RegionViewModel
+import ru.practicum.android.diploma.presentation.filter_area.AreaViewModel
+import ru.practicum.android.diploma.presentation.filter_area.CountryViewModel
+import ru.practicum.android.diploma.presentation.filter_area.RegionViewModel
 import ru.practicum.android.diploma.presentation.viewmodels.CountrySelectionViewModel
 import ru.practicum.android.diploma.presentation.viewmodels.FavouritesViewModel
 import ru.practicum.android.diploma.presentation.viewmodels.FiltersViewModel

@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.presentation.`filter-area`
+package ru.practicum.android.diploma.presentation.filter_area
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

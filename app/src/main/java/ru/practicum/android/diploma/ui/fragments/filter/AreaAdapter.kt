@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.presentation.filter_area.AreaUi
+import ru.practicum.android.diploma.presentation.filterarea.AreaUi
 
 class AreaAdapter(
     private val areas: List<AreaUi>,

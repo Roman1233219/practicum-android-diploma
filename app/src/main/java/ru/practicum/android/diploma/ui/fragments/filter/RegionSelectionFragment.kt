@@ -14,9 +14,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentRegionSelectionBinding
-import ru.practicum.android.diploma.presentation.filter_area.AreaUi
-import ru.practicum.android.diploma.presentation.filter_area.RegionUiState
-import ru.practicum.android.diploma.presentation.filter_area.RegionViewModel
+import ru.practicum.android.diploma.presentation.filterarea.AreaUi
+import ru.practicum.android.diploma.presentation.filterarea.RegionUiState
+import ru.practicum.android.diploma.presentation.filterarea.RegionViewModel
 
 class RegionSelectionFragment : Fragment() {
     // binding

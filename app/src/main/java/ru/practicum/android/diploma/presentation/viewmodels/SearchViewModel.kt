@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.network.models.HttpErrorType
@@ -54,10 +55,13 @@ class SearchViewModel(
             filterInteractor.getFilterFlow().collect { settings ->
                 _isFilterSelected.value = settings != FilterSettings()
 
-                // Если фильтры изменились и мы уже что-то искали — перезапускаем поиск
-                if (lastAppliedFilterSettings != null && settings != lastAppliedFilterSettings && lastSearchRequest.isNotBlank()) {
+                // Если фильтры изменились и мы уже что-то искали — перезапускаем поиск с АКТУАЛЬНЫМИ настройками
+                if (lastAppliedFilterSettings != null &&
+                    settings != lastAppliedFilterSettings &&
+                    lastSearchRequest.isNotBlank()
+                ) {
                     clearPagingHistory()
-                    searchVacancies(lastSearchRequest)
+                    searchVacancies(lastSearchRequest, settings)
                 }
                 lastAppliedFilterSettings = settings
             }
@@ -65,9 +69,10 @@ class SearchViewModel(
     }
 
     fun checkFilterState() {
-        // Оставляем для совместимости, если где-то вызывается вручную
-        val settings = filterInteractor.getFilterSettings()
-        _isFilterSelected.value = settings != FilterSettings()
+        viewModelScope.launch {
+            val settings = filterInteractor.getFilterFlow().first()
+            _isFilterSelected.value = settings != FilterSettings()
+        }
     }
 
     fun searchDebounce(searchQuery: String) {
@@ -95,13 +100,13 @@ class SearchViewModel(
         currentSearchPage = 0
     }
 
-    private fun searchVacancies(searchQuery: String) {
+    private fun searchVacancies(searchQuery: String, forcedSettings: FilterSettings? = null) {
         if (searchQuery.isNotEmpty()) {
             renderLoadingState()
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
-                // Получаем текущие настройки фильтрации перед каждым поиском
-                val settings = filterInteractor.getFilterSettings()
+                // Если настройки переданы явно — берем их, иначе грузим из базы
+                val settings = forcedSettings ?: filterInteractor.getFilterFlow().first()
                 runCatching {
                     interactor.searchVacancies(searchQuery, currentSearchPage, settings)
                         .collect { result ->

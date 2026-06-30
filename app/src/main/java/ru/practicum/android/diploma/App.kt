@@ -13,7 +13,7 @@ import ru.practicum.android.diploma.di.ViewModelModule
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        instance = this
+        _instance = this
 
         startKoin {
             printLogger()
@@ -32,7 +32,7 @@ class App : Application() {
     }
 
     companion object {
-        lateinit var instance: App
-            private set
+        private var _instance: App? = null
+        val instance: App get() = _instance ?: throw IllegalStateException("App instance not initialized")
     }
 }

@@ -13,9 +13,9 @@ import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterAreaBinding
-import ru.practicum.android.diploma.presentation.filter_area.AreaUi
-import ru.practicum.android.diploma.presentation.filter_area.AreaUiState
-import ru.practicum.android.diploma.presentation.filter_area.AreaViewModel
+import ru.practicum.android.diploma.presentation.filterarea.AreaUi
+import ru.practicum.android.diploma.presentation.filterarea.AreaUiState
+import ru.practicum.android.diploma.presentation.filterarea.AreaViewModel
 
 class FilterAreaFragment : Fragment() {
 

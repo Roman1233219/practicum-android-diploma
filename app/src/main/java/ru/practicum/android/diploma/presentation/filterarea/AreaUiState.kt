@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.presentation.filter_area
+package ru.practicum.android.diploma.presentation.filterarea
 
 sealed interface AreaUiState {
     object Empty : AreaUiState

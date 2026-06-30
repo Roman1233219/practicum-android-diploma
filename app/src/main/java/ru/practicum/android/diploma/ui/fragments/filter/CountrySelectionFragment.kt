@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentCountrySelectionBinding
-import ru.practicum.android.diploma.presentation.filter_area.AreaUi
+import ru.practicum.android.diploma.presentation.filterarea.AreaUi
 import ru.practicum.android.diploma.presentation.viewmodels.CountrySelectionViewModel
 import ru.practicum.android.diploma.presentation.viewmodels.FiltrationCountryState
 import ru.practicum.android.diploma.ui.adapter.CountryAdapter

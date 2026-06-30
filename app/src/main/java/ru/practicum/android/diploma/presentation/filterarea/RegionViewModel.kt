@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.presentation.filter_area
+package ru.practicum.android.diploma.presentation.filterarea
 
 import android.os.Handler
 import android.os.Looper

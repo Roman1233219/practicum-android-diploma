@@ -14,6 +14,7 @@ import ru.practicum.android.diploma.data.dto.VacanciesRequest
 import ru.practicum.android.diploma.data.dto.VacancyDetailsRequest
 import ru.practicum.android.diploma.data.dto.VacancyDetailsResponse
 import ru.practicum.android.diploma.util.NetworkUtil
+import java.io.IOException
 
 class RetrofitNetworkClient(
     private val apiService: PracticumApiService
@@ -26,13 +27,12 @@ class RetrofitNetworkClient(
             else -> withContext(Dispatchers.IO) {
                 try {
                     val list = apiService.getAreas()
-                    Log.d("RetrofitNetworkClient", "getAreas success, size: ${list.size}")
                     FilterAreaResponse(results = list).apply { resultCode = SUCCESS_CODE }
                 } catch (ex: HttpException) {
-                    Log.e("RetrofitNetworkClient", "getAreas HttpException: ${ex.code()}")
                     Response().apply { resultCode = ex.code() }
-                } catch (ex: Exception) {
-                    Log.e("RetrofitNetworkClient", "getAreas Exception: ${ex.message}")
+                } catch (ex: IOException) {
+                    Response().apply { resultCode = NO_CONNECTION_CODE }
+                } catch (@Suppress("TooGenericExceptionCaught") ex: Exception) {
                     Response().apply { resultCode = SERVER_ERROR_CODE }
                 }
             }
@@ -49,7 +49,9 @@ class RetrofitNetworkClient(
                     FilterIndustriesResponse(results = list).apply { resultCode = SUCCESS_CODE }
                 } catch (ex: HttpException) {
                     Response().apply { resultCode = ex.code() }
-                } catch (ex: Exception) {
+                } catch (ex: IOException) {
+                    Response().apply { resultCode = NO_CONNECTION_CODE }
+                } catch (@Suppress("TooGenericExceptionCaught") ex: Exception) {
                     Response().apply { resultCode = SERVER_ERROR_CODE }
                 }
             }
@@ -84,6 +86,10 @@ class RetrofitNetworkClient(
                 request().apply { resultCode = SUCCESS_CODE }
             } catch (ex: HttpException) {
                 Response().apply { resultCode = ex.code() }
+            } catch (ex: IOException) {
+                Response().apply { resultCode = NO_CONNECTION_CODE }
+            } catch (@Suppress("TooGenericExceptionCaught") ex: Exception) {
+                Response().apply { resultCode = SERVER_ERROR_CODE }
             }
         }
     }

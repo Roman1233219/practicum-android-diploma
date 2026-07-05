@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.di
 
 import okhttp3.OkHttpClient
-import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,7 +12,7 @@ import ru.practicum.android.diploma.data.network.createLoggingInterceptor
 
 private const val BASE_URL = "https://android-diploma.education-services.ru/"
 
-val networkModule = module {
+val NetworkModule = module {
     single<PracticumApiService> {
         val okHttpClient = OkHttpClient.Builder().apply {
             addInterceptor(ApiKeyInterceptor())
@@ -29,6 +28,6 @@ val networkModule = module {
     }
 
     single<NetworkClient> {
-        RetrofitNetworkClient(get(), androidContext())
+        RetrofitNetworkClient(get())
     }
 }

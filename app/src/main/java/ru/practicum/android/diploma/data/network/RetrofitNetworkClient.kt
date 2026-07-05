@@ -1,73 +1,118 @@
 package ru.practicum.android.diploma.data.network
 
-import android.content.Context
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.FilterAreaRequest
+import ru.practicum.android.diploma.data.dto.FilterAreaResponse
+import ru.practicum.android.diploma.data.dto.FilterIndustriesRequest
+import ru.practicum.android.diploma.data.dto.FilterIndustriesResponse
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacanciesRequest
 import ru.practicum.android.diploma.data.dto.VacancyDetailsRequest
 import ru.practicum.android.diploma.data.dto.VacancyDetailsResponse
-import ru.practicum.android.diploma.util.networkConnectivityChecker
+import ru.practicum.android.diploma.util.NetworkUtil
+import java.io.IOException
 
 class RetrofitNetworkClient(
-    private val apiService: PracticumApiService,
-    private val context: Context
+    private val apiService: PracticumApiService
 ) : NetworkClient {
 
     override suspend fun filterAreaRequest(dto: Any): Response {
-        if (!networkConnectivityChecker(context) || dto !is FilterAreaRequest) {
-            return Response().apply {
-                resultCode = if (!networkConnectivityChecker(context)) {
-                    NO_CONNECTION_CODE
-                } else {
-                    BAD_REQUEST_CODE
+        return when {
+            !NetworkUtil.connectivityChecker() -> Response().apply { resultCode = NO_CONNECTION_CODE }
+            dto !is FilterAreaRequest -> Response().apply { resultCode = BAD_REQUEST_CODE }
+            else -> withContext(Dispatchers.IO) {
+                try {
+                    val list = apiService.getAreas()
+                    FilterAreaResponse(results = list).apply { resultCode = SUCCESS_CODE }
+                } catch (ex: HttpException) {
+                    Log.e("RetrofitNetworkClient", "filterAreaRequest HttpException: ${ex.message}", ex)
+                    Response().apply { resultCode = ex.code() }
+                } catch (ex: IOException) {
+                    Log.e("RetrofitNetworkClient", "filterAreaRequest IOException: ${ex.message}", ex)
+                    Response().apply { resultCode = NO_CONNECTION_CODE }
+                } catch (@Suppress("TooGenericExceptionCaught") ex: Exception) {
+                    Log.e("RetrofitNetworkClient", "filterAreaRequest Unexpected error: ${ex.message}", ex)
+                    Response().apply { resultCode = SERVER_ERROR_CODE }
                 }
             }
         }
+    }
 
-        return withContext(Dispatchers.IO) {
-            try {
-                apiService.getAreas().apply { resultCode = SUCCESS_CODE }
-            } catch (_: Throwable) {
-                Response().apply { resultCode = SERVER_ERROR_CODE }
+    override suspend fun filterIndustryRequest(dto: Any): Response {
+        return when {
+            !NetworkUtil.connectivityChecker() -> Response().apply { resultCode = NO_CONNECTION_CODE }
+            dto !is FilterIndustriesRequest -> Response().apply { resultCode = BAD_REQUEST_CODE }
+            else -> withContext(Dispatchers.IO) {
+                try {
+                    val list = apiService.getIndustries()
+                    FilterIndustriesResponse(results = list).apply { resultCode = SUCCESS_CODE }
+                } catch (ex: HttpException) {
+                    Log.e("RetrofitNetworkClient", "filterAreaRequest HttpException: ${ex.message}", ex)
+                    Response().apply { resultCode = ex.code() }
+                } catch (ex: IOException) {
+                    Log.e("RetrofitNetworkClient", "filterAreaRequest IOException: ${ex.message}", ex)
+                    Response().apply { resultCode = NO_CONNECTION_CODE }
+                } catch (@Suppress("TooGenericExceptionCaught") ex: Exception) {
+                    Log.e("RetrofitNetworkClient", "filterAreaRequest Unexpected error: ${ex.message}", ex)
+                    Response().apply { resultCode = SERVER_ERROR_CODE }
+                }
             }
         }
     }
 
     override suspend fun searchVacancies(dto: Any): Response {
-        val hasConnection = networkConnectivityChecker(context)
-        if (!hasConnection || dto !is VacanciesRequest) {
-            return Response().apply {
-                resultCode = if (!hasConnection) NO_CONNECTION_CODE else BAD_REQUEST_CODE
-            }
-        }
-
-        return withContext(Dispatchers.IO) {
-            try {
-                apiService.searchVacancies(dto.text, dto.page).apply { resultCode = SUCCESS_CODE }
-            } catch (_: Throwable) {
-                Response().apply { resultCode = SERVER_ERROR_CODE }
+        return when {
+            !NetworkUtil.connectivityChecker() -> Response().apply { resultCode = NO_CONNECTION_CODE }
+            dto !is VacanciesRequest -> Response().apply { resultCode = BAD_REQUEST_CODE }
+            else -> executeRequest {
+                val options = createSearchOptions(dto)
+                apiService.searchVacancies(options)
             }
         }
     }
 
     override suspend fun getVacancyDetails(dto: Any): Response {
-        val hasConnection = networkConnectivityChecker(context)
-        if (!hasConnection || dto !is VacancyDetailsRequest) {
-            return Response().apply {
-                resultCode = if (!hasConnection) NO_CONNECTION_CODE else BAD_REQUEST_CODE
+        return when {
+            !NetworkUtil.connectivityChecker() -> Response().apply { resultCode = NO_CONNECTION_CODE }
+            dto !is VacancyDetailsRequest -> Response().apply { resultCode = BAD_REQUEST_CODE }
+            else -> executeRequest {
+                val vacancyDto = apiService.getVacancyDetails(dto.vacancyId)
+                VacancyDetailsResponse(vacancyDto)
             }
         }
+    }
 
+    private suspend fun executeRequest(request: suspend () -> Response): Response {
         return withContext(Dispatchers.IO) {
             try {
-                val vacancyDto = apiService.getVacancyDetails(dto.vacancyId)
-                VacancyDetailsResponse(vacancyDto).apply { resultCode = SUCCESS_CODE }
-            } catch (_: Throwable) {
+                request().apply { resultCode = SUCCESS_CODE }
+            } catch (ex: HttpException) {
+                Log.e("RetrofitNetworkClient", "executeRequest HttpException: ${ex.message}", ex)
+                Response().apply { resultCode = ex.code() }
+            } catch (ex: IOException) {
+                Log.e("RetrofitNetworkClient", "executeRequest IOException: ${ex.message}", ex)
+                Response().apply { resultCode = NO_CONNECTION_CODE }
+            } catch (@Suppress("TooGenericExceptionCaught") ex: Exception) {
+                Log.e("RetrofitNetworkClient", "executeRequest Unexpected error: ${ex.message}", ex)
                 Response().apply { resultCode = SERVER_ERROR_CODE }
             }
+        }
+    }
+
+    private fun createSearchOptions(dto: VacanciesRequest): Map<String, String> {
+        return mutableMapOf<String, String>().apply {
+            put("text", dto.text)
+            put("page", dto.page.toString())
+            dto.salary?.let { put("salary", it.toString()) }
+            if (dto.onlyWithSalary) {
+                put("only_with_salary", "true")
+            }
+            dto.area?.let { put("area", it) }
+            dto.industry?.let { put("industry", it) }
         }
     }
 

@@ -9,11 +9,10 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
 
 class RootActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityRootBinding
+    private val binding by lazy { ActivityRootBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Подключение NavController к BottomBar
@@ -26,7 +25,8 @@ class RootActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.vacancySearchFragment,
                 R.id.favouritesFragment,
-                R.id.teamFragment -> {
+                R.id.teamFragment,
+                R.id.industrySelectionFragment -> {
                     binding.bottomNavigationPanel.visibility = View.VISIBLE
                     binding.flDivider.visibility = View.VISIBLE
                 }

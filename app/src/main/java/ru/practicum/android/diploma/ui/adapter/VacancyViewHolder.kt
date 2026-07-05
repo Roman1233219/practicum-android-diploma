@@ -11,6 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.models.VacancyCard
+import ru.practicum.android.diploma.util.CurrencyMapper
 
 class VacancyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val vacancyName: TextView = itemView.findViewById(R.id.vacancyName)
@@ -33,14 +34,14 @@ class VacancyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         if (item.currency != null) {
-            salaryText += " ${item.currency}"
+            salaryText += " ${CurrencyMapper.map(item.currency)}"
         }
 
         if (!salaryText.isEmpty() && (item.salaryFrom != null || item.salaryTo != null)) {
             salary.visibility = View.VISIBLE
             salary.text = salaryText
         } else {
-            salary.text = "Зарплата не указана"
+            salary.text = itemView.context.getString(R.string.salary_not_specified)
             salary.visibility = View.VISIBLE
         }
 
@@ -48,9 +49,14 @@ class VacancyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .load(item.logoUrl)
             .placeholder(R.drawable.ic_placeholder_32)
             .centerInside()
-            .transform(CenterInside(),RoundedCorners(dpToPx(12f, itemView.context)))
+            .transform(CenterInside(), RoundedCorners(dpToPx(ROUNDED_CORNERS_RADIUS, itemView.context)))
             .into(companyIcon)
     }
+
+    companion object {
+        private const val ROUNDED_CORNERS_RADIUS = 12f
+    }
+
     fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,

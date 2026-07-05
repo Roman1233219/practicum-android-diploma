@@ -8,9 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,14 +22,14 @@ import ru.practicum.android.diploma.domain.models.VacancyCard
 import ru.practicum.android.diploma.presentation.viewmodels.SearchState
 import ru.practicum.android.diploma.presentation.viewmodels.SearchViewModel
 import ru.practicum.android.diploma.ui.adapter.VacancyAdapter
+import ru.practicum.android.diploma.ui.fragments.details.VacancyDetailsFragment
 import ru.practicum.android.diploma.util.ViewStateHelper
-import ru.practicum.android.diploma.util.debounce
 
 class VacancySearchFragment : Fragment() {
     private var _binding: FragmentVacancySearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SearchViewModel by viewModel()
-    private lateinit var viewStateHelper: ViewStateHelper
+    private var viewStateHelper: ViewStateHelper? = null
     private var adapter: VacancyAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -62,14 +62,36 @@ class VacancySearchFragment : Fragment() {
 
         viewModel.searchState.observe(viewLifecycleOwner) { state ->
             when (state) {
-                SearchState.IsLoading -> showLoadingState()
-                SearchState.IsLoadingNextPage -> {
+                SearchState.IsLoading -> {
+                    binding.progressBarNextPage.isVisible = false
                     showLoadingState()
                 }
-                is SearchState.Content -> showContent(state.pageData, state.listNeedsScrollTop)
-                is SearchState.ConnectionError -> showNoInternetState()
-                is SearchState.NotFoundError -> showEmptyResultState()
+
+                SearchState.IsLoadingNextPage -> {
+                    binding.progressBarNextPage.isVisible = true
+                }
+
+                is SearchState.Content -> {
+                    binding.progressBarNextPage.isVisible = false
+                    showContent(state.pageData, state.listNeedsScrollTop)
+                }
+
+                is SearchState.ConnectionError -> {
+                    binding.progressBarNextPage.isVisible = false
+                    if ((adapter?.itemCount ?: 0) > 0) {
+                        Toast.makeText(requireContext(), getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
+                    } else {
+                        showNoInternetState()
+                    }
+                }
+
+                is SearchState.NotFoundError -> {
+                    binding.progressBarNextPage.isVisible = false
+                    showEmptyResultState()
+                }
+
                 is SearchState.VacanciesCount -> {
+                    binding.progressBarNextPage.isVisible = false
                     if (state.vacanciesCount == 0) {
                         showEmptyResultState()
                     } else {
@@ -80,13 +102,44 @@ class VacancySearchFragment : Fragment() {
                         )
                     }
                 }
-                is SearchState.ServerError500 -> showServerErrorState()
-                is SearchState.QueryIsEmpty -> {
-                    if (state.isEmpty) showInitialState()
-                }
-                is SearchState.SearchText -> {
 
+                is SearchState.ServerError500 -> {
+                    binding.progressBarNextPage.isVisible = false
+                    if ((adapter?.itemCount ?: 0) > 0) {
+                        Toast.makeText(requireContext(), getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
+                    } else {
+                        showServerErrorState()
+                    }
                 }
+
+                is SearchState.QueryIsEmpty -> {
+                    binding.progressBarNextPage.isVisible = false
+                    if (state.isEmpty) {
+                        showInitialState()
+                    }
+                }
+
+                is SearchState.SearchText -> {
+                    binding.progressBarNextPage.isVisible = false
+                }
+            }
+        }
+
+        viewModel.isFilterSelected.observe(viewLifecycleOwner) { isSelected ->
+            if (isSelected) {
+                binding.filterButton.setImageResource(R.drawable.ic_filter_on_24)
+                binding.filterButton.imageTintList = null
+                binding.filterButton.clearColorFilter()
+            } else {
+                binding.filterButton.setImageResource(R.drawable.ic_filter_off_24)
+                // Для выключенного фильтра возвращаем tint программно
+                val typedValue = android.util.TypedValue()
+                requireContext().theme.resolveAttribute(
+                    com.google.android.material.R.attr.colorOnSurface,
+                    typedValue,
+                    true
+                )
+                binding.filterButton.setColorFilter(typedValue.data)
             }
         }
 
@@ -155,35 +208,36 @@ class VacancySearchFragment : Fragment() {
     }
 
     private fun showInitialState() {
-        viewStateHelper.showOnly(binding.layoutInitial.root)
+        viewStateHelper?.showOnly(binding.layoutInitial.root)
         binding.tvResultInfo.isVisible = false
         binding.vacancyList.isVisible = false
+        viewModel.searchDebounce("")
     }
 
     private fun showNoInternetState() {
-        viewStateHelper.showOnly(binding.layoutNoInternet.root)
+        viewStateHelper?.showOnly(binding.layoutNoInternet.root)
         binding.tvResultInfo.isVisible = false
     }
 
     private fun showEmptyResultState() {
-        viewStateHelper.showOnly(binding.layoutNoFound.root)
+        viewStateHelper?.showOnly(binding.layoutNoFound.root)
         binding.tvResultInfo.isVisible = true
         binding.tvResultInfo.text = getString(R.string.no_vacancies)
     }
 
     private fun showServerErrorState() {
-        viewStateHelper.showOnly(binding.layoutServerError.root)
+        viewStateHelper?.showOnly(binding.layoutServerError.root)
         binding.tvResultInfo.isVisible = false
     }
 
     private fun showLoadingState() {
         closeKeyboard()
-        viewStateHelper.showOnly(binding.layoutLoading.root)
+        viewStateHelper?.showOnly(binding.layoutLoading.root)
         binding.tvResultInfo.isVisible = false
     }
 
     private fun showContent(searchData: List<VacancyCard>, listNeedsScrollTop: Boolean) {
-        viewStateHelper.showOnly(binding.vacancyList)
+        viewStateHelper?.showOnly(binding.vacancyList)
         if (!binding.vacancyList.isVisible) {
             binding.vacancyList.isVisible = true
         }
@@ -191,8 +245,9 @@ class VacancySearchFragment : Fragment() {
     }
 
     private fun showFoundVacancies(vacancies: List<VacancyCard>? = null, scrollToTop: Boolean = false) {
-        if (adapter == null)
+        if (adapter == null) {
             return
+        }
 
         adapter?.submitList(vacancies)
         adapter?.notifyDataSetChanged()
@@ -201,9 +256,15 @@ class VacancySearchFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.checkFilterState()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        viewStateHelper = null
     }
 
     private fun clickOnVacancy(vacancy: VacancyCard) {
